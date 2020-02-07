@@ -1,0 +1,6 @@
+{
+  "port": 8080,
+  "bodyLimit": "100kb",
+  "corsHeaders": ["Link"],
+  "url": "http://localhost:3030"
+}

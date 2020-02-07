@@ -1,0 +1,454 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Documentation for aggregate response application",
+    "version": "1.0.0",
+    "title": "BFF API Doc"
+  },
+  "schemes": [
+    "http"
+  ],
+  "basePath": "/bff/api/v1",
+  "tags": [
+    {
+      "name": "Resources",
+      "description": "Documentation for Resource Management BFF",
+      "externalDocs": {
+        "description": "RM API Doc",
+        "url": "http://dev-resource-app.wms.utkonos.ru:8140/swagger-ui.html"
+      }
+    },
+    {
+      "name": "Transfers",
+      "description": "Documentation for Workflow Application",
+      "externalDocs": {
+        "description": "Workflow API Doc",
+        "url": "http://dev.wms.utkonos.ru/api/workflow/swagger-ui.html"
+      }
+    }
+  ],
+  "paths": {
+    "/resource/resources": {
+      "get": {
+        "tags": ["Resources"],
+        "description": "Returns list of resources",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/resources"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/resource/resource-groups": {
+      "get": {
+        "tags": ["Resources"],
+        "description": "Returns list of resource groups",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/resource-groups"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/resource/task-queues": {
+      "get": {
+        "tags": ["Resources"],
+        "description": "Returns list of task queues",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/task-queues"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/workflow/transfers/search": {
+      "post": {
+        "tags": ["Transfers"],
+        "description": "Returns list transfers",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "description": "body request transfersByTimeInterval",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/transfers-by-time-interval-request"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/transfers-by-time-interval"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/workflow/transfers/:id/batches": {
+      "get": {
+        "tags": ["Transfers"],
+        "description": "Returns list batches of transfer",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [{
+          "in": "path",
+          "name": "id",
+          "description": "Transfer's id",
+          "required": true,
+          "type": "integer"
+        }],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/transfer-batches"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "resources": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "deviceId": {
+          "type": "string"
+        },
+        "siteId": {
+          "type": "string"
+        },
+        "siteName": {
+          "type": "string"
+        },
+        "clientId": {
+          "type": "string"
+        },
+        "clientName": {
+          "type": "string"
+        },
+        "statusChangedTime": {
+          "type": "string"
+        },
+        "resourceNumber": {
+          "type": "string"
+        },
+        "statusId": {
+          "type": "string"
+        },
+        "statusName": {
+          "type": "string"
+        }
+      }
+    },
+    "resource-groups": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "groupName": {
+          "type": "string"
+        },
+        "siteId": {
+          "type": "string"
+        },
+        "siteName": {
+          "type": "string"
+        },
+        "clientId": {
+          "type": "string"
+        },
+        "clientName": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "queues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/task-queues"
+          }
+        }
+      }
+    },
+    "tasks": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "clientId": {
+          "type": "string"
+        },
+        "createdTime": {
+          "type": "string"
+        },
+        "currentStep": {
+          "type": "string"
+        },
+        "documentNumber": {
+          "type": "string"
+        },
+        "numberInQueue": {
+          "type": "number"
+        },
+        "personnelNumber": {
+          "type": "string"
+        },
+        "priority": {
+          "type": "number"
+        },
+        "queueName": {
+          "type": "string"
+        },
+        "resourceFullName": {
+          "type": "string"
+        },
+        "resourceGroupDescription": {
+          "type": "string"
+        },
+        "resourceStatusId": {
+          "type": "string"
+        },
+        "siteId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "typeDescription": {
+          "type": "string"
+        }
+      }
+    },
+    "task-queues": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "siteId": {
+          "type": "string"
+        },
+        "siteName": {
+          "type": "string"
+        },
+        "clientId": {
+          "type": "string"
+        },
+        "clientName": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "createdTime": {
+          "type": "string"
+        }
+      }
+    },
+    "transfer-batches": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number"
+        },
+        "productId": {
+          "type": "string"
+        },
+        "baseUnit": {
+          "type": "string"
+        },
+        "goalPlaceAddress": {
+          "type": "string"
+        },
+        "factPlaceAddress": {
+          "type": "string"
+        }
+      }
+    },
+    "transfers-by-time-interval": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "startDate": {
+          "type": "string"
+        },
+        "startTime": {
+          "type": "string"
+        },
+        "transferType": {
+          "type": "string"
+        },
+        "carrierType": {
+          "type": "number"
+        },
+        "weight": {
+          "type": "string"
+        },
+        "productBatch": {
+          "type": "number"
+        },
+        "status": {
+          "type": "number"
+        },
+        "sourcePlace": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "siteId": {
+              "type": "string"
+            },
+            "address": {
+              "type": "string"
+            }
+          }
+        },
+        "tasks": {
+          "type": "object",
+          "properties": {
+            "inProgress": {
+              "type": "number"
+            },
+            "all": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "transfers-by-time-interval-request": {
+      "type": "object",
+      "properties": {
+        "dateFrom": {
+          "type": "number"
+        },
+        "dateTo": {
+          "type": "number"
+        },
+        "siteId": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}
