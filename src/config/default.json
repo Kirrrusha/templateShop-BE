@@ -1,6 +1,8 @@
 {
   "port": 8080,
   "bodyLimit": "100kb",
-  "corsHeaders": ["Link"],
-  "url": "http://localhost:3030"
+  "corsHeaders": ["http://localhost:3030"],
+  "url": "http://localhost:3030",
+  "mongoURI": "mongodb://localhost:27017/templateShop",
+  "secretOrKey": "secret"
 }

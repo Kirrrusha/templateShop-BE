@@ -33,10 +33,10 @@ app.use(bodyParser.json({
 app.use(compression());
 
 // swagger
-app.use('/bff/swagger', swaggerUi.serve, swaggerUi.setup(swaggerConfig));
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerConfig));
 
 // api router
-app.use('/bff/api', routes());
+app.use('/api', routes());
 
 app.use((err, req, res, next) => {
   if (err) {
