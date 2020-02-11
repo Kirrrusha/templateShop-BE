@@ -1,10 +1,10 @@
-const axios = require('axios');
+const axi = require('axios');
 
 class Request {
   constructor(options = {}) {
-    this.instance = axios.create({
-      headers: {'X-Auth-Header': ''},
-      ...options
+    this.instance = axi.create({
+      headers: { 'X-Auth-Header': '' },
+      ...options,
     });
   }
 

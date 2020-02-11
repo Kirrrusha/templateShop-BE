@@ -6,10 +6,10 @@ module.exports = {
     try {
       await mongoose.connect(db, {
         useNewUrlParser: true,
-        useUnifiedTopology: true
-      })
+        useUnifiedTopology: true,
+      });
     } catch (e) {
-      new Error(e)
+      Error(e);
     }
-  }
+  },
 };

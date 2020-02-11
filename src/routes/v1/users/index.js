@@ -1,16 +1,19 @@
 const express = require('express');
+
 const router = express.Router();
-const ctrlUsers = require('../../../controllers/users');
 const { check } = require('express-validator');
-const {validate} = require('../../../middleware');
+const ctrlUsers = require('../../../controllers/users');
+const { validate } = require('../../../middleware');
 
 const ordersValidator = [
   check('username').isEmpty()
     .withMessage('Обязательное поле')
-    .isAlphanumeric('en-US').withMessage('Username должен быть из чесел и букв'),
+    .isAlphanumeric('en-US')
+    .withMessage('Username должен быть из чесел и букв'),
   check('password').isEmpty()
     .withMessage('Обязательное поле')
-    .isAlphanumeric('en-US').withMessage('Пароль должен быть из чесел и букв')
+    .isAlphanumeric('en-US')
+    .withMessage('Пароль должен быть из чесел и букв'),
 ];
 
 router.post('/login', validate(ordersValidator), ctrlUsers.auth);

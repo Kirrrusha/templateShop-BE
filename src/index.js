@@ -13,7 +13,7 @@ process
   .on('unhandledRejection', (reason) => {
     logger.error(reason);
   })
-  .on('uncaughtException', err => {
+  .on('uncaughtException', (err) => {
     logger.error(err);
     process.exit(1);
   });

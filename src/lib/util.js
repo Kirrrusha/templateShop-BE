@@ -18,8 +18,7 @@ exports.toRes = function toRes(res, status = 200) {
   };
 };
 
-exports.asyncMiddleware = fn =>
-  (req, res, next) => {
-    Promise.resolve(fn(req, res, next))
-      .catch(next);
-  };
+exports.asyncMiddleware = (fn) => (req, res, next) => {
+  Promise.resolve(fn(req, res, next))
+    .catch(next);
+};
