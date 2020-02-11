@@ -1,19 +1,25 @@
 const version = require('../../../package.json').version;
 const config = require('../../config');
-const Router = require('express').Router;
+const router = require('express').Router();
+const users = require('./users');
+const RateLimit = require('express-rate-limit');
+const passport = require('passport');
 
-module.exports = () => {
-  let api = Router();
+const auth = passport.authenticate('jwt', {
+  session: false
+});
 
-  // api.use(/* auth middleware */);
-  console.log('1')
+const apiLimiter = new RateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
 
-  // perhaps expose some API metadata at the root
-  api.get('/', (req, res) => res.json({
-    version,
-    config,
-    env: process.env.NODE_ENV,
-  }));
+router.get('/', (req, res) => res.json({
+  version,
+  config,
+  env: process.env.NODE_ENV,
+}));
 
-  return api;
-};
+router.use('/users', apiLimiter, users);
+
+module.exports = router;

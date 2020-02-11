@@ -1,5 +1,6 @@
 const http = require('http');
 const express = require('express');
+const passport = require('passport');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const routes = require('../routes');
@@ -9,6 +10,7 @@ const compression = require('compression');
 const finalhandler = require('finalhandler');
 const swaggerUi = require('swagger-ui-express');
 const swaggerConfig = require('../swagger');
+const passportConfig = require('../config/passport');
 
 let app = express();
 app.server = http.createServer(app);
@@ -19,6 +21,8 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 app.use(logger.errorLogger);
+
+passportConfig(passport);
 
 // 3rd party middleware
 app.use(cors({
@@ -36,7 +40,7 @@ app.use(compression());
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerConfig));
 
 // api router
-app.use('/api', routes());
+app.use('/api', routes);
 
 app.use((err, req, res, next) => {
   if (err) {

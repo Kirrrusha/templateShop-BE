@@ -1,9 +1,14 @@
-const Router = require('express').Router;
+const { validationResult } = require('express-validator');
 
-module.exports = () => {
-	let routes = Router();
+exports.validate = checks => [
+	...checks,
+	(req, res, next) => {
+		const errors = validationResult(req.body);
 
-	//TODO: validation, authorization...  middleware here
+		if (!errors.isEmpty()) {
+			return res.status(422).json({ message: errors.array().map(err => err.msg).join(' ') });
+		}
 
-	return routes;
-};
+		next();
+	}
+];
