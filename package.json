@@ -1,0 +1,34 @@
+{
+  "name": "templateshop-be",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "nodemon src",
+    "lint": "eslint --ignore-path .gitignore .",
+    "fixLint": "eslint --ignore-path .gitignore . --fix"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "compression": "^1.7.4",
+    "cookie-parser": "~1.4.4",
+    "cors": "^2.8.5",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "express-rate-limit": "^5.0.0",
+    "finalhandler": "^1.1.2",
+    "jsonwebtoken": "latest",
+    "mongoose": "^5.8.11",
+    "morgan": "~1.9.1",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
+    "swagger-ui-express": "^4.1.3",
+    "express-validator": "^6.4.0",
+    "bcrypt": "^3.0.8"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.20.1",
+    "nodemon": "^2.0.2"
+  }
+}
