@@ -1,8 +1,0 @@
-{
-  "port": 8080,
-  "bodyLimit": "100kb",
-  "corsHeaders": ["http://localhost:3030"],
-  "url": "http://localhost:3030",
-  "mongoURI": "mongodb://localhost:27017/dataArt",
-  "secretOrKey": "secret"
-}

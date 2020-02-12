@@ -1,14 +1,9 @@
 const defaultConfig = require('./default.json');
-const development = require('./development.json');
 
-const envConfig = {
-  development,
-}[process.env.NODE_ENV] || {};
 
 const config = {
   env: process.env.NODE_ENV,
   ...defaultConfig,
-  ...envConfig,
 };
 
 // define env vars into config
