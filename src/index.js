@@ -14,7 +14,7 @@ process
     logger.error(reason);
   })
   .on('uncaughtException', (err) => {
-    logger.error(err);
+    // logger.error(err);
     process.exit(1);
   });
 
