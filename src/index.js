@@ -18,4 +18,4 @@ process
     process.exit(1);
   });
 
-module.exports = server.app;
+// module.exports = server.app;

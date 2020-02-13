@@ -13,7 +13,7 @@ const swaggerConfig = require('../swagger');
 const passportConfig = require('../config/passport');
 
 const app = express();
-app.server = http.createServer(app);
+// app.server = http.createServer(app);
 
 // HTTP request logger
 if (process.env.NODE_ENV !== 'production') {
@@ -54,8 +54,8 @@ app.use((err, req, res, next) => {
 });
 
 function run() {
-  app.server.listen(config.port, () => {
-    console.log('\x1b[33m%s\x1b[0m', `Started on port ${app.server.address().port}`);
+  app.listen(config.port, () => {
+    console.log('\x1b[33m%s\x1b[0m', `Started on port ${config.port}`);
   });
 }
 
