@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon src",
+    "start": "nodemon index",
     "lint": "eslint --ignore-path .gitignore .",
     "fixLint": "eslint --ignore-path .gitignore . --fix"
   },
