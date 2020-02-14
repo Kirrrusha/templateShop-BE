@@ -1,5 +1,9 @@
 const express = require('express');
-const {port} = require('../config');
+const bodyParser = require('body-parser');
+const compression = require('compression');
+const cors = require('cors');
+const {port, corsHeaders, bodyLimit} = require('../config');
+const routes = require('../routes');
 
 const app = express();
 
@@ -7,6 +11,18 @@ const app = express();
 app.get('/', (req, res) => {
   res.json({message: 'ok'})
 });
+
+app.use(cors({
+  exposedHeaders: corsHeaders
+}));
+
+app.use(bodyParser.json({
+  limit: bodyLimit,
+}));
+
+app.use(compression())
+
+app.use('/api', routes);
 
 function run() {
   app.listen(port, () => {

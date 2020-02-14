@@ -1,7 +1,7 @@
 {
   "port": 8080,
   "bodyLimit": "100kb",
-  "corsHeaders": ["http://localhost:3000", "https://sleepy-oasis-78295.herokuapp.com"],
+  "corsHeaders": ["*"],
   "url": "http://localhost:8080",
   "mongoURI": "mongodb://localhost:27017/template-shop",
   "secretOrKey": "secret"
