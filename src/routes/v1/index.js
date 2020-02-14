@@ -14,11 +14,6 @@ const apiLimiter = new RateLimit({
   max: 100,
 });
 
-router.get('/', (req, res) => res.json({
-  version,
-  ...config,
-}));
-
 router.use('/users', apiLimiter, users);
 
 module.exports = router;
