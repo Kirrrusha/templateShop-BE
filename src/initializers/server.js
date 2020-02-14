@@ -1,26 +1,30 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const compression = require('compression');
+const passport = require('passport');
 const cors = require('cors');
-const {port, corsHeaders, bodyLimit} = require('../config');
+const { port, corsHeaders, bodyLimit } = require('../config');
 const routes = require('../routes');
+const passportConfig = require('../config/passport');
 
 const app = express();
 
 
 app.get('/', (req, res) => {
-  res.json({message: 'ok'})
+  res.json({ message: 'ok' });
 });
+
+passportConfig(passport);
 
 app.use(cors({
   exposedHeaders: corsHeaders
 }));
 
 app.use(bodyParser.json({
-  limit: bodyLimit,
+  limit: bodyLimit
 }));
 
-app.use(compression())
+app.use(compression());
 
 app.use('/api', routes);
 
@@ -31,5 +35,6 @@ function run() {
 }
 
 module.exports = {
-  app, run,
+  app,
+  run
 };

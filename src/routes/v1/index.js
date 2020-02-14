@@ -16,8 +16,7 @@ const apiLimiter = new RateLimit({
 
 router.get('/', (req, res) => res.json({
   version,
-  config,
-  env: process.env.NODE_ENV,
+  ...config,
 }));
 
 router.use('/users', apiLimiter, users);
