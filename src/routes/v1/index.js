@@ -1,5 +1,3 @@
-const { version } = require('../../../package.json');
-const config = require('../../config');
 const router = require('express').Router();
 const users = require('./users');
 const RateLimit = require('express-rate-limit');
