@@ -1,0 +1,388 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Documentation for aggregate response application",
+    "version": "1.0.0",
+    "title": "shop"
+  },
+  "schemes": [
+    "http"
+  ],
+  "basePath": "/api/v1/categories",
+  "tags": [
+    {
+      "name": "Categories",
+      "description": "Categories products"
+    },
+    {
+      "name": "Products",
+      "description": "Products"
+    },
+    {
+      "name": "Checkout",
+      "description": "Work with checkout"
+    }
+  ],
+  "paths": {
+    "/api/v1/categories": {
+      "get": {
+        "tags": ["Categories"],
+        "description": "Returns list of categories",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/categories"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/product/:id": {
+      "get": {
+        "tags": ["Products"],
+        "description": "Returns list of products",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [{
+          "in": "path",
+          "name": "id",
+          "description": "product's id",
+          "required": true,
+          "type": "integer"
+        }],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/product"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/category/:id": {
+      "get": {
+        "tags": ["Product"],
+        "description": "Returns list of products by category id",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [{
+          "in": "path",
+          "name": "id",
+          "description": "category's id",
+          "required": true,
+          "type": "integer"
+        }],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/productsByCategoryId"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/checkout": {
+      "post": {
+        "tags": ["Checkout"],
+        "description": "Order products | product",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "description": "body request checkout",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/checkoutBodyRequest"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "items": {
+                "$ref": "#/definitions/simpleOk"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "categories": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "subcategories": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/subcategories"
+          }
+        }
+      }
+    },
+    "subcategories": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "img": {
+          "type": "string"
+        }
+      }
+    },
+    "productsByCategoryId": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "img": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number"
+        }
+      }
+    },
+    "product": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "siteId": {
+          "type": "string"
+        },
+        "manufacture": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/manufacture"
+          }
+        },
+        "model": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/model"
+          }
+        },
+        "exist": {
+          "type": "boolean"
+        },
+        "price": {
+          "type": "string"
+        },
+        "commonAmount": {
+          "type": "string"
+        },
+        "about": {
+          "type": "string"
+        },
+        "img": {
+          "type": "string"
+        },
+        "characteristic": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/characteristic"
+          }
+        },
+        "comments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/comments"
+          }
+        }
+      }
+    },
+    "manufacture": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "model": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "characteristic": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "productId": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "comments": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "label": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "mark": {
+          "type": "integer"
+        }
+      }
+    },
+    "checkoutBodyRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number"
+        },
+        "price": {
+          "type": "number"
+        },
+        "total": {
+          "type": "number"
+        },
+        "client": {
+          "type": "object",
+          "properties": {
+            "clientId": {
+              "type": "number"
+            },
+            "name": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "simpleOk": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}
+

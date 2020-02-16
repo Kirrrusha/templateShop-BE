@@ -5,6 +5,8 @@ const passport = require('passport');
 const cors = require('cors');
 const { port, corsHeaders, bodyLimit } = require('../config');
 const routes = require('../routes');
+const swaggerUi = require('swagger-ui-express');
+const swaggerConfig = require('../swagger');
 const passportConfig = require('../config/passport');
 
 const app = express();
@@ -23,6 +25,9 @@ app.use(cors({
 app.use(bodyParser.json({
   limit: bodyLimit
 }));
+
+// swagger
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerConfig));
 
 app.use(compression());
 
