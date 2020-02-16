@@ -15,8 +15,8 @@ const ordersValidator = [
     .withMessage('Пароль должен быть из чесел и букв'),
   check('email').isEmpty()
     .withMessage('Обязательное поле')
-    .isEmail('Это не email')
-    .withMessage('Пароль должен быть из чесел и букв'),
+    .isEmail()
+    .withMessage('Email не корректоного вида'),
 ];
 
 router.post('/login', validate(ordersValidator), ctrlUsers.auth);
