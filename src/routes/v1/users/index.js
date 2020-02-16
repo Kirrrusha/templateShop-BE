@@ -13,6 +13,10 @@ const ordersValidator = [
     .withMessage('Обязательное поле')
     .isAlphanumeric('en-US')
     .withMessage('Пароль должен быть из чесел и букв'),
+  check('email').isEmpty()
+    .withMessage('Обязательное поле')
+    .isEmail('Это не email')
+    .withMessage('Пароль должен быть из чесел и букв'),
 ];
 
 router.post('/login', validate(ordersValidator), ctrlUsers.auth);
