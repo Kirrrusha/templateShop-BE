@@ -32,10 +32,19 @@ exports.registration = (req, res) => {
         bCrypt.hash(password, salt, (err, hash) => {
           if (err) return res.status(404).json({ ...err });
           newUser.password = hash;
-          newUser
-            .save()
-            .then(() => res.json({ message: 'Пользователь создан' }))
-            .catch(({ message }) => res.status(404).json({ message }));
+
+          const payload = { id: newUser._id, username: newUser.username };
+
+          jwt.sign(payload, key, { expiresIn: 86400 }, (err, token) => {
+            if (err) res.status(404).json({ ...err });
+
+            newUser
+              .save()
+              .then(() => res.json({ token }))
+              .catch(({ message }) => res.status(404).json({ message }));
+          });
+
+
         });
       });
     })
