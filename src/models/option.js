@@ -29,6 +29,6 @@ const optionValuesSchema = new Schema({
   }
 });
 
-const option = mongoose.model('groupAttribute', optionSchema);
+const option = mongoose.model('optionProduct', optionSchema);
 
 module.exports = option;

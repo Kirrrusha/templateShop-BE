@@ -17,6 +17,6 @@ const attributeSchema = new Schema({
   },
 });
 
-const attribute = mongoose.model('groupAttribute', attributeSchema);
+const attribute = mongoose.model('attribute', attributeSchema);
 
 module.exports = attribute;
