@@ -1,17 +1,13 @@
 const router = require('express').Router();
 const users = require('./users');
-const RateLimit = require('express-rate-limit');
+const product = require('./product');
 const passport = require('passport');
 
 const auth = passport.authenticate('jwt', {
   session: false,
 });
 
-const apiLimiter = new RateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-});
-
-router.use('/users', apiLimiter, users);
+router.use('/users', users);
+router.use('/product', product);
 
 module.exports = router;
