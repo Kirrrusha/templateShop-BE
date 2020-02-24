@@ -22,10 +22,10 @@ const optionSchema = new Schema({
 }, {
   timestamps: {
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-    versionKey: false,
-    collection: 'OptionProductCollection',
+    updatedAt: 'updatedAt'
   },
+  collection: 'OptionProductCollection',
+  versionKey: false
 });
 
 const option = mongoose.model('optionProduct', optionSchema);

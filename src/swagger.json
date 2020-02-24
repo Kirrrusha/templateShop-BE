@@ -209,7 +209,31 @@
             "description": "body request option",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/optionProduct"
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "optionType": {
+                  "type": "string",
+                  "enum": [
+                    "checkbox",
+                    "radio",
+                    "select"
+                  ]
+                },
+                "optionValues": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         ],
@@ -316,13 +340,15 @@
         "consumes": [
           "application/json"
         ],
-        "parameters": [{
-          "in": "path",
-          "name": "id",
-          "description": "Option's id",
-          "required": true,
-          "type": "string"
-        }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "Option's id",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -352,13 +378,15 @@
         "consumes": [
           "application/json"
         ],
-        "parameters": [{
-          "in": "path",
-          "name": "id",
-          "description": "Option's id",
-          "required": true,
-          "type": "string"
-        }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "Option's id",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -397,7 +425,18 @@
             "description": "body request option",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/article"
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "boolean"
+                }
+              }
             }
           }
         ],
@@ -504,13 +543,15 @@
         "consumes": [
           "application/json"
         ],
-        "parameters": [{
-          "in": "path",
-          "name": "id",
-          "description": "Article's id",
-          "required": true,
-          "type": "string"
-        }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "Article's id",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -540,13 +581,241 @@
         "consumes": [
           "application/json"
         ],
-        "parameters": [{
-          "in": "path",
-          "name": "id",
-          "description": "Article's id",
-          "required": true,
-          "type": "string"
-        }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "Article's id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/simpleOk"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/product/group-attributes": {
+      "post": {
+        "tags": [
+          "Products"
+        ],
+        "description": "Create product's group-attributes",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body request option",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/simpleOk"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "description": "get all group-attributes",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Articles"
+        ],
+        "description": "update group-attributes",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body request option",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/product/group-attributes/:id": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "description": "get article by id",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "Article's id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Products"
+        ],
+        "description": "remove article by id",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "Article's id",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -765,6 +1034,9 @@
     "optionProduct": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "string"
+        },
         "name": {
           "type": "string"
         },
@@ -792,6 +1064,9 @@
     "article": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "string"
+        },
         "name": {
           "type": "string"
         },

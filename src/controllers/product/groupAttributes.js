@@ -1,9 +1,9 @@
-const Articles = require('../models/articles');
-const {errorHandler} = require('../lib/util');
+const GroupAttributes = require('../../models/group-attributes');
+const {errorHandler} = require('../../lib/util');
 
 exports.getAll = (req, res, next) => {
-  Articles.find({})
-    .then(articles => res.json(articles.map(article => transformArticle(article))))
+  GroupAttributes.find({})
+    .then(groupAttributes => res.json(groupAttributes.map(group => transformGroupAttributes(group))))
     .catch(({ message }) =>  errorHandler({
       message,
       statusCode: 404
@@ -12,8 +12,8 @@ exports.getAll = (req, res, next) => {
 
 exports.getById = (req, res, next) => {
   const {id} = req.query;
-  Articles.find({_id: id})
-    .then(article => res.json(transformArticle(article)))
+  GroupAttributes.find({_id: id})
+    .then(groupAttributes => res.json(transformGroupAttributes(groupAttributes)))
     .catch(({ message }) => errorHandler({
       message,
       statusCode: 404
@@ -23,30 +23,28 @@ exports.getById = (req, res, next) => {
 exports.create = (req, res, next) => {
   const {name, type, optionValues} = req.body;
 
-  Articles.create({name, type, optionValues}, (err, article) => {
+  GroupAttributes.create({name, type, optionValues}, (err, groupAttributes) => {
     if (err) errorHandler({
       message: err
     }, next);
-    res.json(transformArticle(article));
+    res.json(transformGroupAttributes(groupAttributes));
   });
 };
 
 exports.update = (req, res, next) => {
-  const {id, name, text, status} = req.body;
-  Articles.findOne({ _id: id }, (err, article) => {
+  const {id, name} = req.body;
+  GroupAttributes.findOne({ _id: id }, (err, groupAttributes) => {
     if (err) errorHandler({
       message: err
     }, next);
-    if (!articles) errorHandler({
+    if (!groupAttributes) errorHandler({
       message: 'Not found',
       statusCode: 404
     }, next);
-    article.name = name;
-    article.text = text;
-    article.status = status;
-    article
+    groupAttributes.name = name;
+    groupAttributes
       .save()
-      .then(article => res.json(transformArticle(article)))
+      .then(opt => res.json(opt))
       .catch(({ message }) => errorHandler({
         message,
         statusCode: 404
@@ -57,7 +55,7 @@ exports.update = (req, res, next) => {
 exports.delete = (req, res, next) => {
   const {id} = req.query;
 
-  Articles.deleteOne({ _id: id }, err => {
+  GroupAttributes.deleteOne({ _id: id }, err => {
     if (err) errorHandler({
       message: err
     }, next);
@@ -65,9 +63,4 @@ exports.delete = (req, res, next) => {
   });
 };
 
-const transformArticle = ({ _id, name, text, status }) => ({
-  id: _id,
-  name,
-  text,
-  status
-});
+const transformGroupAttributes = ({_id, name}) => ({id: _id, name});

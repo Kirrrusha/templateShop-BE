@@ -15,10 +15,10 @@ const articlesSchema = new Schema({
 }, {
   timestamps: {
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-    versionKey: false,
-    collection: 'modulesCollection',
+    updatedAt: 'updatedAt'
   },
+  versionKey: false,
+  collection: 'articlesCollection'
 });
 
 const modules = mongoose.model('modules', articlesSchema);
