@@ -8,9 +8,18 @@ const routes = require('../routes');
 const swaggerUi = require('swagger-ui-express');
 const swaggerConfig = require('../swagger');
 const passportConfig = require('../config/passport');
+const logger = require('../lib/logger');
+const RateLimit = require('express-rate-limit');
+
 
 const app = express();
 
+// HTTP request logger
+if (process.env.NODE_ENV !== 'production') {
+  app.use(logger.devLogger);
+}
+
+app.use(logger.errorLogger);
 
 app.get('/', (req, res) => {
   res.json({ message: 'ok' });
@@ -31,7 +40,24 @@ app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerConfig));
 
 app.use(compression());
 
-app.use('/api', routes);
+
+const apiLimiter = new RateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
+
+app.use('/api', apiLimiter, routes);
+
+app.use((err, req, res, next) => {
+  if (err) {
+    if (!err.statusCode) err.statusCode = 500;
+    req.err = err.stack;
+    console.error(err);
+    res.status(err.statusCode).send({message: err.message});
+  }
+
+  next();
+});
 
 function run() {
   app.listen(port, () => {

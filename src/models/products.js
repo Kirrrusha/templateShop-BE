@@ -2,50 +2,9 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
-const productsSchema = new Schema({
-  name: {
-    type: String,
-    required: [true, 'Add name product'],
-  },
-  description: String,
-  status: Boolean,
-  price: {
-    type: Number,
-    required: [true, 'Add product\'s price'],
-  },
-  images: {
-    type: [String],
-    required: [true, 'Need at least one photo'],
-  },
-  deductFromStock: {
-    type: Boolean,
-    default: true
-  },
-  manufactureId: String,
-  categoryId: [String],
-  recommended: [String],
-  attributes: [attributesProductSchema],
-  options: [optionsProductSchema],
-  discount: [discountProductSchema],
-  stock: [stockProductSchema]
-}, {
-  timestamps: {
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-    versionKey: false,
-    collection: 'productsCollection',
-  },
-});
-
 const attributesProductSchema = new Schema({
   attributeId: String,
   text: String
-});
-
-const optionsProductSchema = new Schema({
-  optionId: String,
-  status: Boolean,
-  optionValues: [optionsProductSchemaProductSchema]
 });
 
 const optionsProductSchemaProductSchema = new Schema({
@@ -63,6 +22,12 @@ const optionsProductSchemaProductSchema = new Schema({
     default: true
   },
   price: Number
+});
+
+const optionsProductSchema = new Schema({
+  optionId: String,
+  status: Boolean,
+  optionValues: [optionsProductSchemaProductSchema]
 });
 
 const discountProductSchema = new Schema({
@@ -107,6 +72,41 @@ const stockProductSchema = new Schema({
     type: Date,
     default: new Date()
   }
+});
+
+const productsSchema = new Schema({
+  name: {
+    type: String,
+    required: [true, 'Add name product'],
+  },
+  description: String,
+  status: Boolean,
+  price: {
+    type: Number,
+    required: [true, 'Add product\'s price'],
+  },
+  images: {
+    type: [String],
+    required: [true, 'Need at least one photo'],
+  },
+  deductFromStock: {
+    type: Boolean,
+    default: true
+  },
+  manufactureId: String,
+  categoryId: [String],
+  recommended: [String],
+  attributes: [attributesProductSchema],
+  options: [optionsProductSchema],
+  discount: [discountProductSchema],
+  stock: [stockProductSchema]
+}, {
+  timestamps: {
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    versionKey: false,
+    collection: 'productsCollection',
+  },
 });
 
 const products = mongoose.model('products', productsSchema);

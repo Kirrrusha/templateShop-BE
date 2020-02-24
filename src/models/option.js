@@ -2,17 +2,23 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
+const optionValuesSchema = new Schema({
+  name: {
+    type: String,
+    required: [true, 'Add name product value']
+  }
+});
+
 const optionSchema = new Schema({
   name: {
     type: String,
-    required: [true, 'Add name option product'],
+    required: [true, 'Add name product product'],
   },
-  type: {
+  optionType: {
     type: String,
     enum: ['checkbox', 'radio', 'select'],
   },
-  values: [optionValuesSchema]
-
+  optionValues: [optionValuesSchema]
 }, {
   timestamps: {
     createdAt: 'createdAt',
@@ -20,13 +26,6 @@ const optionSchema = new Schema({
     versionKey: false,
     collection: 'OptionProductCollection',
   },
-});
-
-const optionValuesSchema = new Schema({
-  name: {
-    type: String,
-    required: [true, 'Add name option value']
-  }
 });
 
 const option = mongoose.model('optionProduct', optionSchema);
