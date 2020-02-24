@@ -1,9 +1,9 @@
-const Options = require('../../models/option');
-const {errorHandler} = require('../../lib/util');
+const Articles = require('../models/articles');
+const {errorHandler} = require('../lib/util');
 
 exports.getAll = (req, res, next) => {
-  Options.find({})
-    .then(options => res.json(options))
+  Articles.find({})
+    .then(articles => res.json(articles))
     .catch(({ message }) =>  errorHandler({
       message,
       statusCode: 404
@@ -12,8 +12,8 @@ exports.getAll = (req, res, next) => {
 
 exports.getById = (req, res, next) => {
   const {id} = req.query;
-  Options.find({_id: id})
-    .then(option => res.json(option))
+  Articles.find({_id: id})
+    .then(article => res.json(article))
     .catch(({ message }) => errorHandler({
       message,
       statusCode: 404
@@ -23,30 +23,30 @@ exports.getById = (req, res, next) => {
 exports.create = (req, res, next) => {
   const {name, type, optionValues} = req.body;
 
-  Options.create({name, type, optionValues}, (err, option) => {
+  Articles.create({name, type, optionValues}, (err, articles) => {
     if (err) errorHandler({
       message: err
     }, next);
-    res.json(option);
+    res.json(articles);
   });
 };
 
 exports.update = (req, res, next) => {
-  const {id, name, type, optionValues} = req.body;
-  Options.findOne({ _id: id }, (err, option) => {
+  const {id, name, text, status} = req.body;
+  Articles.findOne({ _id: id }, (err, articles) => {
     if (err) errorHandler({
       message: err
     }, next);
-    if (!option) errorHandler({
+    if (!articles) errorHandler({
       message: 'Not found',
       statusCode: 404
     }, next);
-    option.name = name;
-    option.type = type;
-    option.optionValues = optionValues;
-    option
+    articles.name = name;
+    articles.text = text;
+    articles.status = status;
+    articles
       .save()
-      .then(opt => res.json(opt))
+      .then(article => res.json(article))
       .catch(({ message }) => errorHandler({
         message,
         statusCode: 404
@@ -57,7 +57,7 @@ exports.update = (req, res, next) => {
 exports.delete = (req, res, next) => {
   const {id} = req.query;
 
-  Options.deleteOne({ _id: id }, err => {
+  Articles.deleteOne({ _id: id }, err => {
     if (err) errorHandler({
       message: err
     }, next);

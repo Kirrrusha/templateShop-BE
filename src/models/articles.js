@@ -7,9 +7,11 @@ const articlesSchema = new Schema({
     type: String,
     required: [true, 'Add name article'],
   },
-  type: String,
   text: String,
-  status: Boolean
+  status: {
+    type: Boolean,
+    default: false
+  }
 }, {
   timestamps: {
     createdAt: 'createdAt',
