@@ -11,10 +11,10 @@ const attributeSchema = new Schema({
 }, {
   timestamps: {
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-    versionKey: false,
-    collection: 'AttributeCollection',
+    updatedAt: 'updatedAt'
   },
+  versionKey: false,
+  collection: 'AttributeCollection',
 });
 
 const attribute = mongoose.model('attribute', attributeSchema);

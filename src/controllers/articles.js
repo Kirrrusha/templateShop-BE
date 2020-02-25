@@ -11,8 +11,8 @@ exports.getAll = (req, res, next) => {
 };
 
 exports.getById = (req, res, next) => {
-  const {id} = req.query;
-  Articles.find({_id: id})
+  const {id} = req.params;
+  Articles.findOne({_id: id})
     .then(article => res.json(transformArticle(article)))
     .catch(({ message }) => errorHandler({
       message,
@@ -55,7 +55,7 @@ exports.update = (req, res, next) => {
 };
 
 exports.delete = (req, res, next) => {
-  const {id} = req.query;
+  const {id} = req.params;
 
   Articles.deleteOne({ _id: id }, err => {
     if (err) errorHandler({
