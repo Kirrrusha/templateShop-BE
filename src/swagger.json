@@ -190,7 +190,7 @@
         }
       }
     },
-    "/api/v1/product/options": {
+    "/api/v1/products/options": {
       "post": {
         "tags": [
           "Products"
@@ -328,7 +328,7 @@
         }
       }
     },
-    "/api/v1/product/options/:id": {
+    "/api/v1/products/options/:id": {
       "get": {
         "tags": [
           "Products"
@@ -406,7 +406,7 @@
         }
       }
     },
-    "/api/v1/product/articles": {
+    "/api/v1/articles": {
       "post": {
         "tags": [
           "Articles"
@@ -531,7 +531,7 @@
         }
       }
     },
-    "/api/v1/product/articles/:id": {
+    "/api/v1/articles/:id": {
       "get": {
         "tags": [
           "Articles"
@@ -609,7 +609,7 @@
         }
       }
     },
-    "/api/v1/product/group-attributes": {
+    "/api/v1/products/group-attributes": {
       "post": {
         "tags": [
           "Products"
@@ -749,7 +749,7 @@
         }
       }
     },
-    "/api/v1/product/group-attributes/:id": {
+    "/api/v1/products/group-attributes/:id": {
       "get": {
         "tags": [
           "Products"
@@ -835,7 +835,7 @@
         }
       }
     },
-    "/api/v1/product/attributes": {
+    "/api/v1/products/attributes": {
       "post": {
         "tags": [
           "Products"
@@ -987,7 +987,7 @@
         }
       }
     },
-    "/api/v1/product/attributes/:id": {
+    "/api/v1/products/attributes/:id": {
       "get": {
         "tags": [
           "Products"
