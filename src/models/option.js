@@ -5,14 +5,14 @@ const { Schema } = mongoose;
 const optionValuesSchema = new Schema({
   name: {
     type: String,
-    required: [true, 'Add name product value']
+    required: [true, 'Add name products value']
   }
 });
 
 const optionSchema = new Schema({
   name: {
     type: String,
-    required: [true, 'Add name product product'],
+    required: [true, 'Add name products products'],
   },
   optionType: {
     type: String,

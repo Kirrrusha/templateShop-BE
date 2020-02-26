@@ -77,13 +77,13 @@ const stockProductSchema = new Schema({
 const productsSchema = new Schema({
   name: {
     type: String,
-    required: [true, 'Add name product'],
+    required: [true, 'Add name products'],
   },
   description: String,
   status: Boolean,
   price: {
     type: Number,
-    required: [true, 'Add product\'s price'],
+    required: [true, 'Add products\'s price'],
   },
   images: {
     type: [String],

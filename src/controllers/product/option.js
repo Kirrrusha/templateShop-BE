@@ -11,8 +11,8 @@ exports.getAll = (req, res, next) => {
 };
 
 exports.getById = (req, res, next) => {
-  const { id } = req.query;
-  Options.find({ _id: id })
+  const { id } = req.params;
+  Options.findOne({ _id: id })
     .then(option => res.json(transformOption(option)))
     .catch(({ message }) => errorHandler({
       message,
@@ -65,7 +65,7 @@ exports.update = (req, res, next) => {
 };
 
 exports.delete = (req, res, next) => {
-  const { id } = req.query;
+  const { id } = req.params;
 
   Options.deleteOne({ _id: id }, err => {
     if (err) {

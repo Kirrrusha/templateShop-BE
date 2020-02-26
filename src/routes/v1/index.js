@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const users = require('./users');
 const articles = require('./articles');
-const product = require('./product');
+const products = require('./products');
 const passport = require('passport');
 
 const auth = passport.authenticate('jwt', {
@@ -9,7 +9,7 @@ const auth = passport.authenticate('jwt', {
 });
 
 router.use('/users', users);
-router.use('/product', product);
+router.use('/products', products);
 router.use('/articles', articles);
 
 module.exports = router;
