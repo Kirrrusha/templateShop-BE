@@ -24,7 +24,7 @@ exports.create = (req, res, next) => {
   const {name, groupId} = req.body;
 
   Attributes.create({name, groupId}, (err, attribute) => {
-    if (err) errorHandler({
+    if (err) return errorHandler({
       message: err
     }, next);
     res.json(transformAttributes(attribute));
@@ -34,12 +34,8 @@ exports.create = (req, res, next) => {
 exports.update = (req, res, next) => {
   const {id, name} = req.body;
   Attributes.findOne({ _id: id }, (err, attributes) => {
-    if (err) errorHandler({
+    if (err) return errorHandler({
       message: err
-    }, next);
-    if (!attributes) errorHandler({
-      message: 'Not found',
-      statusCode: 404
     }, next);
     attributes.name = name;
     attributes
@@ -56,7 +52,7 @@ exports.delete = (req, res, next) => {
   const {id} = req.params;
 
   Attributes.deleteOne({ _id: id }, err => {
-    if (err) errorHandler({
+    if (err) return errorHandler({
       message: err
     }, next);
     res.json({message: 'ok'});

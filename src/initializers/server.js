@@ -53,7 +53,7 @@ app.use((err, req, res, next) => {
     if (!err.statusCode) err.statusCode = 500;
     req.err = err.stack;
     console.error(err);
-    res.status(err.statusCode).send({message: err.message});
+    return res.status(err.statusCode).send({message: err.message});
   }
 
   next();

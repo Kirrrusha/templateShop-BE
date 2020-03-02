@@ -3,9 +3,9 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const commentsSchema = new Schema({
-  authorName: {
+  productId: {
     type: String,
-    default: 'Anonymous'
+    required: true
   },
   authorId: String,
   text: {
@@ -15,19 +15,21 @@ const commentsSchema = new Schema({
   rating: {
     type: Number,
     get: v => Math.round(v),
-    set: v => Math.round(v)
+    set: v => Math.round(v),
+    min: 1,
+    max: 5
   },
-  status: {
+  visible: {
     type: Boolean,
     default: true
   }
 }, {
   timestamps: {
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-    versionKey: false,
-    collection: 'OptionProductCollection'
-  }
+    updatedAt: 'updatedAt'
+  },
+  versionKey: false,
+  collection: 'CommentsCollection'
 });
 
 const comments = mongoose.model('comments', commentsSchema);

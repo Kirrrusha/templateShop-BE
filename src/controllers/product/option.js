@@ -11,8 +11,8 @@ exports.getAll = (req, res, next) => {
 };
 
 exports.getById = (req, res, next) => {
-  const { id } = req.params;
-  Options.findOne({ _id: id })
+  const { id: _id } = req.params;
+  Options.findOne({ _id })
     .then(option => res.json(transformOption(option)))
     .catch(({ message }) => errorHandler({
       message,
@@ -29,7 +29,7 @@ exports.create = (req, res, next) => {
     optionValues
   }, (err, option) => {
     if (err) {
-      errorHandler({
+      return errorHandler({
         message: err
       }, next);
     }
@@ -41,14 +41,8 @@ exports.update = (req, res, next) => {
   const { id, name, optionType, optionValues } = req.body;
   Options.findOne({ _id: id }, (err, option) => {
     if (err) {
-      errorHandler({
+      return errorHandler({
         message: err
-      }, next);
-    }
-    if (!option) {
-      errorHandler({
-        message: 'Not found',
-        statusCode: 404
       }, next);
     }
     option.name = name;
@@ -65,11 +59,11 @@ exports.update = (req, res, next) => {
 };
 
 exports.delete = (req, res, next) => {
-  const { id } = req.params;
+  const { id: _id } = req.params;
 
-  Options.deleteOne({ _id: id }, err => {
+  Options.deleteOne({ _id }, err => {
     if (err) {
-      errorHandler({
+      return errorHandler({
         message: err
       }, next);
     }
@@ -77,8 +71,8 @@ exports.delete = (req, res, next) => {
   });
 };
 
-const transformOption = ({ _id, name, optionType, optionValues }) => ({
-  id: _id,
+const transformOption = ({ _id: id, name, optionType, optionValues }) => ({
+  id,
   name,
   optionType,
   optionValues: optionValues.map(({_id, name}) => ({id: _id, name}))
