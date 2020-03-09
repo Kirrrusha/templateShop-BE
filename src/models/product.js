@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
-const autoIncrement = require('mongoose-auto-increment');
-const { autoIncremental } = require('../lib/util');
-
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 const { Schema } = mongoose;
 
 const attributesProductSchema = new Schema({
@@ -86,20 +84,27 @@ const productSchema = new Schema({
     unique: true,
     default: 0
   },
-  description: String,
-  status: Boolean,
+  description: {
+    type: String,
+    maxlength: 1000,
+    trim: true
+  },
+  status: {
+    type: Boolean,
+    default: false
+  },
   price: {
     type: Number,
     required: [true, 'Add products\'s price']
   },
   imagesPath: {
     type: [String],
-    required: [true, 'Need at least one photo']
+    default: ['/assets/uploads/unnamed.jpg']
   },
-  deductFromStock: {
-    type: Boolean,
-    default: true
-  },
+  // deductFromStock: {
+  //   type: Boolean,
+  //   default: false
+  // },
   manufactureId: {
     type: Schema.Types.ObjectId,
     ref: 'manufacture',
@@ -110,7 +115,7 @@ const productSchema = new Schema({
     ref: 'category',
     index: true
   }],
-  recommended: [{
+  recommendedProductIdList: [{
     type: Schema.Types.ObjectId,
     ref: 'product',
     index: true
@@ -127,8 +132,7 @@ const productSchema = new Schema({
   versionKey: false
 });
 
-productSchema.pre('save', (next) => autoIncremental(productSchema, this, next));
-
+productSchema.plugin(AutoIncrement, {inc_field: 'productId'});
 
 const product = mongoose.model('product', productSchema);
 

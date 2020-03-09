@@ -11,6 +11,6 @@ router.use('/group-attributes', groupAttributes);
 router.use('/attributes', attributes);
 router.use('/comments', comments);
 router.use('/manufactures', manufactures);
-router.use('', product);
+router.use('/', product);
 
 module.exports = router;

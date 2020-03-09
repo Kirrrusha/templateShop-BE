@@ -6,7 +6,6 @@ const { validate } = require('../../../middleware');
 const multer = require('multer');
 const path = require('path');
 const Manufacturers = require('../../../models/manufacturer');
-const { errorHandler } = require('../../../lib/util');
 const { isEmpty } = require('lodash');
 
 const storage = multer.diskStorage({
@@ -57,7 +56,7 @@ router.get('/:id', ctrlManufacturers.getById);
 
 router.post('/', validate(ordersValidator), upload.single('img'), ctrlManufacturers.create);
 
-router.put('/', validate(ordersValidator), ctrlManufacturers.update);
+router.put('/', validate(ordersValidator), upload.single('img'), ctrlManufacturers.update);
 
 router.delete('', ctrlManufacturers.delete);
 

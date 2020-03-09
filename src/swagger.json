@@ -25,6 +25,16 @@
     {
       "name": "Checkout",
       "description": "Work with checkout"
+    },
+    {
+      "name": "Attributes",
+      "description": "Product's attributes information"
+    },
+    {
+      "name": "Options"
+    },
+    {
+      "name": "Comments"
     }
   ],
   "paths": {
@@ -62,53 +72,10 @@
         }
       }
     },
-    "/api/v1/product/:id": {
-      "get": {
-        "tags": [
-          "Products"
-        ],
-        "description": "Returns list of products",
-        "produces": [
-          "application/json"
-        ],
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "description": "product's id",
-            "required": true,
-            "type": "integer"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/product"
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
     "/api/v1/category/:id": {
       "get": {
         "tags": [
-          "Product"
+          "Categories"
         ],
         "description": "Returns list of products by category id",
         "produces": [
@@ -148,12 +115,12 @@
         }
       }
     },
-    "/api/v1/checkout": {
-      "post": {
+    "/api/v1/products": {
+      "delete": {
         "tags": [
-          "Checkout"
+          "Products"
         ],
-        "description": "Order products | product",
+        "description": "remove comments by id",
         "produces": [
           "application/json"
         ],
@@ -162,20 +129,57 @@
         ],
         "parameters": [
           {
-            "in": "body",
-            "name": "body",
-            "description": "body request checkout",
+            "in": "query",
+            "name": "id",
             "required": true,
-            "schema": {
-              "$ref": "#/definitions/checkoutBodyRequest"
+            "type": "array",
+            "items": {
+              "type": "string"
             }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/products/:id": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "description": "Returns product",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "product's id",
+            "required": true,
+            "type": "integer"
           }
         ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/simpleOk"
+              "$ref": "#/definitions/product"
             }
           },
           "401": {
@@ -193,7 +197,7 @@
     "/api/v1/products/options": {
       "post": {
         "tags": [
-          "Products"
+          "Options"
         ],
         "description": "Create option product",
         "produces": [
@@ -331,7 +335,7 @@
     "/api/v1/products/options/:id": {
       "get": {
         "tags": [
-          "Products"
+          "Options"
         ],
         "description": "get option by id",
         "produces": [
@@ -612,7 +616,7 @@
     "/api/v1/products/group-attributes": {
       "post": {
         "tags": [
-          "Products"
+          "Attributes"
         ],
         "description": "Create product's group-attributes",
         "produces": [
@@ -752,7 +756,7 @@
     "/api/v1/products/group-attributes/:id": {
       "get": {
         "tags": [
-          "Products"
+          "Attributes"
         ],
         "description": "get article by id",
         "produces": [
@@ -1079,7 +1083,7 @@
     "/api/v1/products/comments": {
       "post": {
         "tags": [
-          "Products"
+          "Comments"
         ],
         "description": "Create product's comments",
         "produces": [
@@ -1114,7 +1118,10 @@
                   "type": "boolean"
                 }
               },
-              "required": ["productId", "text"]
+              "required": [
+                "productId",
+                "text"
+              ]
             }
           }
         ],
@@ -1208,7 +1215,11 @@
                   "type": "boolean"
                 }
               },
-              "required": ["id","productId", "text"]
+              "required": [
+                "id",
+                "productId",
+                "text"
+              ]
             }
           }
         ],
@@ -1234,7 +1245,7 @@
     "/api/v1/products/comments/:id": {
       "get": {
         "tags": [
-          "Products"
+          "Comments"
         ],
         "description": "get comment by id",
         "produces": [
@@ -1272,7 +1283,7 @@
       },
       "delete": {
         "tags": [
-          "Products"
+          "Comments"
         ],
         "description": "remove comments by id",
         "produces": [
@@ -1288,6 +1299,48 @@
             "description": "comments id",
             "required": true,
             "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/simpleOk"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/checkout": {
+      "post": {
+        "tags": [
+          "Checkout"
+        ],
+        "description": "Order products | product",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body request checkout",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/checkoutBodyRequest"
+            }
           }
         ],
         "responses": {
@@ -1368,46 +1421,37 @@
         "name": {
           "type": "string"
         },
-        "siteId": {
+        "description": {
           "type": "string"
         },
-        "manufacture": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/manufacture"
-          }
-        },
-        "model": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/model"
-          }
-        },
-        "exist": {
-          "type": "boolean"
+        "status": {
+          "type": "string"
         },
         "price": {
-          "type": "string"
+          "type": "number"
         },
-        "commonAmount": {
-          "type": "string"
-        },
-        "about": {
-          "type": "string"
-        },
-        "img": {
-          "type": "string"
-        },
-        "characteristic": {
+        "imagesPath": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/characteristic"
+            "type": "string"
           }
         },
-        "comments": {
+        "deductFromStock": {
+          "type": "boolean"
+        },
+        "manufactureId": {
+          "type": "string"
+        },
+        "categoryId": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/comments"
+            "type": "string"
+          }
+        },
+        "recommendedProductIdList": {
+          "type": "array",
+          "items": {
+            "type": "string"
           }
         }
       }

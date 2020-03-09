@@ -1,6 +1,8 @@
+const fs = require('fs');
 const Product = require('../models/product');
 const { transformResponse } = require('../lib/util');
 const { errorHandler } = require('../lib/util');
+const { difference } = require('lodash');
 
 exports.getAll = async (req, res, next) => {
   try {
@@ -28,10 +30,29 @@ exports.getById = async (req, res, next) => {
 };
 
 exports.create = async (req, res, next) => {
-  const {body} = req;
+  const { body, files } = req;
   try {
-    const product = await Product.create({...body});
-    res.json(transformResponse(product));
+    const product = await Product.create({
+      ...body,
+      imagesPath: files.map(file => `/assets/uploads/${file.filename}`)
+    });
+    const {
+      _id, name, productId, description, status, price, imagesPath,
+      deductFromStock, manufactureId, categoryId, recommendedProductIdList
+    } = product;
+    res.json(transformResponse({
+      _id,
+      name,
+      productId,
+      description,
+      status,
+      price,
+      imagesPath,
+      deductFromStock,
+      manufactureId,
+      categoryId,
+      recommendedProductIdList
+    }));
   } catch ({ message }) {
     errorHandler({
       message,
@@ -41,12 +62,39 @@ exports.create = async (req, res, next) => {
 };
 
 exports.update = async (req, res, next) => {
-  const { id, ...body } = req.body;
+  console.log('body', req.body);
+  const { body: { id, ...body }, files: photo } = req;
   try {
-    const product = await Product.findOneAndUpdate({_id: id},
-      {...body},
-      {new: true});
-    res.json(transformResponse(product));
+    const product = await Product.findById(id);
+    if (product) {
+      for (const image of product.imagesPath) {
+        await fs.unlinkSync(`.${image.replace(/assets/, 'src')}`);
+      }
+    }
+    const result = await Product.findOneAndUpdate({ _id: id },
+      {
+        ...body,
+        imagesPath: photo.map(file => `/assets/uploads/${file.filename}`)
+      },
+      { new: true });
+    const {
+      _id, name, productId, description, status, price, imagesPath,
+      deductFromStock, manufactureId, categoryId, recommendedProductIdList
+    } = result;
+
+    res.json(transformResponse({
+      id: _id,
+      name,
+      productId,
+      description,
+      status,
+      price,
+      imagesPath,
+      deductFromStock,
+      manufactureId,
+      categoryId,
+      recommendedProductIdList
+    }));
   } catch ({ message }) {
     return errorHandler({
       message,
@@ -58,18 +106,17 @@ exports.update = async (req, res, next) => {
 exports.delete = async (req, res, next) => {
   const { id } = req.query;
   try {
+    const product = await Product.findById(id);
+    if (product) {
+      for (const image of product.imagesPath) {
+        await fs.unlinkSync(`.${image.replace(/assets/, 'src')}`);
+      }
+    }
     await Product.deleteMany({ _id: { $in: id } });
-    res.end()
+    res.end();
   } catch ({ message }) {
     return errorHandler({
       message
     }, next);
   }
-
 };
-
-const transformProduct = ({ _id: id, ...body }) =>
-  ({
-    id,
-    ...body
-  });
