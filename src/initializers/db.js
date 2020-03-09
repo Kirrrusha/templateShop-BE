@@ -7,6 +7,7 @@ module.exports = {
       await mongoose.connect(db, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
+        useCreateIndex: true,
       });
     } catch (e) {
       Error(e);

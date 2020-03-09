@@ -9,17 +9,16 @@ const manufacturersSchema = new Schema({
   },
   img: {
     type: String,
-    default: '',
+    default: ''
   },
 }, {
   timestamps: {
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-    versionKey: false,
-    collection: 'manufacturersCollection',
+    updatedAt: 'updatedAt'
   },
+  versionKey: false,
 });
 
-const manufacturers = mongoose.model('groupAttribute', manufacturersSchema);
+const manufacturer = mongoose.model('manufacture', manufacturersSchema);
 
-module.exports = manufacturers;
+module.exports = manufacturer;

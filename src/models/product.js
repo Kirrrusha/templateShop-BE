@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const autoIncrement = require('mongoose-auto-increment');
+const { autoIncremental } = require('../lib/util');
 
 const { Schema } = mongoose;
 
@@ -55,14 +57,14 @@ const discountProductSchema = new Schema({
 });
 
 const stockProductSchema = new Schema({
-  groupClientId: String,
+  // groupClientId: String,
   priority: {
     type: Number,
     default: 1
   },
   price: {
     type: Number,
-    default: 0
+    required: [true, 'Add stock\'s price']
   },
   startDate: {
     type: Date,
@@ -74,41 +76,60 @@ const stockProductSchema = new Schema({
   }
 });
 
-const productsSchema = new Schema({
+const productSchema = new Schema({
   name: {
     type: String,
-    required: [true, 'Add name products'],
+    required: [true, 'Add name products']
+  },
+  productId: {
+    type: Number,
+    unique: true,
+    default: 0
   },
   description: String,
   status: Boolean,
   price: {
     type: Number,
-    required: [true, 'Add products\'s price'],
+    required: [true, 'Add products\'s price']
   },
-  images: {
+  imagesPath: {
     type: [String],
-    required: [true, 'Need at least one photo'],
+    required: [true, 'Need at least one photo']
   },
   deductFromStock: {
     type: Boolean,
     default: true
   },
-  manufactureId: String,
-  categoryId: [String],
-  recommended: [String],
-  attributes: [attributesProductSchema],
-  options: [optionsProductSchema],
-  discount: [discountProductSchema],
+  manufactureId: {
+    type: Schema.Types.ObjectId,
+    ref: 'manufacture',
+    index: true
+  },
+  categoryId: [{
+    type: Schema.Types.ObjectId,
+    ref: 'category',
+    index: true
+  }],
+  recommended: [{
+    type: Schema.Types.ObjectId,
+    ref: 'product',
+    index: true
+  }],
+  // attributes: [attributesProductSchema],
+  // options: [optionsProductSchema],
+  // discount: [discountProductSchema],
   stock: [stockProductSchema]
 }, {
   timestamps: {
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-    versionKey: false,
-    collection: 'productsCollection',
+    updatedAt: 'updatedAt'
   },
+  versionKey: false
 });
 
-const products = mongoose.model('products', productsSchema);
+productSchema.pre('save', (next) => autoIncremental(productSchema, this, next));
 
-module.exports = products;
+
+const product = mongoose.model('product', productSchema);
+
+module.exports = product;

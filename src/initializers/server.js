@@ -10,9 +10,15 @@ const swaggerConfig = require('../swagger');
 const passportConfig = require('../config/passport');
 const logger = require('../lib/logger');
 const RateLimit = require('express-rate-limit');
+const helmet = require('helmet');
 
 
 const app = express();
+
+app.use(helmet());
+
+app.use('/assets/uploads/', express.static('src/uploads'));
+
 
 // HTTP request logger
 if (process.env.NODE_ENV !== 'production') {

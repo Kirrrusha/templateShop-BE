@@ -11,11 +11,5 @@ const errorLogger = morgan(':remote-addr :remote-user :method :url :status :resp
   skip: function (req, res) { return res.statusCode < 400 }
 });
 
-if (process.env.NODE_ENV === 'production') {
-  console.log = function () {};
-  console.info = function () {};
-  console.warn = function () {};
-  console.error = function () {};
-}
 
 module.exports = {devLogger, errorLogger};
