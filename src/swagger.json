@@ -133,7 +133,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/products"
+                "$ref": "#/definitions/product"
               }
             }
           },
@@ -410,10 +410,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/product"
-            }
+            "description": "OK"
           },
           "401": {
             "description": "Unauthorized"
