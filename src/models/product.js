@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 const { Schema } = mongoose;
 
 const attributesProductSchema = new Schema({
@@ -55,14 +55,14 @@ const discountProductSchema = new Schema({
 });
 
 const stockProductSchema = new Schema({
-  groupClientId: String,
+  // groupClientId: String,
   priority: {
     type: Number,
     default: 1
   },
-  price: {
+  newPrice: {
     type: Number,
-    default: 0
+    required: [true, 'Add stock\'s price']
   },
   startDate: {
     type: Date,
@@ -74,41 +74,66 @@ const stockProductSchema = new Schema({
   }
 });
 
-const productsSchema = new Schema({
+const productSchema = new Schema({
   name: {
     type: String,
-    required: [true, 'Add name products'],
+    required: [true, 'Add name products']
   },
-  description: String,
-  status: Boolean,
+  productId: {
+    type: Number,
+    unique: true,
+    default: 0
+  },
+  description: {
+    type: String,
+    maxlength: 1000,
+    trim: true
+  },
+  status: {
+    type: Boolean,
+    default: false
+  },
   price: {
     type: Number,
-    required: [true, 'Add products\'s price'],
+    required: [true, 'Add products\'s price']
   },
-  images: {
+  imagesPath: {
     type: [String],
-    required: [true, 'Need at least one photo'],
+    default: ['/assets/uploads/unnamed.jpg']
   },
-  deductFromStock: {
-    type: Boolean,
-    default: true
+  // deductFromStock: {
+  //   type: Boolean,
+  //   default: false
+  // },
+  manufactureId: {
+    type: Schema.Types.ObjectId,
+    ref: 'manufacture',
+    index: true
   },
-  manufactureId: String,
-  categoryId: [String],
-  recommended: [String],
-  attributes: [attributesProductSchema],
-  options: [optionsProductSchema],
-  discount: [discountProductSchema],
+  categoryId: [{
+    type: Schema.Types.ObjectId,
+    ref: 'category',
+    index: true
+  }],
+  recommendedProductIdList: [{
+    type: Schema.Types.ObjectId,
+    ref: 'product',
+    index: true
+  }],
+  // attributes: [attributesProductSchema],
+  // options: [optionsProductSchema],
+  // discount: [discountProductSchema],
   stock: [stockProductSchema]
 }, {
   timestamps: {
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-    versionKey: false,
-    collection: 'productsCollection',
+    updatedAt: 'updatedAt'
   },
+  versionKey: false
 });
 
-const products = mongoose.model('products', productsSchema);
+productSchema.plugin(AutoIncrement, {inc_field: 'productId'});
 
-module.exports = products;
+const product = mongoose.model('product', productSchema);
+
+module.exports = product;

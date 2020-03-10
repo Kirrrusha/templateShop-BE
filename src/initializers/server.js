@@ -10,9 +10,15 @@ const swaggerConfig = require('../swagger');
 const passportConfig = require('../config/passport');
 const logger = require('../lib/logger');
 const RateLimit = require('express-rate-limit');
+const helmet = require('helmet');
 
 
 const app = express();
+
+app.use(helmet());
+
+app.use('/assets/uploads/', express.static('src/uploads'));
+
 
 // HTTP request logger
 if (process.env.NODE_ENV !== 'production') {
@@ -53,7 +59,7 @@ app.use((err, req, res, next) => {
     if (!err.statusCode) err.statusCode = 500;
     req.err = err.stack;
     console.error(err);
-    res.status(err.statusCode).send({message: err.message});
+    return res.status(err.statusCode).send({message: err.message});
   }
 
   next();
