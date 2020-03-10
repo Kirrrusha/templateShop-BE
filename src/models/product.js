@@ -60,7 +60,7 @@ const stockProductSchema = new Schema({
     type: Number,
     default: 1
   },
-  price: {
+  newPrice: {
     type: Number,
     required: [true, 'Add stock\'s price']
   },

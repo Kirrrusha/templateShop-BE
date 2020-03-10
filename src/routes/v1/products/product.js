@@ -64,7 +64,6 @@ router.get('/:id', ctrlProduct.getById);
 router.post('/', validate(ordersValidator), upload.array('photos', 12), ctrlProduct.create);
 
 router.put('/', validate(ordersValidator), upload.array('photos', 12), ctrlProduct.update);
-// router.put('/', validate(ordersValidator), ctrlProduct.update);
 
 router.delete('', ctrlProduct.delete);
 

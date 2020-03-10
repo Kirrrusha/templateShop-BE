@@ -116,11 +116,244 @@
       }
     },
     "/api/v1/products": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "description": "get all products",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/products"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Products"
+        ],
+        "description": "Create product",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body request option",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string",
+                  "maxLength": 1000
+                },
+                "status": {
+                  "type": "boolean"
+                },
+                "price": {
+                  "type": "number"
+                },
+                "imagesPath": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "manufactureId": {
+                  "type": "string"
+                },
+                "categoryId": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "recommendedProductIdList": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "stock": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "priority": {
+                        "type": "number"
+                      },
+                      "newPrice": {
+                        "type": "number"
+                      },
+                      "startDate": {
+                        "type": "string"
+                      },
+                      "endDate": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "newPrice"
+                    ]
+                  }
+                }
+              },
+              "required": ["name", "price"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/product"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Products"
+        ],
+        "description": "Update product",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body request option",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string",
+                  "maxLength": 1000
+                },
+                "status": {
+                  "type": "boolean"
+                },
+                "price": {
+                  "type": "number"
+                },
+                "imagesPath": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "manufactureId": {
+                  "type": "string"
+                },
+                "categoryId": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "recommendedProductIdList": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "stock": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "priority": {
+                        "type": "number"
+                      },
+                      "newPrice": {
+                        "type": "number"
+                      },
+                      "startDate": {
+                        "type": "string"
+                      },
+                      "endDate": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "newPrice"
+                    ]
+                  }
+                }
+              },
+              "required": ["name", "price", "id"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/product"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
       "delete": {
         "tags": [
           "Products"
         ],
-        "description": "remove comments by id",
+        "description": "remove products by id",
         "produces": [
           "application/json"
         ],
@@ -261,7 +494,7 @@
       },
       "get": {
         "tags": [
-          "Products"
+          "Options"
         ],
         "description": "get all options",
         "produces": [
@@ -293,7 +526,7 @@
       },
       "put": {
         "tags": [
-          "Products"
+          "Options"
         ],
         "description": "update option",
         "produces": [
@@ -373,7 +606,7 @@
       },
       "delete": {
         "tags": [
-          "Products"
+          "Options"
         ],
         "description": "remove option by id",
         "produces": [
@@ -661,7 +894,7 @@
       },
       "get": {
         "tags": [
-          "Products"
+          "Attributes"
         ],
         "description": "get all group-attributes",
         "produces": [
@@ -698,7 +931,7 @@
       },
       "put": {
         "tags": [
-          "Articles"
+          "Attributes"
         ],
         "description": "update group-attributes",
         "produces": [
@@ -802,7 +1035,7 @@
       },
       "delete": {
         "tags": [
-          "Products"
+          "Attributes"
         ],
         "description": "remove article by id",
         "produces": [
@@ -842,7 +1075,7 @@
     "/api/v1/products/attributes": {
       "post": {
         "tags": [
-          "Products"
+          "Attributes"
         ],
         "description": "Create product's attribute",
         "produces": [
@@ -890,7 +1123,7 @@
       },
       "get": {
         "tags": [
-          "Products"
+          "Attributes"
         ],
         "description": "get all attributes",
         "produces": [
@@ -933,7 +1166,7 @@
       },
       "put": {
         "tags": [
-          "Articles"
+          "Attributes"
         ],
         "description": "update group-attributes",
         "produces": [
@@ -971,7 +1204,7 @@
               "type": "object",
               "properties": {
                 "id": {
-                  "type": "string"
+                 "type": "string"
                 },
                 "name": {
                   "type": "string"
@@ -994,7 +1227,7 @@
     "/api/v1/products/attributes/:id": {
       "get": {
         "tags": [
-          "Products"
+          "Attributes"
         ],
         "description": "get attribute by id",
         "produces": [
@@ -1043,7 +1276,7 @@
       },
       "delete": {
         "tags": [
-          "Products"
+          "Attributes"
         ],
         "description": "remove article by id",
         "produces": [
@@ -1145,7 +1378,7 @@
       },
       "get": {
         "tags": [
-          "Products"
+          "Comments"
         ],
         "description": "get all comments",
         "produces": [
@@ -1177,7 +1410,7 @@
       },
       "put": {
         "tags": [
-          "Products"
+          "Comments"
         ],
         "description": "update comment",
         "produces": [
