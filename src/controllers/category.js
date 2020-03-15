@@ -61,7 +61,6 @@ exports.update = async (req, res, next) => {
 
 exports.delete = async (req, res, next) => {
   const { id } = req.query;
-  console.log('id', id)
   try {
     await Category.deleteMany({ _id: { $in: id } });
     res.end()
@@ -70,7 +69,6 @@ exports.delete = async (req, res, next) => {
       message
     }, next);
   }
-
 };
 
 const transformCategory = ({ _id: id, name, status, description }) =>

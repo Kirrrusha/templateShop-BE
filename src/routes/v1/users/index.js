@@ -1,26 +1,47 @@
 const express = require('express');
 const router = express.Router();
 const { check } = require('express-validator');
+const validator = require('validator');
 const ctrlUsers = require('../../../controllers/users');
 const { validate } = require('../../../middleware');
 
 const ordersValidator = [
-  check('username').isEmpty()
-    .withMessage('Обязательное поле')
+  check('username').not().isEmpty()
+    .withMessage('Obligatory field')
     .isAlphanumeric('en-US')
-    .withMessage('Username должен быть из чесел и букв'),
-  check('password').isEmpty()
-    .withMessage('Обязательное поле')
+    .withMessage('Wrong type'),
+  check('password').not().isEmpty()
+    .withMessage('Obligatory field')
     .isAlphanumeric('en-US')
-    .withMessage('Пароль должен быть из чесел и букв'),
-  check('email').isEmpty()
-    .withMessage('Обязательное поле')
+    .withMessage('Wrong type'),
+  check('email')
+    .optional()
     .isEmail()
-    .withMessage('Email не корректоного вида'),
+    .withMessage('Wrong type'),
+  check('surname')
+    .optional()
+    .isAlphanumeric('en-US')
+    .withMessage('Wrong type'),
+  check('name')
+    .optional()
+    .isAlphanumeric('en-US')
+    .withMessage('Wrong type'),
+  check('middleName')
+    .optional()
+    .custom(value => {
+      if (!validator.isAlphanumeric(value, 'en-US')
+        && !validator.isAlphanumeric(value, 'ru-RU')) {
+        throw new Error('Wrong type');
+      }
+
+      return true;
+    })
 ];
 
 router.post('/login', validate(ordersValidator), ctrlUsers.auth);
-
 router.post('/registration', validate(ordersValidator), ctrlUsers.registration);
+router.get('/:id', ctrlUsers.getById);
+router.put('/', validate(ordersValidator), ctrlUsers.updateUser);
+router.delete('/', ctrlUsers.deleteUsers);
 
 module.exports = router;

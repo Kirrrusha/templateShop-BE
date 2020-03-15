@@ -4,11 +4,12 @@ const { validationResult } = require('express-validator');
 exports.validate = (checks) => [
   ...checks,
   (req, res, next) => {
-    const errors = validationResult(req.body);
+    const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      errorHandler({
-        message: errors.array().map((err) => err.msg).join(' '),
-        statusCode: 422
+      return errorHandler({
+        message: errors.array().map((err) => {
+          return `${err.param} - ${err.msg}`}).join('; '),
+        statusCode: 401
       }, next)
     }
 

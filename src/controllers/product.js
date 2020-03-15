@@ -62,7 +62,6 @@ exports.create = async (req, res, next) => {
 };
 
 exports.update = async (req, res, next) => {
-  console.log('body', req.body);
   const { body: { id, ...body }, files: photo } = req;
   try {
     const product = await Product.findById(id);
