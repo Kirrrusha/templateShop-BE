@@ -1,10 +1,11 @@
 const bCrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const key = require('../config').secretOrKey;
-const Users = require('../models/users');
+const { secretOrKey: key, expiresIn } = require('../config');
+const User = require('../models/user');
+const { errorHandler } = require('../lib/util');
+const { roles } = require('../models/roles');
 
-
-exports.registration = (req, res) => {
+exports.registration = async (req, res, next) => {
   const {
     username,
     password,
@@ -12,84 +13,144 @@ exports.registration = (req, res) => {
     surname,
     name,
     middleName,
+    role
   } = req.body;
-  Users.findOne({ username })
-    .then((user) => {
-      if (user) {
-        return res
-          .status(400)
-          .json({ message: 'Users with this username already exists.' });
-      }
-      const newUser = new Users({
-        username,
-        email,
-        surname,
-        password,
-        name,
-        middleName,
-      });
-      bCrypt.genSalt(10, (error, salt) => {
-        bCrypt.hash(password, salt, (err, hash) => {
-          if (err) return res.status(404).json({ ...err });
-          newUser.password = hash;
+  const user = await User.findOne({
+    username,
+    email
+  });
 
-          const payload = { id: newUser._id, username: newUser.username };
+  if (user) {
+    return errorHandler({
+      message: 'Users with this username already exists.',
+      statusCode: 401
+    }, next);
+  }
+  const newUser = new User({
+    username,
+    email,
+    surname,
+    role,
+    password,
+    name,
+    middleName
+  });
 
-          jwt.sign(payload, key, { expiresIn: 86400 }, (err, token) => {
-            if (err) res.status(404).json({ ...err });
+  try {
+    const salt = await bCrypt.genSalt(10);
+    newUser.password = await bCrypt.hash(password, salt);
 
-            newUser
-              .save()
-              .then(() => res.json({ token }))
-              .catch(({ message }) => res.status(404).json({ message }));
-          });
+    const savedUser = await newUser.save();
+    const payload = {
+      id: savedUser._id,
+      username: savedUser.username
+    };
 
-
-        });
-      });
-    })
-    .catch(({ message }) => res.status(404).json({ message }));
+    const token = jwt.sign(payload, key, { expiresIn });
+    await res.json({
+      ...newUser.toJSON(),
+      token
+    });
+  } catch (e) {
+    errorHandler({
+      message: e.message,
+      statusCode: 401
+    }, next);
+  }
 };
 
-exports.auth = (req, res) => {
-  const { username, password, email } = req.body;
+exports.auth = async (req, res, next) => {
+  const { username, password } = req.body;
 
-  Users.findOne({ username, email })
-    .then((user) => {
-      if (!user) {
-        return res.status(404).json({
-          message: 'Неправильный логин или пароль',
-        });
-      }
-      if (user && bCrypt.compareSync(password, user.password)) {
-        const payload = { id: user._id, username: user.username };
+  const user = await User.findOne({ username });
 
-        jwt.sign(payload, key, { expiresIn: 86400 }, (err, token) => {
-          if (err) res.status(404).json({ ...err });
-          res.json({
-            id: user._id,
-            username: user.username,
-            password: user.password,
-            surname: user.surname,
-            name: user.name,
-            middleName: user.middleName,
-            token,
-          });
-        });
-      }
-    }).catch(({ message }) => res.status(500).json({ message }));
+  if (!user) {
+    return errorHandler({
+      message: 'Wrong login or password',
+      statusCode: 401
+    }, next);
+  }
+
+  try {
+    const match = await bCrypt.compare(password, user.password);
+    if (match) {
+      const payload = { id: user._id, username: user.username };
+      const token = jwt.sign(payload, key, { expiresIn });
+      await res.json({
+        ...user.toJSON(),
+        token
+      });
+    }
+  } catch (e) {
+    errorHandler({
+      message: e.message,
+      statusCode: 401
+    }, next);
+  }
 };
 
-exports.updateUser = (req, res) => {
-  const { surname, name, middleName } = req.body;
+exports.getById = async (req, res, next) => {
   const { id } = req.params;
-  Users.updateOne({ _id: id }, { surname, name, middleName })
-    .then(() => res.json({ surname, name, middleName }))
-    .catch(({ message }) => res.status(404).json({ message }));
+  try {
+    const user = await User.findById(id);
+    await res.json(user.toJSON());
+  } catch ({ message }) {
+    errorHandler({
+      message,
+      statusCode: 401
+    }, next);
+  }
 };
 
-exports.deleteUser = ({ params }, res) => {
-  Users.deleteOne({ _id: params.id })
-    .then(() => res.json({ message: 'ok' }))
-    .catch(({ message }) => res.status(404).json({ message }));
+exports.updateUser = async (req, res, next) => {
+  const { id, password, surname, email, name, middleName, role } = req.body;
+
+  try {
+    const salt = await bCrypt.genSalt(10);
+    const hashPassword = await bCrypt.hash(password, salt);
+    const user = await User.findById(id).exec();
+    user.password = hashPassword;
+    user.surname = surname;
+    user.email = email;
+    user.name = name;
+    user.middleName = middleName;
+    user.role = role;
+    await user.save();
+    await res.json(user.toJSON())
+  } catch (e) {
+    errorHandler({
+      message: e.message,
+      statusCode: 401
+    }, next);
+  }
+};
+
+exports.deleteUsers = async ({ id }, res, next) => {
+  try {
+    await User.deleteMany({ _id: { $in: id } });
+    res.end()
+  } catch ({ message }) {
+    return errorHandler({
+      message
+    }, next);
+  }
+};
+
+exports.grantAccess = (action, resource) => {
+  return async (req, res, next) => {
+    try {
+      const permission = roles.can(req.user.role)[action](resource);
+      if (!permission.granted) {
+        return res.status(401)
+          .json({
+            error: 'You don\'t have enough permission to perform this action'
+          });
+      }
+      next();
+    } catch (error) {
+      res.status(400)
+        .json({ message: error.message });
+      next(error);
+    }
+  };
 };
