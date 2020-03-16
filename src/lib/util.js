@@ -7,6 +7,8 @@
  *			collection.find({}, toRes(res));
  *		}
  */
+const validator = require('validator');
+
 exports.toRes = function toRes(res, status = 200) {
   return (err, thing) => {
     if (err) {
@@ -35,3 +37,7 @@ exports.errorHandler = ({ message, statusCode = 500 }, next) => {
 };
 
 exports.transformResponse = ({ _id: id, ...body }) => ({ id, ...body });
+
+exports.validatorIsAlphanumeric = (value) =>
+  validator.isAlphanumeric(value, 'en-US')
+  && validator.isAlphanumeric(value, 'ru-RU');

@@ -1,10 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const { validatorIsAlphanumeric } = require('../lib/util');
 const { Schema } = mongoose;
-
-const validatorIsAlphanumeric = (value) =>
-  validator.isAlphanumeric(value, 'en-US')
-  && validator.isAlphanumeric(value, 'ru-RU')
 
 const UserSchema = new Schema({
   username: {
