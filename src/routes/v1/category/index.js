@@ -5,20 +5,31 @@ const ctrlCategory = require('../../../controllers/category');
 const { validate } = require('../../../middleware');
 
 const ordersValidator = [
-  check('name').isEmpty()
-    .withMessage('Обязательное поле')
-    .isAlphanumeric('en-US')
-    .withMessage('Неверный тип данных')
+  check('name').not().isEmpty()
+    .withMessage('Obligatory field')
     .isLength({max: 15, min: 2})
-    .withMessage('Некорректная длина названия'),
+    .withMessage('Wrong length')
+    .custom(value => {
+      if (!validator.isAlphanumeric(value, 'en-US')
+        && !validator.isAlphanumeric(value, 'ru-RU')) {
+        throw new Error('Wrong type');
+      }
+      return true;
+    }),
   check('description')
-    .isAlphanumeric('en-US')
-    .withMessage('Неправильное значение')
+    .optional()
+    .custom(value => {
+      if (!validator.isAlphanumeric(value, 'en-US')
+        && !validator.isAlphanumeric(value, 'ru-RU')) {
+        throw new Error('Wrong type');
+      }
+      return true;
+    })
     .isLength({max: 50})
-    .withMessage('Слишком длинное описание')
+    .withMessage('Too much long')
   ,
   check('status').isBoolean()
-    .withMessage('Неверный тип данных')
+    .withMessage('Wrong type')
 ];
 
 router.get('/', ctrlCategory.getAll);

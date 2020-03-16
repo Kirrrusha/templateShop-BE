@@ -2,12 +2,11 @@ const fs = require('fs');
 const Product = require('../models/product');
 const { transformResponse } = require('../lib/util');
 const { errorHandler } = require('../lib/util');
-const { difference } = require('lodash');
 
 exports.getAll = async (req, res, next) => {
   try {
     const products = await Product.find({});
-    res.json(products.map(product => transformResponse(product)));
+    await res.json(products.map(product => transformResponse(product)));
   } catch ({ message }) {
     errorHandler({
       message,
@@ -20,7 +19,7 @@ exports.getById = async (req, res, next) => {
   const { id } = req.params;
   try {
     const product = await Product.findById(id);
-    res.json(transformResponse(product));
+    await res.json(transformResponse(product));
   } catch ({ message }) {
     errorHandler({
       message,

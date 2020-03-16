@@ -4,7 +4,7 @@ const { errorHandler } = require('../lib/util');
 exports.getAll = async (req, res, next) => {
   try {
     const categories = await Category.find({});
-    res.json(categories.map(category => transformCategory(category)));
+    await res.json(categories.map(category => category.toJSON()));
   } catch ({ message }) {
     errorHandler({
       message,
@@ -16,8 +16,8 @@ exports.getAll = async (req, res, next) => {
 exports.getById = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const category = await Category.findOne({ _id: id });
-    res.json(transformCategory(category));
+    const category = await Category.findById(id);
+    await res.json(category.toJSON());
   } catch ({ message }) {
     errorHandler({
       message,
@@ -34,7 +34,7 @@ exports.create = async (req, res, next) => {
       status,
       description
     });
-    res.json(transformCategory(category));
+    await res.json(category.toJSON());
   } catch ({ message }) {
     errorHandler({
       message,
@@ -44,13 +44,14 @@ exports.create = async (req, res, next) => {
 };
 
 exports.update = async (req, res, next) => {
-  const { id, name, text, status } = req.body;
+  const { id, name, description, status } = req.body;
   try {
-    const category = await Category.findOneAndUpdate({_id: id} , {
-      name, text,
-      status
-    }, {new: true});
-    res.json(transformCategory(category));
+    const category = await Category.findById(id).exec();
+    category.name = name;
+    category.description = description;
+    category.status = status;
+    await category.save();
+    await res.json(category.toJSON());
   } catch ({ message }) {
     return errorHandler({
       message,
@@ -70,11 +71,3 @@ exports.delete = async (req, res, next) => {
     }, next);
   }
 };
-
-const transformCategory = ({ _id: id, name, status, description }) =>
-  ({
-    id,
-    name,
-    status,
-    description
-  });

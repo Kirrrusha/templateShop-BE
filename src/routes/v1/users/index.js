@@ -20,12 +20,22 @@ const ordersValidator = [
     .withMessage('Wrong type'),
   check('surname')
     .optional()
-    .isAlphanumeric('en-US')
-    .withMessage('Wrong type'),
+    .custom(value => {
+      if (!validator.isAlphanumeric(value, 'en-US')
+        && !validator.isAlphanumeric(value, 'ru-RU')) {
+        throw new Error('Wrong type');
+      }
+      return true;
+    }),
   check('name')
     .optional()
-    .isAlphanumeric('en-US')
-    .withMessage('Wrong type'),
+    .custom(value => {
+      if (!validator.isAlphanumeric(value, 'en-US')
+        && !validator.isAlphanumeric(value, 'ru-RU')) {
+        throw new Error('Wrong type');
+      }
+      return true;
+    }),
   check('middleName')
     .optional()
     .custom(value => {
@@ -33,7 +43,6 @@ const ordersValidator = [
         && !validator.isAlphanumeric(value, 'ru-RU')) {
         throw new Error('Wrong type');
       }
-
       return true;
     })
 ];
