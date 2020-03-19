@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const { validatorIsAlphanumeric } = require('../lib/util');
+const validator = require('validator');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 const { Schema } = mongoose;
 
@@ -58,15 +60,27 @@ const stockProductSchema = new Schema({
   // groupClientId: String,
   priority: {
     type: Number,
-    default: 1
+    default: 1,
+    max: 20,
+    trim: true,
+    validate: {
+      validator: (value) => validator.isNumeric(value),
+      message: '{VALUE} Invalid value',
+    }
   },
   newPrice: {
     type: Number,
-    required: [true, 'Add stock\'s price']
+    required: [true, 'Add stock\'s price'],
+    max: 1000000,
+    trim: true,
+    validate: {
+      validator: (value) => validator.isNumeric(value),
+      message: '{VALUE} Invalid value',
+    }
   },
   startDate: {
     type: Date,
-    default: new Date()
+    default: new Date(),
   },
   endDate: {
     type: Date,
@@ -77,7 +91,15 @@ const stockProductSchema = new Schema({
 const productSchema = new Schema({
   name: {
     type: String,
-    required: [true, 'Add name products']
+    required: [true, 'Add name products'],
+    unique: true,
+    trim: true,
+    min: 2,
+    maxlength: 15,
+    validate: {
+      validator: validatorIsAlphanumeric,
+      message: '{VALUE} Invalid value',
+    }
   },
   productId: {
     type: Number,
@@ -95,25 +117,39 @@ const productSchema = new Schema({
   },
   price: {
     type: Number,
-    required: [true, 'Add products\'s price']
+    required: [true, 'Add products\'s price'],
+    max: 1000000,
+    trim: true,
+    validate: {
+      validator: (value) => validator.isNumeric(value),
+      message: '{VALUE} Invalid value',
+    }
   },
   imagesPath: {
     type: [String],
-    default: ['/assets/uploads/unnamed.jpg']
+    default: ['/assets/uploads/unnamed.jpg'],
+    validate: {
+      validator: (value) => value.length <= 12,
+      message: '{VALUE} exceeds the limit of 12',
+    }
   },
-  // deductFromStock: {
-  //   type: Boolean,
-  //   default: false
-  // },
+  deductFromStock: {
+    type: Boolean,
+    default: false
+  },
   manufactureId: {
-    type: Schema.Types.ObjectId,
-    ref: 'manufacture',
-    index: true
+    type: Number,
+    validate: {
+      validator: (value) => validator.isNumeric(value),
+      message: '{VALUE} Invalid value',
+    }
   },
   categoryId: [{
-    type: Schema.Types.ObjectId,
-    ref: 'category',
-    index: true
+    type: Number,
+    validate: {
+      validator: (value) => validator.isNumeric(value),
+      message: '{VALUE} Invalid value',
+    }
   }],
   recommendedProductIdList: [{
     type: Schema.Types.ObjectId,
@@ -129,7 +165,22 @@ const productSchema = new Schema({
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   },
-  versionKey: false
+  versionKey: false,
+  toJSON: {
+    transform: function (doc, ret) {
+      const {
+        _id, name, productId, description, status,
+        price, imagesPath, deductFromStock,
+        manufactureId, categoryId, recommendedProductIdList
+      } = ret;
+      return {
+        id: _id,
+        name, productId, description, status,
+        price, imagesPath, deductFromStock,
+        manufactureId, categoryId, recommendedProductIdList
+      }
+    }
+  }
 });
 
 productSchema.plugin(AutoIncrement, {inc_field: 'productId'});

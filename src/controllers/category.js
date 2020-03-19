@@ -1,4 +1,5 @@
 const Category = require('../models/category');
+const Product = require('../models/product');
 const { errorHandler } = require('../lib/util');
 
 exports.getAll = async (req, res, next) => {
@@ -16,7 +17,7 @@ exports.getAll = async (req, res, next) => {
 exports.getById = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const category = await Category.findById(id);
+    const category = await Category.findOne({categoryId: id});
     await res.json(category.toJSON());
   } catch ({ message }) {
     errorHandler({
@@ -63,7 +64,7 @@ exports.update = async (req, res, next) => {
 exports.delete = async (req, res, next) => {
   const { id } = req.query;
   try {
-    await Category.deleteMany({ _id: { $in: id } });
+    await Category.deleteMany({ categoryId: { $in: id } });
     res.end()
   } catch ({ message }) {
     return errorHandler({

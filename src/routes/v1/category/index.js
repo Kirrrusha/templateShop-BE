@@ -26,8 +26,7 @@ const ordersValidator = [
       return true;
     })
     .isLength({max: 50})
-    .withMessage('Too much long')
-  ,
+    .withMessage('Too much long'),
   check('status').isBoolean()
     .withMessage('Wrong type')
 ];
