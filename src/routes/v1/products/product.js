@@ -7,25 +7,28 @@ const ctrlProduct = require('../../../controllers/product');
 const { validate } = require('../../../middleware');
 
 const ordersValidator = [
-  check('name').isEmpty()
-    .withMessage('Обязательное поле')
-    .isAlphanumeric('en-US')
-    .withMessage('Неверный тип данных')
+  check('name').not().isEmpty()
+    .withMessage('Obligatory field')
     .isLength({max: 15, min: 2})
-    .withMessage('Некорректная длина названия'),
+    .withMessage('Wrong length name')
+    .custom(value => {
+    if (!validator.isAlphanumeric(value, 'en-US')
+      && !validator.isAlphanumeric(value, 'ru-RU')) {
+      throw new Error('Wrong type');
+    }
+    return true;
+  }),
   check('description')
     .isLength({max: 1000})
-    .withMessage('Слишком длинное описание'),
-  check('status').isBoolean()
-    .withMessage('Неверный тип данных'),
-  check('deductFromStock').isBoolean()
-    .withMessage('Неверный тип данных'),
-  check('manufactureId').isMongoId()
-    .withMessage('Неверный тип данных'),
-  check('categoryId').isMongoId()
-    .withMessage('Неверный тип данных'),
-  check('recommendedProductIdList').isMongoId()
-    .withMessage('Неверный тип данных')
+    .withMessage('Too much long'),
+  check('status').optional()
+    .isBoolean()
+    .withMessage('Wrong type'),
+  check('deductFromStock').optional()
+    .isBoolean()
+    .withMessage('Wrong type'),
+  check('manufactureId').optional()
+    .isNumeric().withMessage('Wrong type')
 ];
 
 const storage = multer.diskStorage({
@@ -57,11 +60,22 @@ const upload = multer({
 
 router.get('/', ctrlProduct.getAll);
 
+// router.get('/search', ctrlProduct.productsByQuery);
+router.get('/byCategory', ctrlProduct.productsByCategoryId);
+
 router.get('/:id', ctrlProduct.getById);
 
-router.post('/', validate(ordersValidator), upload.array('photos', 12), ctrlProduct.create);
+router.post('/',
+  validate(ordersValidator),
+  upload.array('photos', 12),
+  ctrlProduct.create
+);
 
-router.put('/', validate(ordersValidator), upload.array('photos', 12), ctrlProduct.update);
+router.put('/',
+  validate(ordersValidator),
+  upload.array('photos', 12),
+  ctrlProduct.update
+);
 
 router.delete('', ctrlProduct.delete);
 
