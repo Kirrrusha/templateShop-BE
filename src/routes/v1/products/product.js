@@ -14,8 +14,6 @@ const ordersValidator = [
     .isLength({max: 15, min: 2})
     .withMessage('Некорректная длина названия'),
   check('description')
-    .isAlphanumeric('en-US')
-    .withMessage('Неправильное значение')
     .isLength({max: 1000})
     .withMessage('Слишком длинное описание'),
   check('status').isBoolean()

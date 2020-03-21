@@ -1,13 +1,6 @@
-/**  Creates a callback that proxies node callback style arguments to an Express Response object.
- *  @param {express.Response} res  Express HTTP Response
- *  @param {number} [status=200]  Status code to send on success
- *
- *  @example
- *    list(req, res) {
- *			collection.find({}, toRes(res));
- *		}
- */
 const validator = require('validator');
+const HTMLParser = require('node-html-parser');
+
 
 exports.toRes = function toRes(res, status = 200) {
   return (err, thing) => {
@@ -39,5 +32,14 @@ exports.errorHandler = ({ message, statusCode = 500 }, next) => {
 exports.transformResponse = ({ _id: id, ...body }) => ({ id, ...body });
 
 exports.validatorIsAlphanumeric = (value) =>
-  validator.isAlphanumeric(value, 'en-US')
-  && validator.isAlphanumeric(value, 'ru-RU');
+  !validator.isAlphanumeric(value, 'en-US')
+  || !validator.isAlphanumeric(value, 'ru-RU');
+
+exports.useTag = (value) => HTMLParser.parse(value, {
+  lowerCaseTagName: false,
+  script: false,
+  style: false,
+  pre: false,
+  comment: false
+});
+

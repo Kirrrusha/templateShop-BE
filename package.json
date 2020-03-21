@@ -19,13 +19,14 @@
     "jsonwebtoken": "^8.5.1",
     "lodash": "latest",
     "mongoose": "^5.9.0",
-    "mongoose-sequence": "latest",
+    "mongoose-sequence": "^5.2.2",
     "morgan": "^1.9.1",
     "multer": "^1.4.2",
+    "node-html-parser": "^1.2.13",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "swagger-ui-express": "^4.1.3",
-    "validator": "latest"
+    "validator": "^13.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"
