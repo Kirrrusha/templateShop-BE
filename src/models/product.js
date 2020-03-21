@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { validatorIsAlphanumeric } = require('../lib/util');
 const validator = require('validator');
+const { useTag } = require('../lib/util');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 const { Schema } = mongoose;
 
@@ -109,7 +110,8 @@ const productSchema = new Schema({
   description: {
     type: String,
     maxlength: 1000,
-    trim: true
+    trim: true,
+    set: useTag
   },
   status: {
     type: Boolean,

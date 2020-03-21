@@ -19,14 +19,6 @@ const ordersValidator = [
     return true;
   }),
   check('description')
-    .optional()
-    .custom(value => {
-      if (!validator.isAlphanumeric(value, 'en-US')
-        && !validator.isAlphanumeric(value, 'ru-RU')) {
-        throw new Error('Wrong type');
-      }
-      return true;
-    })
     .isLength({max: 1000})
     .withMessage('Too much long'),
   check('status').optional()
