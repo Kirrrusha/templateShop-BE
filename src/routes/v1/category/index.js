@@ -4,11 +4,18 @@ const validator = require('validator');
 const { check } = require('express-validator');
 const ctrlCategory = require('../../../controllers/category');
 const { validate } = require('../../../middleware');
+const multer = require('multer');
+const multParse = multer();
 
 const ordersValidator = [
-  check('name').not().isEmpty()
+  check('name')
+    .not()
+    .isEmpty()
     .withMessage('Obligatory field')
-    .isLength({max: 15, min: 2})
+    .isLength({
+      max: 15,
+      min: 2
+    })
     .withMessage('Wrong length')
     .custom(value => {
       if (!validator.isAlphanumeric(value, 'en-US')
@@ -19,10 +26,12 @@ const ordersValidator = [
     }),
   check('description')
     .optional()
-    .isLength({max: 1000})
+    .isLength({ max: 1000 })
     .withMessage('Too much long')
   ,
-  check('status').isBoolean()
+  check('status')
+    .optional()
+    .isBoolean()
     .withMessage('Wrong type')
 ];
 
@@ -30,9 +39,9 @@ router.get('/', ctrlCategory.getAll);
 
 router.get('/:id', ctrlCategory.getById);
 
-router.post('/', validate(ordersValidator), ctrlCategory.create);
+router.post('/', multParse.none(), validate(ordersValidator), ctrlCategory.create);
 
-router.put('/', validate(ordersValidator), ctrlCategory.update);
+router.put('/', multParse.none(), validate(ordersValidator), ctrlCategory.update);
 
 router.delete('', ctrlCategory.delete);
 

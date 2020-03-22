@@ -1,5 +1,4 @@
 const Category = require('../models/category');
-const Product = require('../models/product');
 const { errorHandler } = require('../lib/util');
 
 exports.getAll = async (req, res, next) => {
