@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { validatorIsAlphanumeric } = require('../lib/util');
 const validator = require('validator');
+const isNumber = require('lodash');
 const { useTag } = require('../lib/util');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 const { Schema } = mongoose;
@@ -65,7 +66,7 @@ const stockProductSchema = new Schema({
     max: 20,
     trim: true,
     validate: {
-      validator: (value) => validator.isNumeric(value),
+      validator: (value) => isNumber(value),
       message: '{VALUE} Invalid value',
     }
   },
@@ -75,7 +76,7 @@ const stockProductSchema = new Schema({
     max: 1000000,
     trim: true,
     validate: {
-      validator: (value) => validator.isNumeric(value),
+      validator: (value) => isNumber(value),
       message: '{VALUE} Invalid value',
     }
   },
@@ -123,7 +124,7 @@ const productSchema = new Schema({
     max: 1000000,
     trim: true,
     validate: {
-      validator: (value) => validator.isNumeric(value),
+      validator: (value) => isNumber(value),
       message: '{VALUE} Invalid value',
     }
   },
@@ -142,14 +143,14 @@ const productSchema = new Schema({
   manufactureId: {
     type: Number,
     validate: {
-      validator: (value) => validator.isNumeric(value),
+      validator: (value) => isNumber(value),
       message: '{VALUE} Invalid value',
     }
   },
   categoryId: [{
     type: Number,
     validate: {
-      validator: (value) => validator.isNumeric(value),
+      validator: (value) => isNumber(value),
       message: '{VALUE} Invalid value',
     }
   }],

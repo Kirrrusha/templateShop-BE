@@ -172,6 +172,9 @@
             "schema": {
               "type": "object",
               "properties": {
+                "id": {
+                  "type": "string"
+                },
                 "name": {
                   "type": "string"
                 },
@@ -183,6 +186,7 @@
                 }
               },
               "required": [
+                "id",
                 "name",
                 "description",
                 "status"
@@ -247,58 +251,6 @@
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/api/v1/category/:id": {
-      "get": {
-        "tags": [
-          "Categories"
-        ],
-        "description": "Returns list of products by category id",
-        "produces": [
-          "application/json"
-        ],
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "description": "category's id",
-            "required": true,
-            "type": "integer"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/category"
-              },
-              "examples": {
-                "application/json": {
-                  "id": "5e6d377c4d2326090eb7e6c4",
-                  "categoryId": 1,
-                  "name": "Chairs",
-                  "description": "Good chair",
-                  "status": true
-                }
-              }
-            }
           },
           "401": {
             "description": "Unauthorized"
@@ -644,6 +596,27 @@
               "items": {
                 "$ref": "#/definitions/product"
               }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "id": "5e6d377c4d2326090eb7e6c4",
+                  "name": "Chair",
+                  "description": "Cool chair",
+                  "price": 150,
+                  "imagesPath": [
+                    "no-name.png"
+                  ],
+                  "deductFromStock": true,
+                  "manufactureId": 1,
+                  "categoryId": [
+                    1
+                  ],
+                  "recommendedProductIdList": [
+                    "5e6d377c4d2326090eb7e6c4"
+                  ]
+                }
+              ]
             }
           },
           "401": {
@@ -737,7 +710,24 @@
               "required": [
                 "name",
                 "price"
-              ]
+              ],
+              "example": {
+                "id": "5e6d377c4d2326090eb7e6c4",
+                "name": "Chair",
+                "description": "Cool chair",
+                "price": 150,
+                "imagesPath": [
+                  "no-name.png"
+                ],
+                "deductFromStock": true,
+                "manufactureId": 1,
+                "categoryId": [
+                  1
+                ],
+                "recommendedProductIdList": [
+                  "5e6d377c4d2326090eb7e6c4"
+                ]
+              }
             }
           }
         ],
@@ -746,6 +736,27 @@
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/product"
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "id": "5e6d377c4d2326090eb7e6c4",
+                  "name": "Chair",
+                  "description": "Cool chair",
+                  "price": 150,
+                  "imagesPath": [
+                    "no-name.png"
+                  ],
+                  "deductFromStock": true,
+                  "manufactureId": 1,
+                  "categoryId": [
+                    1
+                  ],
+                  "recommendedProductIdList": [
+                    "5e6d377c4d2326090eb7e6c4"
+                  ]
+                }
+              ]
             }
           },
           "401": {
@@ -835,7 +846,24 @@
                     },
                     "required": [
                       "newPrice"
-                    ]
+                    ],
+                    "example": {
+                      "id": "5e6d377c4d2326090eb7e6c4",
+                      "name": "Chair",
+                      "description": "Cool chair",
+                      "price": 150,
+                      "imagesPath": [
+                        "no-name.png"
+                      ],
+                      "deductFromStock": true,
+                      "manufactureId": 1,
+                      "categoryId": [
+                        1
+                      ],
+                      "recommendedProductIdList": [
+                        "5e6d377c4d2326090eb7e6c4"
+                      ]
+                    }
                   }
                 }
               },
@@ -852,6 +880,27 @@
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/product"
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "id": "5e6d377c4d2326090eb7e6c4",
+                  "name": "Chair",
+                  "description": "Cool chair",
+                  "price": 150,
+                  "imagesPath": [
+                    "no-name.png"
+                  ],
+                  "deductFromStock": true,
+                  "manufactureId": 1,
+                  "categoryId": [
+                    1
+                  ],
+                  "recommendedProductIdList": [
+                    "5e6d377c4d2326090eb7e6c4"
+                  ]
+                }
+              ]
             }
           },
           "401": {
@@ -934,6 +983,27 @@
               "items": {
                 "$ref": "#/definitions/product"
               }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "id": "5e6d377c4d2326090eb7e6c4",
+                  "name": "Chair",
+                  "description": "Cool chair",
+                  "price": 150,
+                  "imagesPath": [
+                    "no-name.png"
+                  ],
+                  "deductFromStock": true,
+                  "manufactureId": 1,
+                  "categoryId": [
+                    1
+                  ],
+                  "recommendedProductIdList": [
+                    "5e6d377c4d2326090eb7e6c4"
+                  ]
+                }
+              ]
             }
           },
           "401": {
@@ -971,7 +1041,34 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/product"
+              }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "id": "5e6d377c4d2326090eb7e6c4",
+                  "name": "Chair",
+                  "description": "Cool chair",
+                  "price": 150,
+                  "imagesPath": [
+                    "no-name.png"
+                  ],
+                  "deductFromStock": true,
+                  "manufactureId": 1,
+                  "categoryId": [
+                    1
+                  ],
+                  "recommendedProductIdList": [
+                    "5e6d377c4d2326090eb7e6c4"
+                  ]
+                }
+              ]
+            }
           },
           "401": {
             "description": "Unauthorized"
@@ -2234,12 +2331,12 @@
           "type": "boolean"
         },
         "manufactureId": {
-          "type": "string"
+          "type": "number"
         },
         "categoryId": {
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "number"
           }
         },
         "recommendedProductIdList": {

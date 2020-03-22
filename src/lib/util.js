@@ -1,7 +1,6 @@
 const validator = require('validator');
 const HTMLParser = require('node-html-parser');
 
-
 exports.toRes = function toRes(res, status = 200) {
   return (err, thing) => {
     if (err) {
@@ -42,4 +41,3 @@ exports.useTag = (value) => HTMLParser.parse(value, {
   pre: false,
   comment: false
 });
-

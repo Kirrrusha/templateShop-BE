@@ -27,10 +27,6 @@ if (process.env.NODE_ENV !== 'production') {
 
 app.use(logger.errorLogger);
 
-app.get('/', (req, res) => {
-  res.json({ message: 'ok' });
-});
-
 passportConfig(passport);
 
 app.use(cors({
@@ -40,6 +36,8 @@ app.use(cors({
 app.use(bodyParser.json({
   limit: bodyLimit
 }));
+
+// app.use(bodyParser.urlencoded({ extended: true }));
 
 // swagger
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerConfig));
