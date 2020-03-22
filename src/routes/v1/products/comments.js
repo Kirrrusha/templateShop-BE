@@ -2,36 +2,56 @@ const express = require('express');
 const router = express.Router();
 const { check } = require('express-validator');
 const ctrlComments = require('../../../controllers/product/comments');
+const isNumber = require('lodash');
 const { validate } = require('../../../middleware');
+const validator = require('validator');
+const multer = require('multer');
+const multParse = multer();
 
 const ordersValidator = [
-  check('text').isEmpty()
-    .withMessage('Обязательное поле')
-    .isAlphanumeric('en-US')
-    .withMessage('некорректный тип поля'),
-  check('productId').isEmpty()
-    .withMessage('Обязательное поле')
-    .isAlphanumeric('en-US')
-    .withMessage('некорректный тип поля'),
-  check('authorId')
-    .isAlphanumeric('en-US')
-    .withMessage('некорректный тип поля'),
+  check('text').not().isEmpty()
+    .withMessage('Obligatory field')
+    .isLength({
+      max: 300,
+      min: 2
+    })
+    .withMessage('Wrong length')
+    .custom(value => {
+      if (!validator.isAlphanumeric(value, 'en-US')
+        && !validator.isAlphanumeric(value, 'ru-RU')) {
+        throw new Error('Wrong type');
+      }
+      return true;
+    }).trim().escape(),
+  check('productId').not().isEmpty()
+    .withMessage('Obligatory field')
+    .isMongoId()
+    .withMessage('Wrong type'),
+  check('authorId').not().isEmpty()
+    .withMessage('Obligatory field')
+    .isMongoId()
+    .withMessage('Wrong type'),
   check('rating')
-    .isNumeric()
-    .withMessage('некорректный тип поля'),
+    .optional()
+    .custom(value => {
+      if (!isNumber(value)) {
+        throw new Error('Wrong type');
+      }
+      return true;
+    }),
   check('visible')
+    .optional()
     .isBoolean()
-    .withMessage('некорректный тип поля'),
-
+    .withMessage('Wrong type'),
 ];
 
 router.get('/', ctrlComments.getAll);
 
 router.get('/:id', ctrlComments.getById);
 
-router.post('/', validate(ordersValidator), ctrlComments.create);
+router.post('/', multParse.none(), validate(ordersValidator), ctrlComments.create);
 
-router.put('/', validate(ordersValidator), ctrlComments.update);
+router.put('/', multParse.none(), validate(ordersValidator), ctrlComments.update);
 
 router.delete('', ctrlComments.delete);
 
