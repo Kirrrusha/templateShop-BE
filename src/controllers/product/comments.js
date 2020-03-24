@@ -26,6 +26,19 @@ exports.getById = async (req, res, next) => {
   }
 };
 
+exports.getByProductId = async (req, res, next) => {
+  const { id: productId } = req.params;
+  try {
+    const comments = await Comment.find({productId });
+    await res.json(comments.map(comment => comment.toJSON()));
+  } catch ({ message }) {
+    errorHandler({
+      message,
+      statusCode: 404
+    }, next);
+  }
+};
+
 exports.create = async (req, res, next) => {
   const { productId, authorId, text, rating, visible } = req.body;
   try {

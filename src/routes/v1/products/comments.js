@@ -48,6 +48,7 @@ const ordersValidator = [
 router.get('/', ctrlComments.getAll);
 
 router.get('/:id', ctrlComments.getById);
+router.get('/product/:id', ctrlComments.getByProductId);
 
 router.post('/', multParse.none(), validate(ordersValidator), ctrlComments.create);
 
