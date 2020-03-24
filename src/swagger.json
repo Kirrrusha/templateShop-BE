@@ -952,7 +952,7 @@
         }
       }
     },
-    "/api/v1/products/byCategoryId": {
+    "/api/v1/products/byCategoryId/:id": {
       "get": {
         "tags": [
           "Products"
@@ -966,13 +966,11 @@
         ],
         "parameters": [
           {
-            "in": "query",
+            "in": "path",
             "name": "id",
+            "description": "category's id",
             "required": true,
-            "type": "array",
-            "items": {
-              "type": "number"
-            }
+            "type": "integer"
           }
         ],
         "responses": {
@@ -2009,7 +2007,14 @@
               "required": [
                 "productId",
                 "text"
-              ]
+              ],
+              "example": {
+                "productId": "5e6d377c4d2326090eb7e6c4",
+                "authorId": "5e6d377c4d2326090eb7e6c4",
+                "text": "Cool chair",
+                "rating": 2,
+                "visible": true
+              }
             }
           }
         ],
@@ -2018,6 +2023,16 @@
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/comments"
+            },
+            "examples": {
+              "application/json": {
+                "id": "5e6d377c4d2326090eb7e6c4",
+                "productId": "5e6d377c4d2326090eb7e6c4",
+                "authorId": "5e6d377c4d2326090eb7e6c4",
+                "text": "Cool chair",
+                "rating": 2,
+                "visible": true
+              }
             }
           },
           "401": {
@@ -2050,6 +2065,18 @@
               "items": {
                 "$ref": "#/definitions/comments"
               }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "id": "5e6d377c4d2326090eb7e6c4",
+                  "productId": "5e6d377c4d2326090eb7e6c4",
+                  "authorId": "5e6d377c4d2326090eb7e6c4",
+                  "text": "Cool chair",
+                  "rating": 2,
+                  "visible": true
+                }
+              ]
             }
           },
           "401": {
@@ -2107,7 +2134,15 @@
                 "id",
                 "productId",
                 "text"
-              ]
+              ],
+              "example": {
+                "id": "5e6d377c4d2326090eb7e6c4",
+                "productId": "5e6d377c4d2326090eb7e6c4",
+                "authorId": "5e6d377c4d2326090eb7e6c4",
+                "text": "Cool chair",
+                "rating": 2,
+                "visible": true
+              }
             }
           }
         ],
@@ -2116,6 +2151,16 @@
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/comments"
+            },
+            "examples": {
+              "application/json": {
+                "id": "5e6d377c4d2326090eb7e6c4",
+                "productId": "5e6d377c4d2326090eb7e6c4",
+                "authorId": "5e6d377c4d2326090eb7e6c4",
+                "text": "Cool chair",
+                "rating": 2,
+                "visible": true
+              }
             }
           },
           "401": {
@@ -2156,6 +2201,16 @@
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/comments"
+            },
+            "examples": {
+              "application/json": {
+                "id": "5e6d377c4d2326090eb7e6c4",
+                "productId": "5e6d377c4d2326090eb7e6c4",
+                "authorId": "5e6d377c4d2326090eb7e6c4",
+                "text": "Cool chair",
+                "rating": 2,
+                "visible": true
+              }
             }
           },
           "401": {
@@ -2191,10 +2246,97 @@
         ],
         "responses": {
           "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/products/comments/product/:id": {
+      "get": {
+        "tags": [
+          "Comments"
+        ],
+        "description": "get comment by productId",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "comment's id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/simpleOk"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/comments"
+              }
+            },
+            "examples": {
+              "application/json": [
+                {
+                "id": "5e6d377c4d2326090eb7e6c4",
+                "productId": "5e6d377c4d2326090eb7e6c4",
+                "authorId": "5e6d377c4d2326090eb7e6c4",
+                "text": "Cool chair",
+                "rating": 2,
+                "visible": true
+              }
+              ]
             }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Comments"
+        ],
+        "description": "remove comments by id",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "description": "comments id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           },
           "401": {
             "description": "Unauthorized"
