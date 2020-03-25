@@ -116,7 +116,7 @@ exports.delete = async (req, res, next) => {
         }
       }
     }
-    await Product.deleteMany({ _id: { $in: id } });
+    await Product.deleteMany({ productId: { $in: id } });
     res.end();
   } catch ({ message }) {
     return errorHandler({
