@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const { validatorIsAlphanumeric } = require('../lib/util');
-const validator = require('validator');
 const isNumber = require('lodash');
 const { useTag } = require('../lib/util');
 const AutoIncrement = require('mongoose-sequence')(mongoose);

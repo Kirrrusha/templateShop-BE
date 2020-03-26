@@ -34,8 +34,9 @@ exports.getAll = async (req, res, next) => {
 // };
 
 exports.productsByCategoryId = async (req, res, next) => {
+  const {categoryId} = req.params;
   try {
-    const products = await Product.find({ categoryId: { $in: req.query } });
+    const products = await Product.find({categoryId: {$in: categoryId}});
     await res.json(products.map(product => product.toJSON()));
   } catch ({ message }) {
     errorHandler({

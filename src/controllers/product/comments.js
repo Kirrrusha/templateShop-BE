@@ -1,87 +1,92 @@
-const Comments = require('../../models/comments');
+const Comment = require('../../models/comment');
 const { errorHandler } = require('../../lib/util');
-// const {isNull} =  require('lodash');
 
-exports.getAll = (req, res, next) => {
-  Comments.find({})
-    .then(comments => res.json(comments.map(comment => transformComment(comment))))
-    .catch(({ message }) => errorHandler({
+exports.getAll = async (req, res, next) => {
+  try {
+    const comments = await Comment.find({});
+    await res.json(comments.map(comment => comment.toJSON()));
+  } catch ({ message }) {
+    errorHandler({
       message,
       statusCode: 404
-    }, next));
+    }, next);
+  }
 };
 
-exports.getById = (req, res, next) => {
-  const { id: _id } = req.params;
-  Comments.findOne({ _id })
-    .then(comment => res.json(transformComment(comment)))
-    .catch(({ message }) => errorHandler({
+exports.getById = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const comment = await Comment.findById(id);
+    await res.json(comment.toJSON());
+  } catch ({ message }) {
+    errorHandler({
       message,
       statusCode: 404
-    }, next));
+    }, next);
+  }
 };
 
-exports.create = (req, res, next) => {
+exports.getByProductId = async (req, res, next) => {
+  const { id: productId } = req.params;
+  try {
+    const comments = await Comment.find({productId });
+    await res.json(comments.map(comment => comment.toJSON()));
+  } catch ({ message }) {
+    errorHandler({
+      message,
+      statusCode: 404
+    }, next);
+  }
+};
+
+exports.create = async (req, res, next) => {
   const { productId, authorId, text, rating, visible } = req.body;
-
-  Comments.create({
-    productId,
-    authorId,
-    text,
-    rating,
-    visible
-  }, (err, comment) => {
-    if (err) {
-      return errorHandler({
-        message: err
-      }, next);
-    }
-    res.json(transformComment(comment));
-  });
+  try {
+    const comment = await Comment.create({
+      productId,
+      authorId,
+      text,
+      rating,
+      visible
+    });
+    await res.json(comment.toJSON());
+  } catch ({ message }) {
+    errorHandler({
+      message,
+      statusCode: 404
+    }, next);
+  }
 };
 
-exports.update = (req, res, next) => {
-  const { id: _id, authorId, productId, text, rating, visible } = req.body;
-  Comments.findOne({ _id }, (err, comment) => {
-    if (err) {
-      return errorHandler({
-        message: err
-      }, next);
-    }
+exports.update = async (req, res, next) => {
+  const { id, authorId, productId, text, rating, visible } = req.body;
+  try {
+    const comment = await Comment.findById(id)
+      .exec();
     comment.authorId = authorId;
     comment.productId = productId;
     comment.text = text;
     comment.rating = rating;
     comment.visible = visible;
-    comment
-      .save()
-      .then(cmt => res.json(transformComment(cmt)))
-      .catch(({ message }) => errorHandler({
-        message,
-        statusCode: 404
-      }, next));
-  });
+    await comment.save();
+    await res.json(comment.toJSON());
+  } catch ({ message }) {
+    errorHandler({
+      message,
+      statusCode: 404
+    }, next);
+  }
 };
 
-exports.delete = (req, res, next) => {
+exports.delete = async (req, res, next) => {
   const { id } = req.query;
-  Comments.deleteMany({
-      _id: {
-        $in: id
-      }
-    },
-    err => {
-      if (err) {
-        return errorHandler({
-          message: err
-        }, next);
-      }
-      res.json({ message: 'ok' });
-    });
+  try {
+    await Comment.deleteMany({ _id: { $in: id } });
+    res.end();
+  } catch ({ message }) {
+    errorHandler({
+      message,
+      statusCode: 404
+    }, next);
+  }
 };
-
-const transformComment = ({ _id: id, productId, authorId, text, rating, visible, updateAt: date }) =>
-  ({
-    id, productId, authorId, text,
-    rating, visible, date
-  });
