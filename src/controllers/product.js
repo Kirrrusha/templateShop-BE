@@ -38,7 +38,7 @@ exports.productsByCategoryId = async (req, res, next) => {
   try {
     const products = await Product.find({categoryId: {$in: categoryId}});
     await res.json(products.map(product => product.toJSON()));
-  } catch ({message}) {
+  } catch ({ message }) {
     errorHandler({
       message,
       statusCode: 401
@@ -49,7 +49,7 @@ exports.productsByCategoryId = async (req, res, next) => {
 exports.getById = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const product = await Product.findOne({categoryId: id});
+    const product = await Product.findOne({ categoryId: id });
     await res.json(product.toJSON());
   } catch ({ message }) {
     errorHandler({
@@ -81,7 +81,9 @@ exports.update = async (req, res, next) => {
     const product = await Product.findById(id);
     if (product) {
       for (const image of product.imagesPath) {
-        await fs.unlinkSync(`.${image.replace(/assets/, 'src')}`);
+        if (image !== '/assets/uploads/unnamed.jpg') {
+          await fs.unlinkSync(`.${image.replace(/assets/, 'src')}`);
+        }
       }
     }
     const result = await Product.findById(id)
@@ -112,7 +114,9 @@ exports.delete = async (req, res, next) => {
     for (let i = 0, length = products.length; i < length; i++) {
       if (products[i]) {
         for (const image of products[i].imagesPath) {
-          await fs.unlinkSync(`.${image.replace(/assets/, 'src')}`);
+          if (image !== '/assets/uploads/unnamed.jpg') {
+            await fs.unlinkSync(`.${image.replace(/assets/, 'src')}`);
+          }
         }
       }
     }
