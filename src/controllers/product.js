@@ -78,7 +78,7 @@ exports.create = async (req, res, next) => {
 exports.update = async (req, res, next) => {
   const { body: { id, ...body }, files: photo } = req;
   try {
-    const product = await Product.findById(id);
+    const product = await Product.findById(id).exec();
     if (product) {
       for (const image of product.imagesPath) {
         if (image !== '/assets/uploads/unnamed.jpg') {
@@ -86,19 +86,17 @@ exports.update = async (req, res, next) => {
         }
       }
     }
-    const result = await Product.findById(id)
-      .exec();
-    result.name = body.name;
-    result.description = body.description;
-    result.status = body.status;
-    result.price = body.price;
-    result.imagesPath = photo.map(file => `/assets/uploads/${file.filename}`);
-    result.deductFromStock = body.deductFromStock;
-    result.manufactureId = body.manufactureId;
-    result.categoryId = body.categoryId;
-    result.recommendedProductIdList = body.recommendedProductIdList;
-
-    await res.json(result.toJSON());
+    product.name = body.name;
+    product.description = body.description;
+    product.status = body.status;
+    product.price = body.price;
+    product.imagesPath = photo.map(file => `/assets/uploads/${file.filename}`);
+    product.deductFromStock = body.deductFromStock;
+    product.manufacturerId = body.manufacturerId;
+    product.categoryId = body.categoryId;
+    product.recommendedProductIdList = body.recommendedProductIdList;
+    await product.save();
+    await res.json(product.toJSON());
   } catch ({ message }) {
     return errorHandler({
       message,

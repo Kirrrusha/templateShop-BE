@@ -27,6 +27,10 @@
       "description": "Articles"
     },
     {
+      "name": "Manufactures",
+      "description": "Manufactures"
+    },
+    {
       "name": "Checkout",
       "description": "Work with checkout"
     },
@@ -608,7 +612,7 @@
                     "no-name.png"
                   ],
                   "deductFromStock": true,
-                  "manufactureId": 1,
+                  "manufacturerId": 1,
                   "categoryId": [
                     1
                   ],
@@ -668,7 +672,7 @@
                     "type": "string"
                   }
                 },
-                "manufactureId": {
+                "manufacturerId": {
                   "type": "string"
                 },
                 "categoryId": {
@@ -720,7 +724,7 @@
                   "no-name.png"
                 ],
                 "deductFromStock": true,
-                "manufactureId": 1,
+                "manufacturerId": 1,
                 "categoryId": [
                   1
                 ],
@@ -748,7 +752,7 @@
                     "no-name.png"
                   ],
                   "deductFromStock": true,
-                  "manufactureId": 1,
+                  "manufacturerId": 1,
                   "categoryId": [
                     1
                   ],
@@ -811,7 +815,7 @@
                     "type": "string"
                   }
                 },
-                "manufactureId": {
+                "manufacturerId": {
                   "type": "string"
                 },
                 "categoryId": {
@@ -856,7 +860,7 @@
                         "no-name.png"
                       ],
                       "deductFromStock": true,
-                      "manufactureId": 1,
+                      "manufacturerId": 1,
                       "categoryId": [
                         1
                       ],
@@ -892,7 +896,7 @@
                     "no-name.png"
                   ],
                   "deductFromStock": true,
-                  "manufactureId": 1,
+                  "manufacturerId": 1,
                   "categoryId": [
                     1
                   ],
@@ -993,7 +997,7 @@
                     "no-name.png"
                   ],
                   "deductFromStock": true,
-                  "manufactureId": 1,
+                  "manufacturerId": 1,
                   "categoryId": [
                     1
                   ],
@@ -1057,7 +1061,7 @@
                     "no-name.png"
                   ],
                   "deductFromStock": true,
-                  "manufactureId": 1,
+                  "manufacturerId": 1,
                   "categoryId": [
                     1
                   ],
@@ -1219,6 +1223,253 @@
       }
     },
     "/api/v1/products/options/:id": {
+      "get": {
+        "tags": [
+          "Options"
+        ],
+        "description": "get option by id",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "Option's id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/optionProduct"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Options"
+        ],
+        "description": "remove option by id",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "Option's id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/simpleOk"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/manufactures": {
+      "post": {
+        "tags": [
+          "Manufactures"
+        ],
+        "description": "Create manufacture",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "required": true,
+            "description": "Manufacture's name"
+          },
+          {
+            "in": "formData",
+            "name": "img",
+            "type": "file",
+            "required": false,
+            "description": "Manufacture's img"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/manufacturer"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Manufactures"
+        ],
+        "description": "get all manufactures",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/manufacturer"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Manufactures"
+        ],
+        "description": "update manufacturer",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "id",
+            "type": "string",
+            "required": true,
+            "description": "Manufacture's id"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "required": true,
+            "description": "Manufacture's name"
+          },
+          {
+            "in": "formData",
+            "name": "img",
+            "type": "file",
+            "required": false,
+            "description": "Manufacture's img"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/manufacturer"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Manufactures"
+        ],
+        "description": "remove Manufactures by id",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "required": true,
+            "type": "array",
+            "description": "array ObjectId",
+            "items": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/products/manufactures/:id": {
       "get": {
         "tags": [
           "Options"
@@ -2472,7 +2723,7 @@
         "deductFromStock": {
           "type": "boolean"
         },
-        "manufactureId": {
+        "manufacturerId": {
           "type": "number"
         },
         "categoryId": {
@@ -2661,6 +2912,20 @@
           ]
         },
         "token": {
+          "type": "string"
+        }
+      }
+    },
+    "manufacturer": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "imagePath": {
           "type": "string"
         }
       }

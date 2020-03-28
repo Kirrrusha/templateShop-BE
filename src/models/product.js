@@ -139,12 +139,10 @@ const productSchema = new Schema({
     type: Boolean,
     default: false
   },
-  manufactureId: {
-    type: Number,
-    validate: {
-      validator: (value) => isNumber(value),
-      message: '{VALUE} Invalid value',
-    }
+  manufacturerId: {
+    type: Schema.Types.ObjectId,
+    ref: 'manufacture',
+    index: true
   },
   categoryId: [{
     type: Number,
