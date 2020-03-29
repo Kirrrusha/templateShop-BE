@@ -4,6 +4,7 @@ const isNumber = require('lodash');
 const { useTag } = require('../lib/util');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 const { Schema } = mongoose;
+const comment  = require('./comment');
 
 const attributesProductSchema = new Schema({
   attributeId: String,
@@ -139,17 +140,15 @@ const productSchema = new Schema({
     type: Boolean,
     default: false
   },
-  manufacturerId: {
+  manufacturer: {
     type: Schema.Types.ObjectId,
     ref: 'manufacture',
     index: true
   },
-  categoryId: [{
-    type: Number,
-    validate: {
-      validator: (value) => isNumber(value),
-      message: '{VALUE} Invalid value',
-    }
+  category: [{
+    type: Schema.Types.ObjectId,
+    ref: 'category',
+    index: true
   }],
   recommendedProductIdList: [{
     type: Schema.Types.ObjectId,
@@ -159,7 +158,12 @@ const productSchema = new Schema({
   // attributes: [attributesProductSchema],
   // options: [optionsProductSchema],
   // discount: [discountProductSchema],
-  stock: [stockProductSchema]
+  stock: [stockProductSchema],
+  comments: [{
+    type: Schema.Types.ObjectId,
+    ref: 'comment',
+    index: true
+  }]
 }, {
   timestamps: {
     createdAt: 'createdAt',
@@ -171,13 +175,13 @@ const productSchema = new Schema({
       const {
         _id, name, productId, description, status,
         price, imagesPath, deductFromStock,
-        manufactureId, categoryId, recommendedProductIdList
+        manufacturer, category, recommendedProductIdList, comments
       } = ret;
       return {
         id: _id,
         name, productId, description, status,
         price, imagesPath, deductFromStock,
-        manufactureId, categoryId, recommendedProductIdList
+        manufacturer, category, recommendedProductIdList, comments
       }
     }
   }

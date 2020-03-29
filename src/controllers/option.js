@@ -1,5 +1,5 @@
-const Options = require('../../models/option');
-const { errorHandler } = require('../../lib/util');
+const Options = require('../models/option');
+const { errorHandler } = require('../lib/util');
 
 exports.getAll = (req, res, next) => {
   Options.find({})

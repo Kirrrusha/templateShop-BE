@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { check } = require('express-validator');
-const ctrlComments = require('../../../controllers/product/comments');
+const ctrlComments = require('../../../controllers/comments');
 const isNumber = require('lodash');
 const { validate } = require('../../../middleware');
 const validator = require('validator');
@@ -23,12 +23,12 @@ const ordersValidator = [
       }
       return true;
     }).trim().escape(),
-  check('productId').not().isEmpty()
+  check('product').not().isEmpty()
     .withMessage('Obligatory field')
     .isMongoId()
     .withMessage('Wrong type'),
-  check('authorId').not().isEmpty()
-    .withMessage('Obligatory field')
+  check('author').
+    optional()
     .isMongoId()
     .withMessage('Wrong type'),
   check('rating')
@@ -48,7 +48,7 @@ const ordersValidator = [
 router.get('/', ctrlComments.getAll);
 
 router.get('/:id', ctrlComments.getById);
-router.get('/product/:id', ctrlComments.getByProductId);
+router.get('/product/:id', ctrlComments.getCommentsByProductId);
 
 router.post('/', multParse.none(), validate(ordersValidator), ctrlComments.create);
 

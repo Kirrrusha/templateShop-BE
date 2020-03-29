@@ -1,9 +1,9 @@
-const Attributes = require('../../models/attribute');
-const {errorHandler} = require('../../lib/util');
+const GroupAttributes = require('../models/group-attributes');
+const {errorHandler} = require('../lib/util');
 
 exports.getAll = (req, res, next) => {
-  Attributes.find({})
-    .then(attributes => res.json(attributes.map(attribute => transformAttributes(attribute))))
+  GroupAttributes.find({})
+    .then(groupAttributes => res.json(groupAttributes.map(group => transformGroupAttributes(group))))
     .catch(({ message }) =>  errorHandler({
       message,
       statusCode: 404
@@ -12,8 +12,8 @@ exports.getAll = (req, res, next) => {
 
 exports.getById = (req, res, next) => {
   const {id} = req.params;
-  Attributes.findOne({_id: id})
-    .then(attribute => res.json(transformAttributes(attribute)))
+  GroupAttributes.findOne({_id: id})
+    .then(groupAttributes => res.json(transformGroupAttributes(groupAttributes)))
     .catch(({ message }) => errorHandler({
       message,
       statusCode: 404
@@ -21,26 +21,26 @@ exports.getById = (req, res, next) => {
 };
 
 exports.create = (req, res, next) => {
-  const {name, groupId} = req.body;
+  const {name} = req.body;
 
-  Attributes.create({name, groupId}, (err, attribute) => {
+  GroupAttributes.create({name}, (err, groupAttributes) => {
     if (err) return errorHandler({
       message: err
     }, next);
-    res.json(transformAttributes(attribute));
+    res.json(transformGroupAttributes(groupAttributes));
   });
 };
 
 exports.update = (req, res, next) => {
-  const {id, name} = req.body;
-  Attributes.findOne({ _id: id }, (err, attributes) => {
+  const {id: _id, name} = req.body;
+  GroupAttributes.findOne({ _id }, (err, groupAttributes) => {
     if (err) return errorHandler({
       message: err
     }, next);
-    attributes.name = name;
-    attributes
+    groupAttributes.name = name;
+    groupAttributes
       .save()
-      .then(atr => res.json(atr))
+      .then(opt => res.json(opt))
       .catch(({ message }) => errorHandler({
         message,
         statusCode: 404
@@ -51,7 +51,7 @@ exports.update = (req, res, next) => {
 exports.delete = (req, res, next) => {
   const {id} = req.params;
 
-  Attributes.deleteOne({ _id: id }, err => {
+  GroupAttributes.deleteOne({ _id: id }, err => {
     if (err) return errorHandler({
       message: err
     }, next);
@@ -59,4 +59,4 @@ exports.delete = (req, res, next) => {
   });
 };
 
-const transformAttributes = ({_id, name, groupId}) => ({id: _id, name, groupId});
+const transformGroupAttributes = ({_id, name}) => ({id: _id, name});

@@ -1,5 +1,5 @@
-const Comment = require('../../models/comment');
-const { errorHandler } = require('../../lib/util');
+const Comment = require('../models/comment');
+const { errorHandler } = require('../lib/util');
 
 exports.getAll = async (req, res, next) => {
   try {
@@ -26,10 +26,10 @@ exports.getById = async (req, res, next) => {
   }
 };
 
-exports.getByProductId = async (req, res, next) => {
-  const { id: productId } = req.params;
+exports.getCommentsByProductId = async (req, res, next) => {
+  const { id: author } = req.params;
   try {
-    const comments = await Comment.find({productId });
+    const comments = await Comment.find({author}).exec();
     await res.json(comments.map(comment => comment.toJSON()));
   } catch ({ message }) {
     errorHandler({
@@ -40,11 +40,11 @@ exports.getByProductId = async (req, res, next) => {
 };
 
 exports.create = async (req, res, next) => {
-  const { productId, authorId, text, rating, visible } = req.body;
+  const { product, author, text, rating, visible } = req.body;
   try {
     const comment = await Comment.create({
-      productId,
-      authorId,
+      product,
+      author,
       text,
       rating,
       visible
@@ -59,15 +59,15 @@ exports.create = async (req, res, next) => {
 };
 
 exports.update = async (req, res, next) => {
-  const { id, authorId, productId, text, rating, visible } = req.body;
+  const { id, ...body } = req.body;
   try {
     const comment = await Comment.findById(id)
       .exec();
-    comment.authorId = authorId;
-    comment.productId = productId;
-    comment.text = text;
-    comment.rating = rating;
-    comment.visible = visible;
+    comment.author = body.author || comment.author;
+    comment.product = body.product || comment.product;
+    comment.text = body.text || comment.text;
+    comment.rating = body.rating || comment.rating;
+    comment.visible = body.visible || comment.visible;
     await comment.save();
     await res.json(comment.toJSON());
   } catch ({ message }) {

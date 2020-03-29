@@ -43,14 +43,13 @@ exports.create = async (req, res, next) => {
 };
 
 exports.update = async (req, res, next) => {
-  const { body: { id, name }, file } = req;
+  const { body: { id, ...body }, file } = req;
   try {
-    const manufacturer = await Manufacturer.findById(id)
-      .exec();
+    const manufacturer = await Manufacturer.findById(id).exec();
     if (manufacturer.imagePath !== '/assets/uploads/unnamed.jpg') {
       await fs.unlinkSync(`./${manufacturer.imagePath.replace(/assets/, 'src')}`);
     }
-    manufacturer.name = name;
+    manufacturer.name = body.name || manufacturer.name;
     manufacturer.imagePath = file ? `/assets/uploads/${file.filename}` : manufacturer.imagePath;
     await manufacturer.save();
     await res.json(manufacturer.toJSON());
