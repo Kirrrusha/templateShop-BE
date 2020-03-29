@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { check } = require('express-validator');
-const ctrlProductOptions = require('../../../controllers/product/option');
+const ctrlProductOptions = require('../../../controllers/option');
 const { validate } = require('../../../middleware');
 
 const ordersValidator = [

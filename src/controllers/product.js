@@ -4,7 +4,25 @@ const { errorHandler } = require('../lib/util');
 
 exports.getAll = async (req, res, next) => {
   try {
-    const products = await Product.find({});
+    const products = await Product.find({})
+      .populate({
+        path: 'manufacturer',
+        select: 'name imagePath'
+      })
+      .populate({
+        path: 'category',
+        select: 'name description status'
+      })
+      .populate('recommendedProductIdList')
+      .populate({
+        path: 'comments',
+        select: 'text author rating visible',
+        populate: {
+          path: 'author',
+          model: 'user'
+        }
+      })
+      .exec();
     await res.json(products.map(product => product.toJSON()));
   } catch ({ message }) {
     errorHandler({
@@ -34,9 +52,27 @@ exports.getAll = async (req, res, next) => {
 // };
 
 exports.productsByCategoryId = async (req, res, next) => {
-  const {categoryId} = req.params;
+  const { categoryId } = req.params;
   try {
-    const products = await Product.find({categoryId: {$in: categoryId}});
+    const products = await Product.find({ category: { $in: categoryId } })
+      .populate({
+        path: 'manufacturer',
+        select: 'name imagePath'
+      })
+      .populate({
+        path: 'category',
+        select: 'name description status'
+      })
+      .populate('recommendedProductIdList')
+      .populate({
+        path: 'comments',
+        select: 'text author rating visible',
+        populate: {
+          path: 'author',
+          model: 'user'
+        }
+      })
+      .exec();
     await res.json(products.map(product => product.toJSON()));
   } catch ({ message }) {
     errorHandler({
@@ -45,6 +81,19 @@ exports.productsByCategoryId = async (req, res, next) => {
     }, next);
   }
 };
+
+// exports.commentsByProductId = async (req, res, next) => {
+//   const {categoryId} = req.params;
+//   try {
+//     const products = await Product.find({categoryId: {$in: categoryId}});
+//     await res.json(products.map(product => product.toJSON()));
+//   } catch ({ message }) {
+//     errorHandler({
+//       message,
+//       statusCode: 401
+//     }, next);
+//   }
+// };
 
 exports.getById = async (req, res, next) => {
   const { id } = req.params;
@@ -78,7 +127,8 @@ exports.create = async (req, res, next) => {
 exports.update = async (req, res, next) => {
   const { body: { id, ...body }, files: photo } = req;
   try {
-    const product = await Product.findById(id).exec();
+    const product = await Product.findById(id)
+      .exec();
     if (product) {
       for (const image of product.imagesPath) {
         if (image !== '/assets/uploads/unnamed.jpg') {
@@ -86,15 +136,18 @@ exports.update = async (req, res, next) => {
         }
       }
     }
-    product.name = body.name;
-    product.description = body.description;
-    product.status = body.status;
-    product.price = body.price;
-    product.imagesPath = photo.map(file => `/assets/uploads/${file.filename}`);
-    product.deductFromStock = body.deductFromStock;
-    product.manufacturerId = body.manufacturerId;
-    product.categoryId = body.categoryId;
-    product.recommendedProductIdList = body.recommendedProductIdList;
+    product.name = body.name || product.name;
+    product.description = body.description || product.description;
+    product.status = body.status || product.status;
+    product.price = body.price || product.price;
+    product.imagesPath = photo ?
+      photo.map(file => `/assets/uploads/${file.filename}`) : product.imagesPath;
+    product.deductFromStock = body.deductFromStock || product.deductFromStock;
+    product.manufacturerId = body.manufacturerId || product.manufacturerId;
+    product.category = body.category || product.category;
+    product.manufacturer = body.manufacturer || product.manufacturer;
+    product.recommendedProductIdList = body.recommendedProductIdList || product.recommendedProductIdList;
+    product.comments = body.comments || product.comments;
     await product.save();
     await res.json(product.toJSON());
   } catch ({ message }) {

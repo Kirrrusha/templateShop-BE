@@ -44,12 +44,12 @@ exports.create = async (req, res, next) => {
 };
 
 exports.update = async (req, res, next) => {
-  const { id, name, description, status } = req.body;
+  const { id, ...body } = req.body;
   try {
     const category = await Category.findById(id).exec();
-    category.name = name;
-    category.description = description;
-    category.status = status;
+    category.name = body.name || category.name;
+    category.description = body.description || category.description;
+    category.status = body.status || category.status;
     await category.save();
     await res.json(category.toJSON());
   } catch ({ message }) {

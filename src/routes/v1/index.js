@@ -3,7 +3,7 @@ const users = require('./users');
 const articles = require('./articles');
 const products = require('./products');
 const category = require('./category');
-const manufactures = require('./manufacturer');
+const manufacturers = require('./manufacturer');
 const passport = require('passport');
 
 const auth = passport.authenticate('jwt', {
@@ -14,7 +14,7 @@ router.use('/users', users);
 router.use('/products', products);
 router.use('/articles', articles);
 router.use('/categories', category);
-router.use('/manufactures', manufactures);
+router.use('/manufacturer', manufacturers);
 
 
 

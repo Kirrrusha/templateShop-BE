@@ -612,9 +612,9 @@
                     "no-name.png"
                   ],
                   "deductFromStock": true,
-                  "manufacturerId": 1,
-                  "categoryId": [
-                    1
+                  "manufacturer": "5e6d377c4d2326090eb7e6c4",
+                  "category": [
+                    "5e6d377c4d2326090eb7e6c4"
                   ],
                   "recommendedProductIdList": [
                     "5e6d377c4d2326090eb7e6c4"
@@ -643,7 +643,7 @@
           "application/json"
         ],
         "consumes": [
-          "application/json"
+          "multipart/form-data"
         ],
         "parameters": [
           {
@@ -666,16 +666,10 @@
                 "price": {
                   "type": "number"
                 },
-                "imagesPath": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "manufacturerId": {
+                "manufacturer": {
                   "type": "string"
                 },
-                "categoryId": {
+                "category": {
                   "type": "array",
                   "items": {
                     "type": "string"
@@ -733,6 +727,13 @@
                 ]
               }
             }
+          },
+          {
+            "in": "formData",
+            "name": "photo",
+            "type": "file",
+            "required": false,
+            "description": "Product's img"
           }
         ],
         "responses": {
@@ -1300,7 +1301,7 @@
         }
       }
     },
-    "/api/v1/manufactures": {
+    "/api/v1/manufacturer": {
       "post": {
         "tags": [
           "Manufactures"
@@ -1469,7 +1470,7 @@
         }
       }
     },
-    "/api/v1/products/manufactures/:id": {
+    "/api/v1/products/manufacturer/:id": {
       "get": {
         "tags": [
           "Options"
@@ -2723,13 +2724,22 @@
         "deductFromStock": {
           "type": "boolean"
         },
-        "manufacturerId": {
-          "type": "number"
+        "manufacturer": {
+          "type": "string",
+          "description": "ObjectId"
         },
-        "categoryId": {
+        "category": {
           "type": "array",
           "items": {
-            "type": "number"
+            "type": "string",
+            "description": "ObjectId"
+          }
+        },
+        "comments": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "ObjectId"
           }
         },
         "recommendedProductIdList": {
@@ -2737,17 +2747,6 @@
           "items": {
             "type": "string"
           }
-        }
-      }
-    },
-    "manufacture": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "name": {
-          "type": "string"
         }
       }
     },

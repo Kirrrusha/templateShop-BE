@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { check } = require('express-validator');
-const ctrlGroupAttributes = require('../../../controllers/product/groupAttributes');
+const ctrlGroupAttributes = require('../../../controllers/groupAttributes');
 const { validate } = require('../../../middleware');
 
 const ordersValidator = [
