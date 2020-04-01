@@ -957,7 +957,7 @@
         }
       }
     },
-    "/api/v1/products/byCategoryId/:id": {
+    "/api/v1/products/byCategory/:id": {
       "get": {
         "tags": [
           "Products"
@@ -975,7 +975,7 @@
             "name": "id",
             "description": "category's id",
             "required": true,
-            "type": "integer"
+            "type": "string"
           }
         ],
         "responses": {
