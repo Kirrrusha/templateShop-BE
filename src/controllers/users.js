@@ -80,9 +80,14 @@ exports.auth = async (req, res, next) => {
         ...user.toJSON(),
         token
       });
+    } else {
+      return errorHandler({
+        message: 'Wrong login or password',
+        statusCode: 401
+      }, next);
     }
   } catch (e) {
-    errorHandler({
+    return errorHandler({
       message: e.message,
       statusCode: 401
     }, next);
