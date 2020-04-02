@@ -127,11 +127,10 @@ exports.create = async (req, res, next) => {
 exports.update = async (req, res, next) => {
   const { body: { id, ...body }, files: photo } = req;
   try {
-    const product = await Product.findById(id)
-      .exec();
+    const product = await Product.findById(id).exec();
     if (product) {
       for (const image of product.imagesPath) {
-        if (image !== '/assets/uploads/unnamed.jpg') {
+        if (image !== '/assets/uploads/unnamed.jpg' && fs.existsSync(image.replace(/assets/, 'src'))) {
           await fs.unlinkSync(`.${image.replace(/assets/, 'src')}`);
         }
       }
@@ -165,7 +164,7 @@ exports.delete = async (req, res, next) => {
     for (let i = 0, length = products.length; i < length; i++) {
       if (products[i]) {
         for (const image of products[i].imagesPath) {
-          if (image !== '/assets/uploads/unnamed.jpg') {
+          if (image !== '/assets/uploads/unnamed.jpg' && fs.existsSync(image.replace(/assets/, 'src'))) {
             await fs.unlinkSync(`.${image.replace(/assets/, 'src')}`);
           }
         }
