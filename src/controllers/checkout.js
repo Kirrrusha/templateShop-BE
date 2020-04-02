@@ -1,28 +1,16 @@
 const fs = require('fs');
-const Product = require('../models/product');
+const Checkout = require('../models/checkout');
 
 exports.getAll = async (req, res, next) => {
   try {
-    const products = await Product.find({})
+    const checkouts = await Checkout.find({})
       .populate({
-        path: 'manufacturer',
-        select: 'name imagePath'
-      })
-      .populate({
-        path: 'category',
-        select: 'name description status'
-      })
-      .populate('recommendedProductIdList')
-      .populate({
-        path: 'comments',
-        select: 'text author rating visible',
         populate: {
-          path: 'author',
-          model: 'user'
+          path: 'product'
         }
       })
       .exec();
-    await res.json(products.map(product => product.toJSON()));
+    await res.json(checkouts.map(checkout => checkout.toJSON()));
   } catch ({ message }) {
     errorHandler({
       message,
@@ -31,74 +19,12 @@ exports.getAll = async (req, res, next) => {
   }
 };
 
-// exports.productsByQuery = async (req, res, next) => {
-//   let query = null;
-//   for(let key of req.query) {
-//     query = {
-//       ...query,
-//       [key]: {$in: req.query[key]}
-//     }
-//   }
-//   try {
-//     const products = await Product.find(query);
-//     await res.json(products.map(product => product.toJSON()));
-//   } catch ({message}) {
-//     errorHandler({
-//       message,
-//       statusCode: 401
-//     }, next);
-//   }
-// };
-
-exports.productsByCategoryId = async (req, res, next) => {
-  const { categoryId } = req.params;
-  try {
-    const products = await Product.find({ category: { $in: categoryId } })
-      .populate({
-        path: 'manufacturer',
-        select: 'name imagePath'
-      })
-      .populate({
-        path: 'category',
-        select: 'name description status'
-      })
-      .populate('recommendedProductIdList')
-      .populate({
-        path: 'comments',
-        select: 'text author rating visible',
-        populate: {
-          path: 'author',
-          model: 'user'
-        }
-      })
-      .exec();
-    await res.json(products.map(product => product.toJSON()));
-  } catch ({ message }) {
-    errorHandler({
-      message,
-      statusCode: 401
-    }, next);
-  }
-};
-
-// exports.commentsByProductId = async (req, res, next) => {
-//   const {categoryId} = req.params;
-//   try {
-//     const products = await Product.find({categoryId: {$in: categoryId}});
-//     await res.json(products.map(product => product.toJSON()));
-//   } catch ({ message }) {
-//     errorHandler({
-//       message,
-//       statusCode: 401
-//     }, next);
-//   }
-// };
 
 exports.getById = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const product = await Product.findOne({ categoryId: id });
-    await res.json(product.toJSON());
+    const checkout = await Checkout.findById(id);
+    await res.json(checkout.toJSON());
   } catch ({ message }) {
     errorHandler({
       message,
@@ -108,13 +34,10 @@ exports.getById = async (req, res, next) => {
 };
 
 exports.create = async (req, res, next) => {
-  const { body, files } = req;
+  const { body } = req;
   try {
-    const product = await Product.create({
-      ...body,
-      imagesPath: files.map(file => `/assets/uploads/${file.filename}`)
-    });
-    await res.json(product.toJSON());
+    const checkout = await Checkout.create({ ...body });
+    await res.json(checkout.toJSON());
   } catch ({ message }) {
     errorHandler({
       message,
@@ -122,6 +45,10 @@ exports.create = async (req, res, next) => {
     }, next);
   }
 };
+
+
+
+
 
 exports.update = async (req, res, next) => {
   const { body: { id, ...body }, files: photo } = req;
