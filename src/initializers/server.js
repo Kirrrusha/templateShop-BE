@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const compression = require('compression');
 const passport = require('passport');
 const cors = require('cors');
+const path = require('path');
 const { port, corsHeaders, bodyLimit } = require('../config');
 const routes = require('../routes');
 const swaggerUi = require('swagger-ui-express');
@@ -17,7 +18,9 @@ const app = express();
 
 app.use(helmet());
 
-app.use('/assets/uploads/', express.static('src/uploads'));
+process.env.PWD = process.cwd();
+// app.use(express.static(path.join(process.env.PWD, '/assets/uploads/')));
+app.use(path.join(process.env.PWD, '/assets/uploads/'), express.static('src/uploads'));
 
 
 // HTTP request logger
