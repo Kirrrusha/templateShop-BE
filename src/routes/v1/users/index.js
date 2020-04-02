@@ -50,6 +50,7 @@ const ordersValidator = [
 router.post('/login', validate(ordersValidator), ctrlUsers.auth);
 router.post('/registration', validate(ordersValidator), ctrlUsers.registration);
 router.get('/:id', ctrlUsers.getById);
+router.get('/', ctrlUsers.getAll);
 router.put('/', validate(ordersValidator), ctrlUsers.updateUser);
 router.delete('/', ctrlUsers.deleteUsers);
 

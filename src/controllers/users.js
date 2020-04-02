@@ -81,14 +81,26 @@ exports.auth = async (req, res, next) => {
         token
       });
     } else {
-      return errorHandler({
+      errorHandler({
         message: 'Wrong login or password',
         statusCode: 401
       }, next);
     }
   } catch (e) {
-    return errorHandler({
+    errorHandler({
       message: e.message,
+      statusCode: 401
+    }, next);
+  }
+};
+
+exports.getAll = async (req, res, next) => {
+  try {
+    const users = await User.find({});
+    await res.json(users.map(user => user.toJSON()));
+  } catch ({ message }) {
+    errorHandler({
+      message,
       statusCode: 401
     }, next);
   }
