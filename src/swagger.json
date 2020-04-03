@@ -580,7 +580,7 @@
         }
       }
     },
-    "/api/v1/products": {
+    "/products": {
       "get": {
         "tags": [
           "Products"
@@ -957,7 +957,7 @@
         }
       }
     },
-    "/api/v1/products/byCategory/:id": {
+    "/products/byCategory/:id": {
       "get": {
         "tags": [
           "Products"
@@ -1021,7 +1021,7 @@
         }
       }
     },
-    "/api/v1/products/:id": {
+    "/products/:id": {
       "get": {
         "tags": [
           "Products"
@@ -1085,7 +1085,7 @@
         }
       }
     },
-    "/api/v1/products/options": {
+    "/products/options": {
       "post": {
         "tags": [
           "Options"
@@ -1223,7 +1223,7 @@
         }
       }
     },
-    "/api/v1/products/options/:id": {
+    "/products/options/:id": {
       "get": {
         "tags": [
           "Options"
@@ -1301,7 +1301,7 @@
         }
       }
     },
-    "/api/v1/manufacturer": {
+    "/manufacturer": {
       "post": {
         "tags": [
           "Manufactures"
@@ -1470,7 +1470,7 @@
         }
       }
     },
-    "/api/v1/products/manufacturer/:id": {
+    "/products/manufacturer/:id": {
       "get": {
         "tags": [
           "Options"
@@ -1548,7 +1548,7 @@
         }
       }
     },
-    "/api/v1/articles": {
+    "/articles": {
       "post": {
         "tags": [
           "Articles"
@@ -1673,7 +1673,7 @@
         }
       }
     },
-    "/api/v1/articles/:id": {
+    "/articles/:id": {
       "get": {
         "tags": [
           "Articles"
@@ -1751,7 +1751,7 @@
         }
       }
     },
-    "/api/v1/products/group-attributes": {
+    "/products/group-attributes": {
       "post": {
         "tags": [
           "Attributes"
@@ -1891,7 +1891,7 @@
         }
       }
     },
-    "/api/v1/products/group-attributes/:id": {
+    "/products/group-attributes/:id": {
       "get": {
         "tags": [
           "Attributes"
@@ -1977,7 +1977,7 @@
         }
       }
     },
-    "/api/v1/products/attributes": {
+    "/products/attributes": {
       "post": {
         "tags": [
           "Attributes"
@@ -2129,7 +2129,7 @@
         }
       }
     },
-    "/api/v1/products/attributes/:id": {
+    "/products/attributes/:id": {
       "get": {
         "tags": [
           "Attributes"
@@ -2218,7 +2218,7 @@
         }
       }
     },
-    "/api/v1/products/comments": {
+    "/products/comments": {
       "post": {
         "tags": [
           "Comments"
@@ -2427,7 +2427,7 @@
         }
       }
     },
-    "/api/v1/products/comments/:id": {
+    "/products/comments/:id": {
       "get": {
         "tags": [
           "Comments"
@@ -2512,7 +2512,7 @@
         }
       }
     },
-    "/api/v1/products/comments/product/:id": {
+    "/products/comments/product/:id": {
       "get": {
         "tags": [
           "Comments"
@@ -2602,7 +2602,7 @@
         }
       }
     },
-    "/api/v1/checkout": {
+    "/checkout": {
       "post": {
         "tags": [
           "Checkout"
