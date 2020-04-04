@@ -1,17 +1,17 @@
 language: node_js
 node_js:
-  - 10.19.0
+- stable
 cache: npm
-
 install:
-  - npm ci
-
+- npm ci
 after_deploy:
-  - pm2 reload ecosystem.config.js --env production && pm2 save
-
+- pm2 reload ecosystem.config.js --env production && pm2 save
 deploy:
   provider: templateShop-BE
   skip_cleanup: true
-  github-token: $GITHUB_TOKEN
+  github-token: "$GITHUB_TOKEN"
   on:
     branch: develop
+before_install:
+- openssl aes-256-cbc -K $encrypted_f217180e22ee_key -iv $encrypted_f217180e22ee_iv
+  -in id_rsa.enc -out id_rsa -d
