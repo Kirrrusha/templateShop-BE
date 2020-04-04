@@ -6,9 +6,6 @@ cache: npm
 install:
   - npm ci
 
-script:
-  - pm2 reload ecosystem.config.js --env production && pm2 save
-
 deploy:
   provider: templateShop-BE
   skip_cleanup: true
