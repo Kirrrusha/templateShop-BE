@@ -1,26 +1,25 @@
 language: node_js
 node_js:
-- 10.19.0
+  - 10.19.0
 cache: npm
 install:
-- npm ci
+  - npm ci
 addons:
   ssh_known_hosts: 188.225.18.51
-deploy:
-- provider: script
-  skip_cleanup: true
-  script: rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/ web@188.225.18.51:/home/web/projects/templateShop-BE
-  on:
-    branch: develop
-- provider: script
-  skip_cleanup: true
-  script: ssh web@188.225.18.51 "pm2 reload /home/web/ecosystem.config.js --only techlead-API
-    --env production && pm2 save"
-  on:
-    branch: develop
 before_deploy:
-- openssl aes-256-cbc -K $encrypted_f217180e22ee_key -iv $encrypted_f217180e22ee_iv
-  -in id_rsa.enc -out id_rsa -d
-- eval "$(ssh-agent -s)"
-- chmod 600 /id_rsa
-- ssh-add /id_rsa
+  - openssl aes-256-cbc -K $encrypted_f217180e22ee_key -iv $encrypted_f217180e22ee_iv
+    -in id_rsa.enc -out /tmp/id_rsa -d
+  - eval "$(ssh-agent -s)"
+  - chmod 600 /tmp/id_rsa
+  - ssh-add /tmp/id_rsa
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/ web@188.225.18.51:/home/web/projects/templateShop-BE
+    on:
+      branch: develop
+  - provider: script
+    skip_cleanup: true
+    script: ssh web@188.225.18.51 "pm2 reload /home/web/ecosystem.config.js --only techlead-API --env production && pm2 save"
+    on:
+      branch: develop
