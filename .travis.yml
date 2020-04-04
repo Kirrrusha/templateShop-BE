@@ -23,4 +23,6 @@ deploy:
     script: ssh web@188.225.18.51 "pm2 reload /home/web/ecosystem.config.js --env production && pm2 save"
     on:
       branch: develop
+#after_deploy:
+#  - pm2 reload ecosystem.config.js --env production && pm2 save
 
