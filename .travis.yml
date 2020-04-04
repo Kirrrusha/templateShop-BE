@@ -1,9 +1,11 @@
 language: node_js
 node_js:
   - 10.19.0
-cache: npm
-install:
-  - npm ci
+cache:
+  directories:
+    - "node_modules"
+
+install: npm install
 addons:
   ssh_known_hosts: 188.225.18.51
 before_deploy:
