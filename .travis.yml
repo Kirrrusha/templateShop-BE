@@ -1,9 +1,7 @@
 language: node_js
 node_js:
-- stable
+- 12.16.1
 cache: npm
-install:
-- npm ci
 addons:
   ssh_known_hosts: 188.225.18.51
 before_deploy:
