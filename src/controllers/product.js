@@ -1,6 +1,5 @@
 const fs = require('fs');
 const Product = require('../models/product');
-const { errorHandler } = require('../lib/util');
 
 exports.getAll = async (req, res, next) => {
   try {
@@ -147,6 +146,7 @@ exports.update = async (req, res, next) => {
     product.manufacturer = body.manufacturer || product.manufacturer;
     product.recommendedProductIdList = body.recommendedProductIdList || product.recommendedProductIdList;
     product.comments = body.comments || product.comments;
+    product.quantity = body.quantity || product.quantity;
     await product.save();
     await res.json(product.toJSON());
   } catch ({ message }) {

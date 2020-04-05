@@ -128,6 +128,15 @@ const productSchema = new Schema({
       message: '{VALUE} Invalid value',
     }
   },
+  quantity: {
+    type: Number,
+    trim: true,
+    validate: {
+      validator: (value) => isNumber(value),
+      message: '{VALUE} Invalid value',
+    },
+    default: 100
+  },
   imagesPath: {
     type: [String],
     default: ['/assets/uploads/unnamed.jpg'],
@@ -158,7 +167,7 @@ const productSchema = new Schema({
   // attributes: [attributesProductSchema],
   // options: [optionsProductSchema],
   // discount: [discountProductSchema],
-  stock: [stockProductSchema],
+  // stock: [stockProductSchema],
   comments: [{
     type: Schema.Types.ObjectId,
     ref: 'comment',
@@ -175,16 +184,25 @@ const productSchema = new Schema({
       const {
         _id, name, productId, description, status,
         price, imagesPath, deductFromStock,
-        manufacturer, category, recommendedProductIdList, comments
+        manufacturer, category, recommendedProductIdList, comments,
+        quantity
       } = ret;
       return {
         id: _id,
         name, productId, description, status,
         price, imagesPath, deductFromStock,
-        manufacturer, category, recommendedProductIdList, comments
+        manufacturer, category, recommendedProductIdList, comments,
+        quantity
       }
     }
   }
+});
+
+productSchema.pre('save', (next) => {
+  if (this.deductFromStock) {
+    this.quantity = this.quantity - 1;
+  }
+  next()
 });
 
 productSchema.plugin(AutoIncrement, {inc_field: 'productId'});
