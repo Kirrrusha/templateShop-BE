@@ -61,6 +61,14 @@ const checkoutSchema = new Schema({
       message: '{VALUE} Invalid value'
     }
   },
+  email: {
+    type: String,
+    trim: true,
+    validate: {
+      validator: value => !validator.isEmail(value),
+      message: '{VALUE} is not email'
+    }
+  },
   phone: {
     type: String,
     trim: true

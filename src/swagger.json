@@ -1085,222 +1085,6 @@
         }
       }
     },
-    "/products/options": {
-      "post": {
-        "tags": [
-          "Options"
-        ],
-        "description": "Create option product",
-        "produces": [
-          "application/json"
-        ],
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "body request option",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "optionType": {
-                  "type": "string",
-                  "enum": [
-                    "checkbox",
-                    "radio",
-                    "select"
-                  ]
-                },
-                "optionValues": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "name": {
-                        "type": "string"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/simpleOk"
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "Options"
-        ],
-        "description": "get all options",
-        "produces": [
-          "application/json"
-        ],
-        "consumes": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/optionProduct"
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "Options"
-        ],
-        "description": "update option",
-        "produces": [
-          "application/json"
-        ],
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "body request option",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/optionProduct"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/optionProduct"
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/products/options/:id": {
-      "get": {
-        "tags": [
-          "Options"
-        ],
-        "description": "get option by id",
-        "produces": [
-          "application/json"
-        ],
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "description": "Option's id",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/optionProduct"
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Options"
-        ],
-        "description": "remove option by id",
-        "produces": [
-          "application/json"
-        ],
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "description": "Option's id",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/simpleOk"
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
     "/manufacturer": {
       "post": {
         "tags": [
@@ -1823,7 +1607,10 @@
             "name": "id",
             "description": "comments id",
             "required": true,
-            "type": "string"
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1875,14 +1662,263 @@
             "examples": {
               "application/json": [
                 {
-                "id": "5e6d377c4d2326090eb7e6c4",
-                "productId": "5e6d377c4d2326090eb7e6c4",
-                "authorId": "5e6d377c4d2326090eb7e6c4",
-                "text": "Cool chair",
-                "rating": 2,
-                "visible": true
-              }
+                  "id": "5e6d377c4d2326090eb7e6c4",
+                  "productId": "5e6d377c4d2326090eb7e6c4",
+                  "authorId": "5e6d377c4d2326090eb7e6c4",
+                  "text": "Cool chair",
+                  "rating": 2,
+                  "visible": true
+                }
               ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/checkout": {
+      "get": {
+        "tags": [
+          "Checkout"
+        ],
+        "description": "get all checkouts",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/checkout"
+              }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "name": "test",
+                  "surname": "test",
+                  "email": "admin@site.ru",
+                  "phone": "89204442233",
+                  "checkout": [
+                    {
+                      "product": "5e807cfad8d3b1609a97e414",
+                      "quantity": 5,
+                      "total": 100
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Checkout"
+        ],
+        "description": "Order products | product",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body request checkout",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 20
+                },
+                "surname": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 20
+                },
+                "email": {
+                  "type": "string"
+                },
+                "phone": {
+                  "type": "string"
+                },
+                "checkout": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "product": {
+                        "type": "string",
+                        "description": "product's objectId"
+                      },
+                      "quantity": {
+                        "type": "number"
+                      },
+                      "total": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "product",
+                      "quantity",
+                      "total"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "name",
+                "email",
+                "phone",
+                "checkout"
+              ],
+              "example": {
+                "name": "test",
+                "surname": "test",
+                "email": "admin@site.ru",
+                "phone": "89204442233",
+                "checkout": [
+                  {
+                    "product": "5e807cfad8d3b1609a97e414",
+                    "quantity": 5,
+                    "total": 100
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/checkout"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Checkout"
+        ],
+        "description": "Update products | product",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body request checkout",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 20
+                },
+                "surname": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 20
+                },
+                "email": {
+                  "type": "string"
+                },
+                "phone": {
+                  "type": "string"
+                },
+                "checkout": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "product": {
+                        "type": "string",
+                        "description": "product's objectId"
+                      },
+                      "quantity": {
+                        "type": "number"
+                      },
+                      "total": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "product",
+                      "quantity",
+                      "total"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "name",
+                "email",
+                "phone",
+                "checkout"
+              ],
+              "example": {
+                "name": "test",
+                "surname": "test",
+                "email": "admin@site.ru",
+                "phone": "89204442233",
+                "checkout": [
+                  {
+                    "product": "5e807cfad8d3b1609a97e414",
+                    "quantity": 5,
+                    "total": 100
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/checkout"
             }
           },
           "401": {
@@ -1898,9 +1934,9 @@
       },
       "delete": {
         "tags": [
-          "Comments"
+          "Checkout"
         ],
-        "description": "remove comments by id",
+        "description": "remove checkout | checkouts by id",
         "produces": [
           "application/json"
         ],
@@ -1911,9 +1947,12 @@
           {
             "in": "query",
             "name": "id",
-            "description": "comments id",
+            "description": "checkout id",
             "required": true,
-            "type": "string"
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1932,12 +1971,12 @@
         }
       }
     },
-    "/checkout": {
-      "post": {
+    "/checkout/:id": {
+      "get": {
         "tags": [
           "Checkout"
         ],
-        "description": "Order products | product",
+        "description": "get checkout by checkoutId",
         "produces": [
           "application/json"
         ],
@@ -1946,20 +1985,36 @@
         ],
         "parameters": [
           {
-            "in": "body",
-            "name": "body",
-            "description": "body request checkout",
+            "in": "path",
+            "name": "id",
+            "description": "checkout's id",
             "required": true,
-            "schema": {
-              "$ref": "#/definitions/checkoutBodyRequest"
-            }
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/simpleOk"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/checkout"
+              }
+            },
+            "examples": {
+              "application/json": {
+                "name": "test",
+                "surname": "test",
+                "email": "admin@site.ru",
+                "phone": "89204442233",
+                "checkout": [
+                  {
+                    "product": "5e807cfad8d3b1609a97e414",
+                    "quantity": 5,
+                    "total": 100
+                  }
+                ]
+              }
             }
           },
           "401": {
@@ -2112,16 +2167,21 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "string"
+          "type": "string",
+          "description": "Mongodb objectId"
         },
-        "productId": {
-          "type": "string"
+        "product": {
+          "type": "string",
+          "description": "Mongodb product's objectId"
         },
-        "authorId": {
-          "type": "string"
+        "author": {
+          "type": "string",
+          "description": "Mongodb user's objectId"
         },
         "text": {
-          "type": "string"
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 300
         },
         "rating": {
           "type": "number"
@@ -2131,35 +2191,41 @@
         }
       }
     },
-    "checkoutBodyRequest": {
+    "checkout": {
       "type": "object",
       "properties": {
         "id": {
-          "type": "integer"
+          "type": "string",
+          "description": "Mongodb objectId"
         },
         "name": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 20
+        },
+        "surname": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 20
+        },
+        "phone": {
           "type": "string"
         },
-        "amount": {
-          "type": "number"
-        },
-        "price": {
-          "type": "number"
-        },
-        "total": {
-          "type": "number"
-        },
-        "client": {
-          "type": "object",
-          "properties": {
-            "clientId": {
-              "type": "number"
-            },
-            "name": {
-              "type": "string"
-            },
-            "phone": {
-              "type": "string"
+        "checkout": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "product": {
+                "type": "string",
+                "description": "Mongodb product's objectId"
+              },
+              "quantity": {
+                "type": "number"
+              },
+              "total": {
+                "type": "number"
+              }
             }
           }
         }
@@ -2249,13 +2315,21 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "string"
+          "type": "string",
+          "description": "Mongodb objectId"
         },
         "name": {
-          "type": "string"
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 15,
+          "uniqueItems": true
         },
         "imagePath": {
           "type": "string"
+        },
+        "manufacturerId": {
+          "type": "number",
+          "description": "not real id, it is a simple uniq number, which you can substitute in url (for example)"
         }
       }
     },

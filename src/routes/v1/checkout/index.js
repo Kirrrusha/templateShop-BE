@@ -26,6 +26,21 @@ const ordersValidator = [
     })
     .trim()
     .escape(),
+  check('phone')
+    .not()
+    .isEmpty()
+    .withMessage('Obligatory field')
+    .trim()
+    .escape(),
+  check('email')
+    .not()
+    .isEmpty()
+    .withMessage('Obligatory field')
+    .not()
+    .isEmail()
+    .withMessage('Obligatory field')
+    .trim()
+    .escape(),
   check('surname')
     .optional()
     .withMessage('Obligatory field')
@@ -51,21 +66,17 @@ const ordersValidator = [
         throw new Error('Empty checkout');
       } else if (value.some(item => validator.isObjectId(item))) {}
       return true;
-    }),
-  check('status')
-    .optional()
-    .isBoolean()
-    .withMessage('Wrong type')
+    })
 ];
 
-router.get('/', ctrlCategory.getAll);
+router.get('/', ctrlCheckout.getAll);
 
-router.get('/:id', ctrlCategory.getById);
+router.get('/:id', ctrlCheckout.getById);
 
-router.post('/', multParse.none(), validate(ordersValidator), ctrlCategory.create);
+router.post('/', multParse.none(), validate(ordersValidator), ctrlCheckout.create);
 
-router.put('/', multParse.none(), validate(ordersValidator), ctrlCategory.update);
+router.put('/', multParse.none(), validate(ordersValidator), ctrlCheckout.update);
 
-router.delete('', ctrlCategory.delete);
+router.delete('', ctrlCheckout.delete);
 
 module.exports = router;

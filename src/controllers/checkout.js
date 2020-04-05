@@ -46,37 +46,18 @@ exports.create = async (req, res, next) => {
   }
 };
 
-
-
-
-
 exports.update = async (req, res, next) => {
-  const { body: { id, ...body }, files: photo } = req;
+  const { body: { id, ...body } } = req;
   try {
-    const product = await Product.findById(id)
+    const checkout = await Checkout.findById(id)
       .exec();
-    if (product) {
-      for (const image of product.imagesPath) {
-        if (image !== '/assets/uploads/unnamed.jpg') {
-          await fs.unlinkSync(`.${image.replace(/assets/, 'src')}`);
-        }
-      }
-    }
-    product.name = body.name || product.name;
-    product.description = body.description || product.description;
-    product.status = body.status || product.status;
-    product.price = body.price || product.price;
-    product.imagesPath = photo ?
-      photo.map(file => `/assets/uploads/${file.filename}`) : product.imagesPath;
-    product.deductFromStock = body.deductFromStock || product.deductFromStock;
-    product.manufacturerId = body.manufacturerId || product.manufacturerId;
-    product.category = body.category || product.category;
-    product.manufacturer = body.manufacturer || product.manufacturer;
-    product.recommendedProductIdList = body.recommendedProductIdList || product.recommendedProductIdList;
-    product.comments = body.comments || product.comments;
-    product.quantity = body.quantity || product.quantity;
-    await product.save();
-    await res.json(product.toJSON());
+    checkout.name = body.name || checkout.name;
+    checkout.surname = body.surname || checkout.surname;
+    checkout.phone = body.phone || checkout.phone;
+    checkout.email = body.email || checkout.email;
+    checkout.checkout = body.checkout || checkout.checkout;
+    await checkout.save();
+    await res.json(checkout.toJSON());
   } catch ({ message }) {
     return errorHandler({
       message,
@@ -88,17 +69,8 @@ exports.update = async (req, res, next) => {
 exports.delete = async (req, res, next) => {
   const { id } = req.query;
   try {
-    const products = await Product.find({ productId: { $in: id } });
-    for (let i = 0, length = products.length; i < length; i++) {
-      if (products[i]) {
-        for (const image of products[i].imagesPath) {
-          if (image !== '/assets/uploads/unnamed.jpg') {
-            await fs.unlinkSync(`.${image.replace(/assets/, 'src')}`);
-          }
-        }
-      }
-    }
-    await Product.deleteMany({ productId: { $in: id } });
+    await Checkout.deleteMany({ _id: { $in: id } });
+    //TODO send email, after delete
     res.end();
   } catch ({ message }) {
     return errorHandler({
