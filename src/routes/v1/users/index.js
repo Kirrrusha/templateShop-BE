@@ -10,9 +10,9 @@ const ordersValidator = [
     .withMessage('Obligatory field')
     .isAlphanumeric('en-US')
     .withMessage('Wrong type'),
-  check('password').not().isEmpty()
-    .withMessage('Obligatory field')
-    .isAlphanumeric('en-US')
+  check('role')
+    .optional()
+    .isIn(['basic', 'supervisor'])
     .withMessage('Wrong type'),
   check('email')
     .optional()
@@ -47,11 +47,19 @@ const ordersValidator = [
     })
 ];
 
+const passwordValidator = [
+  check('password').not().isEmpty()
+    .withMessage('Obligatory field')
+    .isAlphanumeric('en-US')
+    .withMessage('Wrong type')
+]
+
 router.post('/login', validate(ordersValidator), ctrlUsers.auth);
 router.post('/registration', validate(ordersValidator), ctrlUsers.registration);
 router.get('/:id', ctrlUsers.getById);
 router.get('/', ctrlUsers.getAll);
 router.put('/', validate(ordersValidator), ctrlUsers.updateUser);
+router.put('/changePassword', validate(passwordValidator), ctrlUsers.changePassword);
 router.delete('/', ctrlUsers.deleteUsers);
 
 module.exports = router;
