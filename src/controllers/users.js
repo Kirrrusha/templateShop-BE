@@ -80,10 +80,27 @@ exports.auth = async (req, res, next) => {
         ...user.toJSON(),
         token
       });
+    } else {
+      errorHandler({
+        message: 'Wrong login or password',
+        statusCode: 401
+      }, next);
     }
   } catch (e) {
     errorHandler({
       message: e.message,
+      statusCode: 401
+    }, next);
+  }
+};
+
+exports.getAll = async (req, res, next) => {
+  try {
+    const users = await User.find({});
+    await res.json(users.map(user => user.toJSON()));
+  } catch ({ message }) {
+    errorHandler({
+      message,
       statusCode: 401
     }, next);
   }
@@ -103,18 +120,15 @@ exports.getById = async (req, res, next) => {
 };
 
 exports.updateUser = async (req, res, next) => {
-  const { id, password, surname, email, name, middleName, role } = req.body;
+  const { id, surname, email, name, middleName, role } = req.body;
 
   try {
-    const salt = await bCrypt.genSalt(10);
-    const hashPassword = await bCrypt.hash(password, salt);
     const user = await User.findById(id).exec();
-    user.password = hashPassword;
-    user.surname = surname;
-    user.email = email;
-    user.name = name;
-    user.middleName = middleName;
-    user.role = role;
+    user.surname = surname || user.surname;
+    user.email = email || user.email;
+    user.name = name || user.name;
+    user.middleName = middleName || user.middleName;
+    user.role = role || user.role;
     await user.save();
     await res.json(user.toJSON())
   } catch (e) {
@@ -125,7 +139,29 @@ exports.updateUser = async (req, res, next) => {
   }
 };
 
-exports.deleteUsers = async ({ id }, res, next) => {
+exports.changePassword = async (req, res, next) => {
+  const {id, oldPassword, newPassword} = req.body;
+  try {
+    const salt = await bCrypt.genSalt(10);
+    const hashOldPassword = await bCrypt.hash(oldPassword, salt);
+    const user = await User.findById(id).exec();
+    if (user.password !== hashOldPassword) {
+      throw new Error('Incorrect password!');
+    }
+    const hashNewPassword = await bCrypt.hash(newPassword || hashOldPassword, salt);
+    user.password = hashNewPassword;
+    await user.save();
+    await res.json(user.toJSON())
+  } catch (e) {
+    errorHandler({
+      message: e.message,
+      statusCode: 401
+    }, next);
+  }
+}
+
+exports.deleteUsers = async (req, res, next) => {
+  const { id } = req.body;
   try {
     await User.deleteMany({ _id: { $in: id } });
     res.end()
