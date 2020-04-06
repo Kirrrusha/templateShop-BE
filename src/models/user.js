@@ -62,10 +62,7 @@ const UserSchema = new Schema({
         if (value === 'supervisor') {
           try {
             const admin = await user.findOne({ role: value });
-            if (admin) {
-              return respond(false);
-            }
-            respond(true);
+            return !admin;
           } catch (e) {
             throw e.message;
           }
