@@ -52,6 +52,7 @@ const passwordValidator = [
     .withMessage('Obligatory field')
     .isAlphanumeric('en-US')
     .withMessage('Wrong type')
+    .trim().escape()
 ]
 
 router.post('/login', validate(ordersValidator), ctrlUsers.auth);

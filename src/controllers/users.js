@@ -124,11 +124,11 @@ exports.updateUser = async (req, res, next) => {
 
   try {
     const user = await User.findById(id).exec();
-    user.surname = surname;
-    user.email = email;
-    user.name = name;
-    user.middleName = middleName;
-    user.role = role;
+    user.surname = surname || user.surname;
+    user.email = email || user.email;
+    user.name = name || user.name;
+    user.middleName = middleName || user.middleName;
+    user.role = role || user.role;
     await user.save();
     await res.json(user.toJSON())
   } catch (e) {
@@ -148,7 +148,7 @@ exports.changePassword = async (req, res, next) => {
     if (user.password !== hashOldPassword) {
       throw new Error('Incorrect password!');
     }
-    const hashNewPassword = await bCrypt.hash(newPassword, salt);
+    const hashNewPassword = await bCrypt.hash(newPassword || hashOldPassword, salt);
     user.password = hashNewPassword;
     await user.save();
     await res.json(user.toJSON())
