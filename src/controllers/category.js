@@ -49,7 +49,7 @@ exports.update = async (req, res, next) => {
     const category = await Category.findById(id).exec();
     category.name = body.name || category.name;
     category.description = body.description || category.description;
-    category.status = body.status || category.status;
+    category.status = !!body.status;
     await category.save();
     await res.json(category.toJSON());
   } catch ({ message }) {
@@ -63,7 +63,7 @@ exports.update = async (req, res, next) => {
 exports.delete = async (req, res, next) => {
   const { id } = req.query;
   try {
-    await Category.deleteMany({ categoryId: { $in: id } });
+    await Category.deleteMany({ _id: { $in: id } });
     res.end()
   } catch ({ message }) {
     return errorHandler({
