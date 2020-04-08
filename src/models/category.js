@@ -41,13 +41,14 @@ const categorySchema = new Schema({
   versionKey: false,
   toJSON: {
     transform: function (doc, ret) {
-      const {_id, name, status, description, categoryId} = ret;
+      const {_id, name, status, description, categoryId, updatedAt} = ret;
       return {
         id: _id,
         categoryId,
         name,
         description,
-        status
+        status,
+        updatedAt
       }
     }
   }
