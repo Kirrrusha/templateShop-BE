@@ -1,0 +1,197 @@
+{
+  "paths": {
+    "/manufacturer": {
+      "post": {
+        "tags": [
+          "Manufactures"
+        ],
+        "description": "Create manufacture",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "required": true,
+            "description": "Manufacture's name"
+          },
+          {
+            "in": "formData",
+            "name": "img",
+            "type": "file",
+            "required": false,
+            "description": "Manufacture's img"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/manufacturer"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Manufactures"
+        ],
+        "description": "get all manufactures",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/manufacturer"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Manufactures"
+        ],
+        "description": "update manufacturer",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "id",
+            "type": "string",
+            "required": true,
+            "description": "Manufacture's id"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "required": true,
+            "description": "Manufacture's name"
+          },
+          {
+            "in": "formData",
+            "name": "img",
+            "type": "file",
+            "required": false,
+            "description": "Manufacture's img"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/manufacturer"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Manufactures"
+        ],
+        "description": "remove Manufactures by id",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "required": true,
+            "type": "array",
+            "description": "array ObjectId",
+            "items": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "manufacturer": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Mongodb objectId"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 15,
+          "uniqueItems": true
+        },
+        "imagePath": {
+          "type": "string"
+        },
+        "manufacturerId": {
+          "type": "number",
+          "description": "not real id, it is a simple uniq number, which you can substitute in url (for example)"
+        }
+      }
+    }
+  }
+}

@@ -146,10 +146,12 @@ exports.changePassword = async (req, res, next) => {
     const hashOldPassword = await bCrypt.hash(oldPassword, salt);
     const user = await User.findById(id).exec();
     if (user.password !== hashOldPassword) {
-      throw new Error('Incorrect password!');
+      return errorHandler({
+        message: 'Incorrect password!',
+        statusCode: 401
+      }, next);
     }
-    const hashNewPassword = await bCrypt.hash(newPassword || hashOldPassword, salt);
-    user.password = hashNewPassword;
+    user.password = await bCrypt.hash(newPassword || hashOldPassword, salt);
     await user.save();
     await res.json(user.toJSON())
   } catch (e) {
@@ -161,7 +163,7 @@ exports.changePassword = async (req, res, next) => {
 }
 
 exports.deleteUsers = async (req, res, next) => {
-  const { id } = req.body;
+  const { id } = req.query;
   try {
     await User.deleteMany({ _id: { $in: id } });
     res.end()

@@ -1,0 +1,608 @@
+{
+  "paths": {
+    "/products": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "description": "get all products",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/product"
+              }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "id": "5e6d377c4d2326090eb7e6c4",
+                  "name": "Chair",
+                  "description": "Cool chair",
+                  "price": 150,
+                  "imagesPath": [
+                    "no-name.png"
+                  ],
+                  "deductFromStock": true,
+                  "manufacturer": "5e6d377c4d2326090eb7e6c4",
+                  "category": [
+                    "5e6d377c4d2326090eb7e6c4"
+                  ],
+                  "recommendedProductIdList": [
+                    "5e6d377c4d2326090eb7e6c4"
+                  ]
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Products"
+        ],
+        "description": "Create product",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "description",
+            "type": "string",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "status",
+            "type": "boolean",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "price",
+            "type": "number",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "manufacturer",
+            "type": "string",
+            "required": true,
+            "description": "ObjectId"
+          },
+          {
+            "in": "formData",
+            "name": "category",
+            "required": false,
+            "description": "Array ObjectId",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "formData",
+            "name": "recommendedProductIdList",
+            "required": false,
+            "description": "Array ObjectId",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body request option",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string",
+                  "maxLength": 1000
+                },
+                "status": {
+                  "type": "boolean"
+                },
+                "price": {
+                  "type": "number"
+                },
+                "manufacturer": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "recommendedProductIdList": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "stock": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "priority": {
+                        "type": "number"
+                      },
+                      "newPrice": {
+                        "type": "number"
+                      },
+                      "startDate": {
+                        "type": "string"
+                      },
+                      "endDate": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "newPrice"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "name",
+                "price"
+              ],
+              "example": {
+                "id": "5e6d377c4d2326090eb7e6c4",
+                "name": "Chair",
+                "description": "Cool chair",
+                "price": 150,
+                "imagesPath": [
+                  "no-name.png"
+                ],
+                "deductFromStock": true,
+                "manufacturerId": 1,
+                "categoryId": [
+                  1
+                ],
+                "recommendedProductIdList": [
+                  "5e6d377c4d2326090eb7e6c4"
+                ]
+              }
+            }
+          },
+          {
+            "in": "formData",
+            "name": "photo",
+            "type": "file",
+            "required": false,
+            "description": "Product's img"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/product"
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "id": "5e6d377c4d2326090eb7e6c4",
+                  "name": "Chair",
+                  "description": "Cool chair",
+                  "price": 150,
+                  "imagesPath": [
+                    "no-name.png"
+                  ],
+                  "deductFromStock": true,
+                  "manufacturerId": 1,
+                  "categoryId": [
+                    1
+                  ],
+                  "recommendedProductIdList": [
+                    "5e6d377c4d2326090eb7e6c4"
+                  ]
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Products"
+        ],
+        "description": "Update product",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body request option",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },"name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string",
+                  "maxLength": 1000
+                },
+                "status": {
+                  "type": "boolean"
+                },
+                "price": {
+                  "type": "number"
+                },
+                "manufacturer": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "recommendedProductIdList": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "stock": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "priority": {
+                        "type": "number"
+                      },
+                      "newPrice": {
+                        "type": "number"
+                      },
+                      "startDate": {
+                        "type": "string"
+                      },
+                      "endDate": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "newPrice"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "price"
+              ],
+              "example": {
+                "id": "5e6d377c4d2326090eb7e6c4",
+                "name": "Chair",
+                "description": "Cool chair",
+                "price": 150,
+                "imagesPath": [
+                  "no-name.png"
+                ],
+                "deductFromStock": true,
+                "manufacturerId": 1,
+                "categoryId": [
+                  1
+                ],
+                "recommendedProductIdList": [
+                  "5e6d377c4d2326090eb7e6c4"
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/product"
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "id": "5e6d377c4d2326090eb7e6c4",
+                  "name": "Chair",
+                  "description": "Cool chair",
+                  "price": 150,
+                  "imagesPath": [
+                    "no-name.png"
+                  ],
+                  "deductFromStock": true,
+                  "manufacturerId": 1,
+                  "categoryId": [
+                    1
+                  ],
+                  "recommendedProductIdList": [
+                    "5e6d377c4d2326090eb7e6c4"
+                  ]
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Products"
+        ],
+        "description": "remove products by id",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/products/byCategory/{id}": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "description": "get all products by id",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "category's id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/product"
+              }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "id": "5e6d377c4d2326090eb7e6c4",
+                  "name": "Chair",
+                  "description": "Cool chair",
+                  "price": 150,
+                  "imagesPath": [
+                    "no-name.png"
+                  ],
+                  "deductFromStock": true,
+                  "manufacturerId": 1,
+                  "categoryId": [
+                    1
+                  ],
+                  "recommendedProductIdList": [
+                    "5e6d377c4d2326090eb7e6c4"
+                  ]
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "description": "Returns product",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/product"
+              }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "id": "5e6d377c4d2326090eb7e6c4",
+                  "name": "Chair",
+                  "description": "Cool chair",
+                  "price": 150,
+                  "imagesPath": [
+                    "no-name.png"
+                  ],
+                  "deductFromStock": true,
+                  "manufacturerId": 1,
+                  "categoryId": [
+                    1
+                  ],
+                  "recommendedProductIdList": [
+                    "5e6d377c4d2326090eb7e6c4"
+                  ]
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "product": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "status": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number"
+        },
+        "imagesPath": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "deductFromStock": {
+          "type": "boolean"
+        },
+        "manufacturer": {
+          "type": "string",
+          "description": "ObjectId"
+        },
+        "category": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "ObjectId"
+          }
+        },
+        "comments": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "ObjectId"
+          }
+        },
+        "recommendedProductIdList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

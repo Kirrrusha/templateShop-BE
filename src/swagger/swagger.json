@@ -1,0 +1,44 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Documentation for aggregate response application",
+    "version": "1.0.0",
+    "title": "shop"
+  },
+  "schemes": [
+    "http"
+  ],
+  "basePath": "/api/v1/",
+  "tags": [
+    {
+      "name": "Users",
+      "description": "System's user API"
+    },
+    {
+      "name": "Categories",
+      "description": "Categories products"
+    },
+    {
+      "name": "Products",
+      "description": "Products"
+    },
+    {
+      "name": "Manufactures",
+      "description": "Manufactures"
+    },
+    {
+      "name": "Checkout",
+      "description": "Work with checkout"
+    },
+    {
+      "name": "Comments"
+    }
+  ],
+  "paths": {},
+  "definitions": {},
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}
+
