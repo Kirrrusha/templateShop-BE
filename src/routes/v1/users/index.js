@@ -4,6 +4,8 @@ const { check } = require('express-validator');
 const validator = require('validator');
 const ctrlUsers = require('../../../controllers/users');
 const { validate } = require('../../../middleware');
+const multer = require('multer');
+const multParse = multer();
 
 const ordersValidator = [
   check('username').not().isEmpty()
@@ -55,12 +57,12 @@ const passwordValidator = [
     .trim().escape()
 ]
 
-router.post('/login', validate(ordersValidator), ctrlUsers.auth);
-router.post('/registration', validate(ordersValidator), ctrlUsers.registration);
+router.post('/login', multParse.none(), validate(ordersValidator), ctrlUsers.auth);
+router.post('/registration', multParse.none(), validate(ordersValidator), ctrlUsers.registration);
 router.get('/:id', ctrlUsers.getById);
 router.get('/', ctrlUsers.getAll);
-router.put('/', validate(ordersValidator), ctrlUsers.updateUser);
-router.put('/changePassword', validate(passwordValidator), ctrlUsers.changePassword);
+router.put('/', multParse.none(), validate(ordersValidator), ctrlUsers.updateUser);
+router.put('/changePassword', multParse.none(), validate(passwordValidator), ctrlUsers.changePassword);
 router.delete('/', ctrlUsers.deleteUsers);
 
 module.exports = router;

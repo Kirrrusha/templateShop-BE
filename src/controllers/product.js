@@ -51,9 +51,9 @@ exports.getAll = async (req, res, next) => {
 // };
 
 exports.productsByCategoryId = async (req, res, next) => {
-  const { categoryId } = req.params;
+  const { id } = req.params;
   try {
-    const products = await Product.find({ category: { $in: categoryId } })
+    const products = await Product.find({ category: { $in: id } })
       .populate({
         path: 'manufacturer',
         select: 'name imagePath'
@@ -97,7 +97,7 @@ exports.productsByCategoryId = async (req, res, next) => {
 exports.getById = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const product = await Product.findOne({ categoryId: id });
+    const product = await Product.findById(id);
     await res.json(product.toJSON());
   } catch ({ message }) {
     errorHandler({
