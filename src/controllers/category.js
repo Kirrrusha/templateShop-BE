@@ -16,7 +16,7 @@ exports.getAll = async (req, res, next) => {
 exports.getById = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const category = await Category.findOne({categoryId: id});
+    const category = await Category.findById(id);
     await res.json(category.toJSON());
   } catch ({ message }) {
     errorHandler({
