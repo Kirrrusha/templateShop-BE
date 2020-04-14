@@ -32,7 +32,7 @@ exports.create = async (req, res, next) => {
   try {
     const manufacturer = await Manufacturer.create({
       name,
-      imagePath: file ? `/assets/uploads/${file.filename}` : null
+      imagePath: file ? `/assets/uploads/${file.filename}` : '/assets/uploads/unnamed.jpg'
     });
     await res.json(manufacturer.toJSON());
   } catch ({ message }) {
@@ -47,7 +47,7 @@ exports.update = async (req, res, next) => {
   try {
     const manufacturer = await Manufacturer.findById(id)
       .exec();
-    if (manufacturer.imagePath !== '/assets/uploads/unnamed.jpg' &&
+    if (manufacturer.imagePath && manufacturer.imagePath !== '/assets/uploads/unnamed.jpg' &&
       fs.existsSync(manufacturer.imagePath.replace(/assets/, 'src'))) {
       await fs.unlinkSync(`./${manufacturer.imagePath.replace(/assets/, 'src')}`);
     }
@@ -69,7 +69,8 @@ exports.delete = async (req, res, next) => {
     const manufactures = await Manufacturer.find({ _id: { $in: id } });
     for (let i = 0, length = manufactures.length; i < length; i++) {
       if (manufactures[i]) {
-        if (manufactures[i].imagePath !== '/assets/uploads/unnamed.jpg' &&
+        if (manufactures[i].imagePath &&
+          manufactures[i].imagePath !== '/assets/uploads/unnamed.jpg' &&
           fs.existsSync(manufactures[i].imagePath.replace(/assets/, 'src'))) {
           await fs.unlinkSync(`.${manufactures[i].imagePath.replace(/assets/, 'src')}`);
         }
