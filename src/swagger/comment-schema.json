@@ -15,13 +15,13 @@
         "parameters": [
           {
             "in": "formData",
-            "name": "productId",
+            "name": "product",
             "type": "string",
             "required": true
           },
           {
             "in": "formData",
-            "name": "authorId",
+            "name": "author",
             "type": "string",
             "required": false
           },
@@ -53,8 +53,8 @@
             "examples": {
               "application/json": {
                 "id": "5e6d377c4d2326090eb7e6c4",
-                "productId": "5e6d377c4d2326090eb7e6c4",
-                "authorId": "5e6d377c4d2326090eb7e6c4",
+                "product": "5e6d377c4d2326090eb7e6c4",
+                "author": "5e6d377c4d2326090eb7e6c4",
                 "text": "Cool chair",
                 "rating": 2,
                 "visible": true
@@ -96,8 +96,8 @@
               "application/json": [
                 {
                   "id": "5e6d377c4d2326090eb7e6c4",
-                  "productId": "5e6d377c4d2326090eb7e6c4",
-                  "authorId": "5e6d377c4d2326090eb7e6c4",
+                  "product": "5e6d377c4d2326090eb7e6c4",
+                  "author": "5e6d377c4d2326090eb7e6c4",
                   "text": "Cool chair",
                   "rating": 2,
                   "visible": true
@@ -136,13 +136,13 @@
           },
           {
             "in": "formData",
-            "name": "productId",
+            "name": "product",
             "type": "string",
             "required": true
           },
           {
             "in": "formData",
-            "name": "authorId",
+            "name": "author",
             "type": "string",
             "required": false
           },
@@ -174,8 +174,8 @@
             "examples": {
               "application/json": {
                 "id": "5e6d377c4d2326090eb7e6c4",
-                "productId": "5e6d377c4d2326090eb7e6c4",
-                "authorId": "5e6d377c4d2326090eb7e6c4",
+                "product": "5e6d377c4d2326090eb7e6c4",
+                "author": "5e6d377c4d2326090eb7e6c4",
                 "text": "Cool chair",
                 "rating": 2,
                 "visible": true
