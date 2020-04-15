@@ -15,14 +15,7 @@ const ordersValidator = [
       max: 300,
       min: 2
     })
-    .withMessage('Wrong length')
-    .custom(value => {
-      if (!validator.isAlphanumeric(value, 'en-US')
-        && !validator.isAlphanumeric(value, 'ru-RU')) {
-        throw new Error('Wrong type');
-      }
-      return true;
-    }).trim().escape(),
+    .withMessage('Wrong length').trim().escape(),
   check('product').not().isEmpty()
     .withMessage('Obligatory field')
     .isMongoId()

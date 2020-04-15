@@ -150,7 +150,8 @@
             "description": "array ObjectId",
             "items": {
               "type": "string"
-            }
+            },
+            "collectionFormat": "multi"
           }
         ],
         "responses": {
