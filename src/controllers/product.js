@@ -1,5 +1,6 @@
 const fs = require('fs');
 const Product = require('../models/product');
+const { errorHandler } = require('../lib/util');
 
 exports.getAll = async (req, res, next) => {
   try {
@@ -127,9 +128,10 @@ exports.update = async (req, res, next) => {
   const { body: { id, ...body }, files: photo } = req;
   try {
     const product = await Product.findById(id).exec();
-    if (product) {
+    if (product && photo.length) {
       for (const image of product.imagesPath) {
-        if (image !== '/assets/uploads/unnamed.jpg' && fs.existsSync(image.replace(/assets/, 'src'))) {
+        if (image !== '/assets/uploads/unnamed.jpg' &&
+          fs.existsSync(`.${image.replace(/assets/, 'src')}`)) {
           await fs.unlinkSync(`.${image.replace(/assets/, 'src')}`);
         }
       }
@@ -160,17 +162,18 @@ exports.update = async (req, res, next) => {
 exports.delete = async (req, res, next) => {
   const { id } = req.query;
   try {
-    const products = await Product.find({ productId: { $in: id } });
+    const products = await Product.find({ _id: { $in: id } });
     for (let i = 0, length = products.length; i < length; i++) {
       if (products[i]) {
         for (const image of products[i].imagesPath) {
-          if (image !== '/assets/uploads/unnamed.jpg' && fs.existsSync(image.replace(/assets/, 'src'))) {
+          if (image !== '/assets/uploads/unnamed.jpg' &&
+            fs.existsSync(`.${image.replace(/assets/, 'src')}`)) {
             await fs.unlinkSync(`.${image.replace(/assets/, 'src')}`);
           }
         }
       }
     }
-    await Product.deleteMany({ productId: { $in: id } });
+    await Product.deleteMany({ _id: { $in: id } });
     res.end();
   } catch ({ message }) {
     return errorHandler({
