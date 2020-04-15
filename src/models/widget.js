@@ -40,7 +40,6 @@ const widgetSchema = new Schema({
   versionKey: false,
   toJSON: {
     transform: function (doc, ret) {
-      console.log('ret', ret)
       const {_id, name, status, products, widgetId, updatedAt} = ret;
       return {
         id: _id,

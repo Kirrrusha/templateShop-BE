@@ -634,7 +634,7 @@
           "maxLength": 1000
         },
         "status": {
-          "type": "string"
+          "type": "boolean"
         },
         "price": {
           "type": "number"

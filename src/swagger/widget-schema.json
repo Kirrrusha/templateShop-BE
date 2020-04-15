@@ -1,6 +1,6 @@
 {
   "paths": {
-    "/modules": {
+    "/widgets": {
       "get": {
         "tags": [
           "Widgets"
@@ -18,7 +18,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/module"
+                "$ref": "#/definitions/widgets"
               }
             },
             "examples": {
@@ -27,7 +27,14 @@
                   "id": "5e6d377c4d2326090eb7e6c4",
                   "name": "testName",
                   "products": [
-                    "5e6d377c4d2326090eb7e6c4"
+                    {
+                      "id": "5e6d377c4d2326090eb7e6c4",
+                      "name": "test",
+                      "description": "test",
+                      "status": true,
+                      "price": 123,
+                      "imagesPath": []
+                    }
                   ],
                   "moduleId": 1,
                   "status": true
@@ -50,7 +57,7 @@
         "tags": [
           "Widgets"
         ],
-        "description": "Create module",
+        "description": "Create widget",
         "produces": [
           "application/json"
         ],
@@ -59,44 +66,32 @@
         ],
         "parameters": [
           {
-            "in": "body",
-            "name": "body",
-            "description": "body request widget",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string",
-                  "minLength": 2,
-                  "maxLength": 20
-                },
-                "products": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "status": {
-                  "type": "boolean"
-                }
-              },
-              "required": [
-                "name",
-                "products"
-              ],
-              "example": {
-                "name": "Chair",
-                "products": ["5e6d377c4d2326090eb7e6c4"],
-                "status": true
-              }
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "products",
+            "type": "array",
+            "required": true,
+            "items": {
+              "type": "string"
             }
+          },
+          {
+            "in": "formData",
+            "name": "status",
+            "type": "boolean",
+            "required": false
           }
         ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/module"
+              "$ref": "#/definitions/widget"
             },
             "examples": {
               "application/json": {
@@ -147,9 +142,12 @@
           },
           {
             "in": "formData",
-            "name": "description",
-            "type": "string",
-            "required": false
+            "name": "products",
+            "type": "array",
+            "required": true,
+            "items": {
+              "type": "string"
+            }
           },
           {
             "in": "formData",
@@ -162,14 +160,16 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/category"
+              "$ref": "#/definitions/widget"
             },
             "examples": {
               "application/json": {
                 "id": "5e6d377c4d2326090eb7e6c4",
-                "categoryId": 1,
-                "name": "Chairs",
-                "description": "Good chair",
+                "name": "testName",
+                "products": [
+                  "5e6d377c4d2326090eb7e6c4"
+                ],
+                "moduleId": 1,
                 "status": true
               }
             }
@@ -189,7 +189,7 @@
         "tags": [
           "Widgets"
         ],
-        "description": "remove category | categories by id",
+        "description": "remove widget | widgets by id",
         "produces": [
           "application/json"
         ],
@@ -222,10 +222,71 @@
           }
         }
       }
+    },
+    "/widgets/{id}": {
+      "get": {
+        "tags": [
+          "Widgets"
+        ],
+        "description": "get widget by id",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "widget's id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/widget"
+              }
+            },
+            "examples": {
+              "application/json": {
+                "id": "5e6d377c4d2326090eb7e6c4",
+                "name": "testName",
+                "products": [
+                  {
+                    "id": "5e6d377c4d2326090eb7e6c4",
+                    "name": "test",
+                    "description": "test",
+                    "status": true,
+                    "price": 123,
+                    "imagesPath": []
+                  }
+                ],
+                "moduleId": 1,
+                "status": true
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
     }
   },
   "definitions": {
-    "module": {
+    "widget": {
       "type": "object",
       "properties": {
         "id": {
@@ -237,8 +298,30 @@
         "products": {
           "type": "array",
           "items": {
-            "schema": {
-              "$ref": "#/definitions/product"
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number"
+              },
+              "name": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string",
+                "maxLength": 1000
+              },
+              "status": {
+                "type": "boolean"
+              },
+              "price": {
+                "type": "number"
+              },
+              "imagesPath": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
             }
           }
         },
