@@ -30,7 +30,6 @@ const ordersValidator = [
     .not()
     .isEmpty()
     .custom(value => {
-      console.log('value', typeof value)
       if (!value.length) {
         throw new Error('Empty checkout');
       } else if (!value.every(item => validator.isObjectId(item))) {
