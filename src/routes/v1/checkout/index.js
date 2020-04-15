@@ -38,12 +38,27 @@ const ordersValidator = [
     .withMessage('Obligatory field')
     .not()
     .isEmail()
-    .withMessage('Obligatory field')
+    .withMessage('Incorrect email')
     .trim()
     .escape(),
   check('surname')
     .optional()
-    .withMessage('Obligatory field')
+    .isLength({
+      max: 20,
+      min: 2
+    })
+    .withMessage('Wrong length')
+    .custom(value => {
+      if (!validator.isAlphanumeric(value, 'en-US')
+        && !validator.isAlphanumeric(value, 'ru-RU')) {
+        throw new Error('Wrong type');
+      }
+      return true;
+    })
+    .trim()
+    .escape(),
+  check('name')
+    .optional()
     .isLength({
       max: 20,
       min: 2
