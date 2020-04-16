@@ -218,7 +218,7 @@
       },
       "delete": {
         "tags": [
-          "Widgets"
+          "Pages"
         ],
         "description": "remove page | pages by id",
         "produces": [
