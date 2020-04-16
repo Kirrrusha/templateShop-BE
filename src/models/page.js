@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
-const { validatorIsAlphanumeric } = require('../lib/util');
+const validator  = require('validator');
 const { Schema } = mongoose;
+const ObjectId = require('mongoose').Types.ObjectId;
 
 const pageSchema = new Schema({
   name: {
@@ -11,7 +12,7 @@ const pageSchema = new Schema({
     min: 2,
     maxlength: 20,
     validate: {
-      validator: value => !validator.isAlphanumericLocales(value, 'en-US'),
+      validator: value => validator.isAlpha(value, 'en-US'),
       message: '{VALUE} Invalid value',
     }
   },
@@ -19,7 +20,11 @@ const pageSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'widget',
     index: true,
-    required: [true, 'Add widget']
+    required: [true, 'Add widget'],
+    validate: {
+      validator: value => ObjectId.isValid(value),
+      message: '{VALUE} Invalid value',
+    }
   }],
   status: {
     type: Boolean,
