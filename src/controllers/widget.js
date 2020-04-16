@@ -56,10 +56,11 @@ exports.create = async (req, res, next) => {
 exports.update = async (req, res, next) => {
   const { id, ...body } = req.body;
   try {
+    const products = typeof body.products === 'string' ? body.products.split(', ') : body.products;
     const widget = await Widget.findById(id)
       .exec();
     widget.name = body.name || widget.name;
-    widget.products = body.products.length ? body.products : widget.description;
+    widget.products = products.length ? products : widget.products;
     widget.status = !!body.status;
     await widget.save();
     await res.json(widget.toJSON());

@@ -31,8 +31,8 @@ exports.errorHandler = ({ message, statusCode = 500 }, next) => {
 exports.transformResponse = ({ _id: id, ...body }) => ({ id, ...body });
 
 exports.validatorIsAlphanumeric = (value) =>
-  !validator.isAlphanumeric(value, 'en-US')
-  || !validator.isAlphanumeric(value, 'ru-RU');
+  !validator.isAlphanumericLocales(value, 'en-US') ||
+  !validator.isAlphanumericLocales(value, 'ru-RU');
 
 exports.useTag = (value) => HTMLParser.parse(value, {
   lowerCaseTagName: false,
