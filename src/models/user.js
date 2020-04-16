@@ -8,6 +8,7 @@ const UserSchema = new Schema({
     type: String,
     required: [true, 'Enter login'],
     trim: true,
+    minLength: 2,
     maxlength: 15,
     validate: {
       validator: (value) => validator.isAlphanumeric(value, 'en-US'),
