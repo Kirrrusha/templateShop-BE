@@ -31,8 +31,6 @@ const ordersValidator = [
     .custom(value => {
       if (!value.length) {
         throw new Error('Empty checkout');
-      } else if (!value.every(item => validator.isObjectId(item))) {
-        throw new Error('Wrong type');
       }
       return true;
     })
