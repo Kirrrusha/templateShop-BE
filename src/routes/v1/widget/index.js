@@ -18,8 +18,7 @@ const ordersValidator = [
     })
     .withMessage('Wrong length')
     .custom(value => {
-      if (!validator.isAlphanumeric(value, 'en-US')
-        && !validator.isAlphanumeric(value, 'ru-RU')) {
+      if (!validator.isAlphanumeric(value, 'en-US')) {
         throw new Error('Wrong type');
       }
       return true;
@@ -32,8 +31,6 @@ const ordersValidator = [
     .custom(value => {
       if (!value.length) {
         throw new Error('Empty checkout');
-      } else if (!value.every(item => validator.isObjectId(item))) {
-        throw new Error('Wrong type');
       }
       return true;
     })
