@@ -48,7 +48,9 @@ const upload = multer({
     fileSize: 1000000
   },
   fileFilter: (req, file, cb) => {
-    if (
+    if (file.length > 12) {
+      cb(new Error("Too many files"), false);
+    } else if (
       file.mimetype === "image/png" ||
       file.mimetype === "image/jpg" ||
       file.mimetype === "image/jpeg"
@@ -68,12 +70,12 @@ router.get('/byCategory/:id', ctrlProduct.productsByCategoryId);
 router.get('/:id', ctrlProduct.getById);
 
 router.post('/',
-  upload.array('photos', 12),
+  upload.any(),
   ctrlProduct.create
 );
 
 router.put('/',
-  upload.array('photos', 12),
+  upload.any(),
   ctrlProduct.update
 );
 
