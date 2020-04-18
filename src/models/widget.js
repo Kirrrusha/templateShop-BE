@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const { validatorIsAlphanumeric } = require('../lib/util');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 const { Schema } = mongoose;
+const ObjectId = require('mongoose').Types.ObjectId;
 
 
 const widgetSchema = new Schema({
@@ -26,7 +27,11 @@ const widgetSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'product',
     index: true,
-    required: [true, 'Add product']
+    required: [true, 'Add product'],
+    validate: {
+      validator: value => ObjectId.isValid(value),
+      message: '{VALUE} Invalid value',
+    }
   }],
   status: {
     type: Boolean,
