@@ -7,13 +7,14 @@ exports.getAll = async (req, res, next) => {
       .populate({
         path: 'widgets',
         select: 'id name products',
-        match: { status: { $eq: true } },
-        // populate: {
-        //   path: 'products',
-        //   select: 'id name productId',
-        //   match: { status: { $eq: true } }
-        // }
-      });
+        match: { status: { $ne: true } },
+        populate: {
+          path: 'products',
+          select: 'id name productId',
+          match: { status: { $ne: true } }
+        }
+      })
+      .exec();
     await res.json(pages.map(page => page.toJSON()));
   } catch ({ message }) {
     errorHandler({
@@ -30,7 +31,7 @@ exports.getById = async (req, res, next) => {
       .populate({
         path: 'widgets',
         select: 'id name widgets',
-        match: { status: { $eq: true } }
+        match: { status: { $ne: true } }
       });
     await res.json(page.toJSON());
   } catch ({ message }) {

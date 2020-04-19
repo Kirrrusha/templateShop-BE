@@ -7,8 +7,8 @@ exports.getAll = async (req, res, next) => {
       .populate({
         path: 'products',
         select: 'id name productId',
-        match: { status: { $eq: true } }
-      });
+        match: { status: { $ne: true } }
+      }).exec();
     await res.json(widgets.map(widget => widget.toJSON()));
   } catch ({ message }) {
     errorHandler({
@@ -25,7 +25,7 @@ exports.getById = async (req, res, next) => {
       .populate({
         path: 'products',
         select: 'id name productId',
-        match: { status: { $eq: true } }
+        match: { status: { $ne: true } }
       });
     await res.json(module.toJSON());
   } catch ({ message }) {
