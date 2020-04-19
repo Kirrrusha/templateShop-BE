@@ -38,7 +38,9 @@ const ordersValidator = [
 
 router.get('/', ctrlPage.getAll);
 
-router.get('/:id', ctrlPage.getById);
+router.get('/byId/:id', ctrlPage.getById);
+
+router.get('/byName/:name', ctrlPage.getByName);
 
 router.post('/', multParse.none(), validate(ordersValidator), ctrlPage.create);
 

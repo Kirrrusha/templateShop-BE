@@ -254,7 +254,7 @@
         }
       }
     },
-    "/pages/{id}": {
+    "/pages/byId/{id}": {
       "get": {
         "tags": [
           "Pages"
@@ -271,6 +271,72 @@
             "in": "path",
             "name": "id",
             "description": "page's id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/page"
+              }
+            },
+            "examples": {
+              "application/json": {
+                "id": "5e6d377c4d2326090eb7e6c4",
+                "name": "testName",
+                "widgets": [
+                  {
+                    "id": "5e6d377c4d2326090eb7e6c4",
+                    "name": "test",
+                    "products": [
+                      {
+                        "id": "5e6d377c4d2326090eb7e6c4",
+                        "name": "test",
+                        "description": "test",
+                        "status": true,
+                        "price": 123,
+                        "imagesPath": []
+                      }
+                    ]
+                  }
+                ],
+                "status": "true"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/pages/byName/{name}": {
+      "get": {
+        "tags": [
+          "Pages"
+        ],
+        "description": "get page by name",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "description": "page's name",
             "required": true,
             "type": "string"
           }

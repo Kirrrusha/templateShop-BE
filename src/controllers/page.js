@@ -7,11 +7,11 @@ exports.getAll = async (req, res, next) => {
       .populate({
         path: 'widgets',
         select: 'id name products',
-        match: { status: { $ne: true } },
+        match: { status: { $eq: true } },
         populate: {
           path: 'products',
           select: 'id name productId',
-          match: { status: { $ne: true } }
+          match: { status: { $eq: true } }
         }
       })
       .exec();
@@ -31,7 +31,35 @@ exports.getById = async (req, res, next) => {
       .populate({
         path: 'widgets',
         select: 'id name widgets',
-        match: { status: { $ne: true } }
+        match: { status: { $ne: true } },
+        populate: {
+          path: 'products',
+          select: 'id name productId',
+          match: { status: { $eq: true } }
+        }
+      });
+    await res.json(page.toJSON());
+  } catch ({ message }) {
+    errorHandler({
+      message,
+      statusCode: 401
+    }, next);
+  }
+};
+
+exports.getByName = async (req, res, next) => {
+  const { name } = req.params;
+  try {
+    const page = await Page.findOne({name})
+      .populate({
+        path: 'widgets',
+        select: 'id name widgets',
+        match: { status: { $ne: true } },
+        populate: {
+          path: 'products',
+          select: 'id name productId',
+          match: { status: { $eq: true } }
+        }
       });
     await res.json(page.toJSON());
   } catch ({ message }) {
