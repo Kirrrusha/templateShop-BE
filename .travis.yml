@@ -19,7 +19,7 @@ before_deploy:
 deploy:
   - provider: script
     skip_cleanup: true
-    script: rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/ web@188.225.18.51:/home/web/projects/templateShop-BE
+    script:  cd /home/web/projects/templateShop-BE && git pull
     on:
       branch: develop
   - provider: script
