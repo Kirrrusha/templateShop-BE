@@ -19,7 +19,7 @@ before_deploy:
 deploy:
   - provider: script
     skip_cleanup: true
-    script:  ssh web@188.225.18.51 "cd /home/web/projects/templateShop-BE && git pull"
+    script:  ssh web@188.225.18.51 "cd /home/web/projects/templateShop-BE && git pull && npm ci"
     on:
       branch: develop
   - provider: script
