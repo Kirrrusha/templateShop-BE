@@ -31,7 +31,7 @@ exports.getById = async (req, res, next) => {
       .populate({
         path: 'widgets',
         select: 'id name widgets',
-        match: { status: { $ne: true } },
+        match: { status: { $eq: true } },
         populate: {
           path: 'products',
           select: 'id name productId',
@@ -54,7 +54,7 @@ exports.getByName = async (req, res, next) => {
       .populate({
         path: 'widgets',
         select: 'id name widgets',
-        match: { status: { $ne: true } },
+        match: { status: { $eq: true } },
         populate: {
           path: 'products',
           select: 'id name productId',
