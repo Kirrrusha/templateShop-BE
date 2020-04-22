@@ -639,6 +639,9 @@
         "price": {
           "type": "number"
         },
+        "updatedAt": {
+          "type": "string"
+        },
         "imagesPath": {
           "type": "array",
           "items": {
