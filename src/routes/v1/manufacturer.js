@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const validator = require('validator');
 const { check } = require('express-validator');
 const ctrlManufacturers = require('../../controllers/manufacturer');
 const { validate } = require('../../middleware');
@@ -7,6 +8,25 @@ const multer = require('multer');
 const path = require('path');
 const Manufacturer = require('../../models/manufacturer');
 const { isEmpty } = require('lodash');
+
+const ordersValidator = [
+  check('name')
+    .not()
+    .isEmpty()
+    .withMessage('Obligatory field')
+    .isLength({
+      max: 15,
+      min: 2
+    })
+    .withMessage('Wrong length')
+    .custom(value => {
+      if (!validator.isAlphanumeric(value, 'en-US')
+        && !validator.isAlphanumeric(value, 'ru-RU')) {
+        throw new Error('Wrong type');
+      }
+      return true;
+    }).trim().escape(),
+];
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -23,12 +43,18 @@ const upload = multer({
     fileSize: 1000000
   },
   fileFilter: async (req, file, cb) => {
-    if (file.mimetype !== 'image/png') {
-      return cb(null, false, new Error('I don\'t have a clue!'));
+    if (
+      file.mimetype === "image/png" ||
+      file.mimetype === "image/jpg" ||
+      file.mimetype === "image/jpeg"
+    ) {
+      cb(null, true);
+    } else {
+      cb(new Error("File format should be PNG,JPG,JPEG"), false);
     }
     if (req.method !== 'PUT') {
       try {
-        const manufacturer = Manufacturer.findOne({ name: req.body.name }).exec();
+        const manufacturer = await Manufacturer.findOne({ name: req.body.name }).exec();
         if (!isEmpty(manufacturer)) {
           cb(new Error('Manufacture already exist'), false);
         }
@@ -45,7 +71,7 @@ router.get('/', ctrlManufacturers.getAll);
 
 router.get('/:id', ctrlManufacturers.getById);
 
-router.post('/', upload.single('img'), ctrlManufacturers.create);
+router.post('/', upload.single('img'), validate(ordersValidator), ctrlManufacturers.create);
 
 router.put('/', upload.single('img'), ctrlManufacturers.update);
 

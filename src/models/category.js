@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const { useTag } = require('../lib/util');
 const { validatorIsAlphanumeric } = require('../lib/util');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
+const uniqueValidator = require('mongoose-unique-validator');
 const { Schema } = mongoose;
 
 
@@ -11,6 +12,8 @@ const categorySchema = new Schema({
     required: [true, 'Add name category'],
     unique: true,
     trim: true,
+    index: true,
+    uniqueCaseInsensitive: true,
     min: 2,
     maxlength: 15,
     validate: {
@@ -55,6 +58,9 @@ const categorySchema = new Schema({
 });
 
 categorySchema.plugin(AutoIncrement, {inc_field: 'categoryId'});
+categorySchema.plugin(uniqueValidator, {
+  message: 'Error, expected {PATH} to be unique.'
+});
 
 const category = mongoose.model('category', categorySchema);
 

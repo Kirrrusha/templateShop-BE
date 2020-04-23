@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { validatorIsAlphanumeric } = require('../lib/util');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
+const uniqueValidator = require('mongoose-unique-validator');
 const { Schema } = mongoose;
 
 const manufacturerSchema = new Schema({
@@ -8,6 +9,8 @@ const manufacturerSchema = new Schema({
     type: String,
     required: [true, 'Add name manufacturer'],
     unique: true,
+    index: true,
+    uniqueCaseInsensitive: true,
     trim: true,
     min: 2,
     maxlength: 15,
@@ -45,6 +48,9 @@ const manufacturerSchema = new Schema({
 });
 
 manufacturerSchema.plugin(AutoIncrement, {inc_field: 'manufacturerId'});
+manufacturerSchema.plugin(uniqueValidator, {
+  message: 'Error, expected {PATH} to be unique.'
+});
 
 const manufacturer = mongoose.model('manufacture', manufacturerSchema);
 

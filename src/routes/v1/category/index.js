@@ -23,7 +23,8 @@ const ordersValidator = [
         throw new Error('Wrong type');
       }
       return true;
-    }).trim().escape(),
+    })
+    .trim().escape(),
   check('description')
     .optional()
     .isLength({ max: 1000 })
