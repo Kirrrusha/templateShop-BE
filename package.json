@@ -20,6 +20,7 @@
     "lodash": "latest",
     "mongoose": "^5.9.0",
     "mongoose-sequence": "^5.2.2",
+    "mongoose-unique-validator": "^2.0.3",
     "morgan": "^1.9.1",
     "multer": "^1.4.2",
     "node-html-parser": "^1.2.13",

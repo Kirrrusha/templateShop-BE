@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { validatorIsAlphanumeric } = require('../lib/util');
+const uniqueValidator = require('mongoose-unique-validator');
 const isNumber = require('lodash');
 const { useTag } = require('../lib/util');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
@@ -96,6 +97,8 @@ const productSchema = new Schema({
     required: [true, 'Add name products'],
     unique: true,
     trim: true,
+    index: true,
+    uniqueCaseInsensitive: true,
     min: 2,
     maxlength: 15,
     validate: {
@@ -208,6 +211,9 @@ productSchema.pre('save', (next) => {
 });
 
 productSchema.plugin(AutoIncrement, {inc_field: 'productId'});
+productSchema.plugin(uniqueValidator, {
+  message: 'Error, expected {PATH} to be unique.'
+});
 
 const product = mongoose.model('product', productSchema);
 

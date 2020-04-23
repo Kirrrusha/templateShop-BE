@@ -16,7 +16,7 @@ router.use('/users', users);
 router.use('/products', products);
 router.use('/articles', articles);
 router.use('/categories', category);
-router.use('/manufacturer', manufacturers);
+router.use('/manufacturers', manufacturers);
 router.use('/widgets', widgets);
 router.use('/pages', pages);
 
