@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node server",
-    "dev": "nodemon server"
+    "dev": "nodemon server",
+    "DEV-api": "PORT=8080 MONGODB_URI=mongodb://database:passw0rd@188.225.18.51:27030/heroku_tzl4m7mh SECRET_OR_KEY=techlead nodemon server"
   },
   "dependencies": {
     "accesscontrol": "^2.2.1",

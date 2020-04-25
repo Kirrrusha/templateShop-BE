@@ -17,7 +17,7 @@ exports.getAll = async (req, res, next) => {
 exports.getById = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const manufacturer = await Manufacturer.findOne({ manufacturerId: id });
+    const manufacturer = await Manufacturer.findById(id);
     await res.json(manufacturer.toJSON());
   } catch ({ message }) {
     errorHandler({

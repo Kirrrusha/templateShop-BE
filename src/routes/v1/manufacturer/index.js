@@ -2,11 +2,11 @@ const express = require('express');
 const router = express.Router();
 const validator = require('validator');
 const { check } = require('express-validator');
-const ctrlManufacturers = require('../../controllers/manufacturer');
-const { validate } = require('../../middleware');
+const ctrlManufacturers = require('../../../controllers/manufacturer');
+const { validate } = require('../../../middleware');
 const multer = require('multer');
 const path = require('path');
-const Manufacturer = require('../../models/manufacturer');
+const Manufacturer = require('../../../models/manufacturer');
 const { isEmpty } = require('lodash');
 
 const ordersValidator = [
@@ -19,13 +19,7 @@ const ordersValidator = [
       min: 2
     })
     .withMessage('Wrong length')
-    .custom(value => {
-      if (!validator.isAlphanumeric(value, 'en-US')
-        && !validator.isAlphanumeric(value, 'ru-RU')) {
-        throw new Error('Wrong type');
-      }
-      return true;
-    }).trim().escape(),
+    .trim().escape(),
 ];
 
 const storage = multer.diskStorage({
@@ -62,6 +56,12 @@ const upload = multer({
       } catch (e) {
         cb(null, false, new Error(e));
       }
+    } else if (req.method === 'PUT') {
+      const manufacturer = await Manufacturer.findById(req.body.id).exec();
+      if (!manufacturer) {
+        cb(new Error('Manufacture not found'), false);
+      }
+      cb(null, true);
     }
     cb(null, true);
   }
