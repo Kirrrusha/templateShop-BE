@@ -29,7 +29,6 @@ exports.getById = async (req, res, next) => {
 
 exports.create = async (req, res, next) => {
   const { body: { name }, file } = req;
-  console.log('file', file)
   try {
     const manufacturer = await Manufacturer.create({
       name,
@@ -48,7 +47,6 @@ exports.update = async (req, res, next) => {
   try {
     const manufacturer = await Manufacturer.findById(id)
       .exec();
-    console.log('manufacturer', manufacturer)
     if (manufacturer.imagePath && manufacturer.imagePath !== '/assets/uploads/unnamed.jpg' &&
       fs.existsSync(manufacturer.imagePath.replace(/assets/, 'src'))) {
       await fs.unlinkSync(`./${manufacturer.imagePath.replace(/assets/, 'src')}`);
