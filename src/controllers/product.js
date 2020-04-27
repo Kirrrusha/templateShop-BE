@@ -98,7 +98,24 @@ exports.productsByCategoryId = async (req, res, next) => {
 exports.getById = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const product = await Product.findById(id);
+    const product = await Product.findById(id)
+      .populate({
+        path: 'manufacturer',
+        select: 'name imagePath'
+      })
+      .populate({
+        path: 'category',
+        select: 'name description status'
+      })
+      .populate('recommendedProductIdList')
+      .populate({
+        path: 'comments',
+        select: 'text author rating visible',
+        populate: {
+          path: 'author',
+          model: 'user'
+        }
+      }).exec();
     await res.json(product.toJSON());
   } catch ({ message }) {
     errorHandler({
@@ -140,7 +157,7 @@ exports.update = async (req, res, next) => {
     product.description = body.description || product.description;
     product.status = body.status || product.status;
     product.price = body.price || product.price;
-    product.imagesPath = photo ?
+    product.imagesPath = photo.length ?
       photo.map(file => `/assets/uploads/${file.filename}`) : product.imagesPath;
     product.deductFromStock = body.deductFromStock || product.deductFromStock;
     product.manufacturerId = body.manufacturerId || product.manufacturerId;
