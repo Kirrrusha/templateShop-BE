@@ -35,9 +35,11 @@ const ordersValidator = [
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, './src/uploads/');
+    // cb(null, './src/uploads/');
+    cb(null, path.join(__dirname, '../../../../src/uploads/'));
   },
   filename: (req, file, cb) => {
+    console.log(Date.now() + path.extname(file.originalname))
     cb(null, Date.now() + path.extname(file.originalname));
   }
 });
@@ -68,6 +70,7 @@ const upload = multer({
       }
     } else if (req.method === 'PUT') {
       const product = await Product.findById(req.body.id).exec();
+      console.log('product', product);
       if (!product) {
         cb(new Error('Product not found'), false);
       }
