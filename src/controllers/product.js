@@ -149,8 +149,8 @@ exports.update = async (req, res, next) => {
     if (product && photo.length) {
       for (const image of product.imagesPath) {
         if (image && image !== 'unnamed.jpg' &&
-          fs.existsSync(`../../uploads/${image}`)) {
-          await fs.unlinkSync(`../../uploads/${image}`);
+          fs.existsSync(path.join(process.cwd(), `/src/uploads/${image}`))) {
+          await fs.unlinkSync(path.join(process.cwd(), `/src/uploads/${image}`));
         }
       }
     }
@@ -185,8 +185,8 @@ exports.delete = async (req, res, next) => {
       if (products[i]) {
         for (const image of products[i].imagesPath) {
           if (image && image !== 'unnamed.jpg' &&
-            fs.existsSync(`../../uploads/${image}`)) {
-            await fs.unlinkSync(`../../uploads/${image}`);
+            fs.existsSync(path.join(process.cwd(), `/src/uploads/${image}`))) {
+            await fs.unlinkSync(path.join(process.cwd(), `/src/uploads/${image}`));
           }
         }
       }
