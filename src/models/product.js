@@ -142,7 +142,7 @@ const productSchema = new Schema({
   },
   imagesPath: {
     type: [String],
-    default: ['/assets/uploads/unnamed.jpg'],
+    default: ['unnamed.jpg'],
     validate: {
       validator: (value) => value.length <= 12,
       message: '{VALUE} exceeds the limit of 12',
