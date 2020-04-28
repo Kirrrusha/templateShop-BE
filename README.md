@@ -1,2 +1,1 @@
 # templateShop-BE
-cool project
