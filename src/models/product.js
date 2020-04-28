@@ -5,7 +5,7 @@ const isNumber = require('lodash');
 const { useTag } = require('../lib/util');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 const { Schema } = mongoose;
-const {url}  = require('../config');
+const {host, protocol, port}  = require('../config');
 
 const attributesProductSchema = new Schema({
   attributeId: String,
@@ -194,7 +194,7 @@ const productSchema = new Schema({
         id: _id,
         name, productId, description, status,
         price,
-        imagesPath: imagesPath.map(image => `${url}/assets/uploads/${image}`),
+        imagesPath: imagesPath.map(image => `${protocol}://${host}:${port}/assets/uploads/${image}`),
         deductFromStock,
         manufacturer, category, recommendedProductIdList, comments,
         quantity, updatedAt

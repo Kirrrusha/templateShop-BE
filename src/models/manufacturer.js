@@ -3,6 +3,7 @@ const { validatorIsAlphanumeric } = require('../lib/util');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 const uniqueValidator = require('mongoose-unique-validator');
 const { Schema } = mongoose;
+const {host, protocol, port}  = require('../config');
 
 const manufacturerSchema = new Schema({
   name: {
@@ -41,7 +42,7 @@ const manufacturerSchema = new Schema({
         id: _id,
         manufacturerId,
         name,
-        imagePath
+        imagePath: `${protocol}://${host}:${port}/assets/uploads/${imagePath}`
       }
     }
   }

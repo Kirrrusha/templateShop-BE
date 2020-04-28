@@ -3,6 +3,8 @@
   "bodyLimit": "100kb",
   "corsHeaders": ["*"],
   "url": "http://localhost:8080",
+  "host": "localhost",
+  "protocol": "http",
   "mongoURI": "mongodb://localhost:27017/heroku_tzl4m7mh",
   "secretOrKey": "secret",
   "expiresIn": 86400
