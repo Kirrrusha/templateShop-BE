@@ -56,7 +56,7 @@ const upload = multer({
       file.mimetype === "image/jpeg"
     ) {
       cb(null, true);
-    } else if (req.method !== 'PUT') {
+    } else if (req.method === 'POST') {
       try {
         const product = await Product.findOne({ name: req.body.name }).exec();
         if (!isEmpty(product)) {
