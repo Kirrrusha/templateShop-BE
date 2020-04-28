@@ -18,12 +18,10 @@ before_deploy:
   - ssh-add /tmp/id_rsa
 deploy:
   - provider: script
-    skip_cleanup: true
     script:  ssh web@188.225.18.51 "cd /home/web/projects/templateShop-BE && git pull && npm ci"
     on:
       branch: develop
   - provider: script
-    skip_cleanup: true
     script: ssh web@188.225.18.51 "pm2 reload /home/web/ecosystem.config.js --only techlead-API --env production && pm2 save"
     on:
       branch: develop
