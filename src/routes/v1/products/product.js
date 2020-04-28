@@ -37,6 +37,35 @@ const ordersValidator = [
     .withMessage('Wrong type')
 ];
 
+const checkExist = async (req, res, next) => {
+  if (req.method === 'POST') {
+    try {
+      const product = await Product.findOne({ name: req.body.name }).exec();
+      console.log('product fileFilter POST', product);
+      if (!!product) {
+        new Error('Product already exist')
+      }
+      else {
+        return next();
+      }
+    } catch (e) {
+      return Error(e);
+    }
+  }
+  else if (req.method === 'PUT') {
+    try {
+      const product = await Product.findById(req.body.id).exec();
+      console.log('product fileFilter PUT', product);
+      if (!product) {
+        new Error('Product not found');
+      } else {
+        return next();
+      }
+    } catch (e) {
+      new Error(e);
+    }
+  }
+}
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -45,34 +74,7 @@ const storage = multer.diskStorage({
   },
   filename: async (req, file, cb) => {
     console.log('file', file);
-    if (req.method === 'POST') {
-      try {
-        const product = await Product.findOne({ name: req.body.name }).exec();
-        console.log('product fileFilter POST', product);
-        if (!!product) {
-          return cb(new Error('Product already exist'), false);
-        }
-        else {
-          return cb(null, Date.now() + path.extname(file.originalname));
-        }
-      } catch (e) {
-        return cb(null, false, new Error(e));
-      }
-    }
-    else if (req.method === 'PUT') {
-      try {
-        const product = await Product.findById(req.body.id).exec();
-        console.log('product fileFilter PUT', product);
-        if (!product) {
-          return cb(new Error('Product not found'), false);
-        } else {
-          return cb(null, Date.now() + path.extname(file.originalname));
-        }
-      } catch (e) {
-        return cb(null, false, new Error(e));
-      }
-    }
-    // cb(null, Date.now() + path.extname(file.originalname));
+    cb(null, Date.now() + path.extname(file.originalname));
   }
 });
 
@@ -106,12 +108,14 @@ router.get('/byCategory/:id', ctrlProduct.productsByCategoryId);
 router.get('/:id', ctrlProduct.getById);
 
 router.post('/',
+  checkExist,
   upload.any(),
   validate(ordersValidator),
   ctrlProduct.create
 );
 
 router.put('/',
+  checkExist,
   upload.any(),
   validate(ordersValidator),
   ctrlProduct.update
