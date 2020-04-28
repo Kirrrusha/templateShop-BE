@@ -18,7 +18,7 @@ const app = express();
 app.use(helmet());
 
 app.use('/assets/uploads/', express.static('src/uploads'));
-
+console.log(process.cwd())
 
 // HTTP request logger
 if (process.env.NODE_ENV !== 'production') {

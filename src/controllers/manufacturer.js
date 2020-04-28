@@ -48,11 +48,11 @@ exports.update = async (req, res, next) => {
     const manufacturer = await Manufacturer.findById(id)
       .exec();
     if (manufacturer.imagePath && manufacturer.imagePath !== 'unnamed.jpg' &&
-      fs.existsSync(`../../uploads/${manufacturer.imagePath}`)) {
-      await fs.unlinkSync(`../../uploads/${manufacturer.imagePath}`);
+      fs.existsSync(path.join(process.cwd(), `/src/uploads/${manufacturer.imagePath}`))) {
+      await fs.unlinkSync(path.join(process.cwd(), `/src/uploads/${manufacturer.imagePath}`));
     }
     manufacturer.name = body.name || manufacturer.name;
-    manufacturer.imagePath = file ? `/assets/uploads/${file.filename}` : manufacturer.imagePath;
+    manufacturer.imagePath = file ? file.filename : manufacturer.imagePath;
     await manufacturer.save();
     await res.json(manufacturer.toJSON());
   } catch ({ message }) {
@@ -71,8 +71,8 @@ exports.delete = async (req, res, next) => {
       if (manufactures[i]) {
         if (manufactures[i].imagePath &&
           image !== 'unnamed.jpg' &&
-          fs.existsSync(`../../uploads/${image}`)) {
-          await fs.unlinkSync(`../../uploads/${image}`);
+          fs.existsSync(path.join(process.cwd(), `/src/uploads/${image}`))) {
+          await fs.unlinkSync(path.join(process.cwd(), `/src/uploads/${image}`));
         }
       }
     }
