@@ -40,16 +40,16 @@ const ordersValidator = [
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
+    console.log(path.join(process.cwd(), '/src/uploads/'))
     cb(null, path.join(process.cwd(), '/src/uploads/'));
   },
   filename: async (req, file, cb) => {
     console.log('file', file);
     if (req.method === 'POST') {
       try {
-        const product = await Product.findOne({ name: req.body.name })
-          .exec();
+        const product = await Product.findOne({ name: req.body.name }).exec();
         console.log('product fileFilter POST', product);
-        if (!product) {
+        if (!!product) {
           return cb(new Error('Product already exist'), false);
         }
         else {
@@ -61,8 +61,7 @@ const storage = multer.diskStorage({
     }
     else if (req.method === 'PUT') {
       try {
-        const product = await Product.findById(req.body.id)
-          .exec();
+        const product = await Product.findById(req.body.id).exec();
         console.log('product fileFilter PUT', product);
         if (!product) {
           return cb(new Error('Product not found'), false);
