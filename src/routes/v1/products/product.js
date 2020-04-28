@@ -50,23 +50,27 @@ const storage = multer.diskStorage({
           .exec();
         console.log('product fileFilter POST', product);
         if (!product) {
-          cb(new Error('Product already exist'), false);
+          return cb(new Error('Product already exist'), false);
         }
         else {
-          cb(null, Date.now() + path.extname(file.originalname));
+          return cb(null, Date.now() + path.extname(file.originalname));
         }
       } catch (e) {
-        cb(null, false, new Error(e));
+        return cb(null, false, new Error(e));
       }
     }
     else if (req.method === 'PUT') {
-      const product = await Product.findById(req.body.id)
-        .exec();
-      console.log('product fileFilter PUT', product);
-      if (!product) {
-        cb(new Error('Product not found'), false);
-      } else {
-        cb(null, Date.now() + path.extname(file.originalname));
+      try {
+        const product = await Product.findById(req.body.id)
+          .exec();
+        console.log('product fileFilter PUT', product);
+        if (!product) {
+          return cb(new Error('Product not found'), false);
+        } else {
+          return cb(null, Date.now() + path.extname(file.originalname));
+        }
+      } catch (e) {
+        return cb(null, false, new Error(e));
       }
     }
     // cb(null, Date.now() + path.extname(file.originalname));
