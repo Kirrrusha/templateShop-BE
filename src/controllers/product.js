@@ -1,6 +1,7 @@
 const fs = require('fs');
 const Product = require('../models/product');
 const { errorHandler } = require('../lib/util');
+const path = require('path');
 
 exports.getAll = async (req, res, next) => {
   try {
