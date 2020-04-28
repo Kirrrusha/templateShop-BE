@@ -9,6 +9,7 @@ const config = {
 // define env vars into config
 config.port = process.env.PORT || config.port;
 config.url = process.env.RESOURCE_URL || config.url;
+config.host = process.env.HOST || config.host;
 config.mongoURI = process.env.MONGODB_URI || config.mongoURI;
 config.secretOrKey = process.env.SECRET_OR_KEY || config.secretOrKey;
 config.expiresIn = process.env.expiresIn || config.expiresIn;
