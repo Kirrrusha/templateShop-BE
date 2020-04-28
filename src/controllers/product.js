@@ -132,7 +132,7 @@ exports.create = async (req, res, next) => {
   try {
     const product = await Product.create({
       ...body,
-      imagesPath: files.map(file => file.filename)
+      // imagesPath: files.map(file => file.filename)
     });
     await res.json(product.toJSON());
   } catch ({ message }) {
@@ -147,20 +147,20 @@ exports.update = async (req, res, next) => {
   const { body: { id, ...body }, files: photo } = req;
   try {
     const product = await Product.findById(id).exec();
-    if (product && photo.length) {
-      for (const image of product.imagesPath) {
-        if (image && image !== 'unnamed.jpg' &&
-          fs.existsSync(path.join(process.cwd(), `/src/uploads/${image}`))) {
-          await fs.unlinkSync(path.join(process.cwd(), `/src/uploads/${image}`));
-        }
-      }
-    }
+    // if (product && photo.length) {
+    //   for (const image of product.imagesPath) {
+    //     if (image && image !== 'unnamed.jpg' &&
+    //       fs.existsSync(path.join(process.cwd(), `/src/uploads/${image}`))) {
+    //       await fs.unlinkSync(path.join(process.cwd(), `/src/uploads/${image}`));
+    //     }
+    //   }
+    // }
     product.name = body.name || product.name;
     product.description = body.description || product.description;
     product.status = body.status || product.status;
     product.price = body.price || product.price;
-    product.imagesPath = photo.length ?
-      photo.map(file => file.filename) : product.imagesPath;
+    // product.imagesPath = photo.length ?
+    //   photo.map(file => file.filename) : product.imagesPath;
     product.deductFromStock = body.deductFromStock || product.deductFromStock;
     product.manufacturerId = body.manufacturerId || product.manufacturerId;
     product.category = body.category || product.category;
