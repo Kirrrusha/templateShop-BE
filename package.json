@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node server",
     "dev": "nodemon server",
-    "DEV-api": "PORT=8080 MONGODB_URI=mongodb://database:passw0rd@188.225.18.51:27030/heroku_tzl4m7mh SECRET_OR_KEY=techlead HOST=188.225.18.51 PROTOCOL=http nodemon server"
+    "DEV-api": "PORT=8080 MONGODB_URI=mongodb://database:passw0rd@188.225.18.51:27030/heroku_tzl4m7mh SECRET_OR_KEY=techlead RESOURCE_URL=0.0.0.0 HOST=188.225.18.51 PROTOCOL=http nodemon server"
   },
   "dependencies": {
     "accesscontrol": "^2.2.1",
