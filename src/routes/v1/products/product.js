@@ -34,10 +34,6 @@ const ordersValidator = [
   check('deductFromStock')
     .optional()
     .isBoolean()
-    .withMessage('Wrong type'),
-  check('manufactureId')
-    .optional()
-    .isNumeric()
     .withMessage('Wrong type')
 ];
 
@@ -53,7 +49,7 @@ const storage = multer.diskStorage({
         const product = await Product.findOne({ name: req.body.name })
           .exec();
         console.log('product fileFilter POST', product);
-        if (!isEmpty(product)) {
+        if (!product) {
           cb(new Error('Product already exist'), false);
         }
         else {
