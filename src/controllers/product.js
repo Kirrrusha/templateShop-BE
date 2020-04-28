@@ -130,7 +130,7 @@ exports.create = async (req, res, next) => {
   try {
     const product = await Product.create({
       ...body,
-      imagesPath: files.map(file => `/assets/uploads/${file.filename}`)
+      imagesPath: files.map(file => file.filename)
     });
     await res.json(product.toJSON());
   } catch ({ message }) {
@@ -147,9 +147,9 @@ exports.update = async (req, res, next) => {
     const product = await Product.findById(id).exec();
     if (product && photo.length) {
       for (const image of product.imagesPath) {
-        if (image !== '/assets/uploads/unnamed.jpg' &&
-          fs.existsSync(`.${image.replace(/assets/, 'src')}`)) {
-          await fs.unlinkSync(`.${image.replace(/assets/, 'src')}`);
+        if (image !== 'unnamed.jpg' &&
+          fs.existsSync(`../../uploads/${image}`)) {
+          await fs.unlinkSync(`../../uploads/${image}`);
         }
       }
     }
@@ -158,7 +158,7 @@ exports.update = async (req, res, next) => {
     product.status = body.status || product.status;
     product.price = body.price || product.price;
     product.imagesPath = photo.length ?
-      photo.map(file => `/assets/uploads/${file.filename}`) : product.imagesPath;
+      photo.map(file => file.filename) : product.imagesPath;
     product.deductFromStock = body.deductFromStock || product.deductFromStock;
     product.manufacturerId = body.manufacturerId || product.manufacturerId;
     product.category = body.category || product.category;
@@ -183,9 +183,9 @@ exports.delete = async (req, res, next) => {
     for (let i = 0, length = products.length; i < length; i++) {
       if (products[i]) {
         for (const image of products[i].imagesPath) {
-          if (image !== '/assets/uploads/unnamed.jpg' &&
-            fs.existsSync(`.${image.replace(/assets/, 'src')}`)) {
-            await fs.unlinkSync(`.${image.replace(/assets/, 'src')}`);
+          if (image !== 'unnamed.jpg' &&
+            fs.existsSync(`../../uploads/${image}`)) {
+            await fs.unlinkSync(`../../uploads/${image}`);
           }
         }
       }

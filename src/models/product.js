@@ -194,7 +194,7 @@ const productSchema = new Schema({
         id: _id,
         name, productId, description, status,
         price,
-        imagesPath: imagesPath.map(image => `${url}${image}`),
+        imagesPath: imagesPath.map(image => `${url}/assets/uploads/${image}`),
         deductFromStock,
         manufacturer, category, recommendedProductIdList, comments,
         quantity, updatedAt
