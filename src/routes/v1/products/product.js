@@ -46,8 +46,34 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, path.join(process.cwd(), '/src/uploads/'));
   },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
+  filename: async (req, file, cb) => {
+    console.log('file', file);
+    if (req.method === 'POST') {
+      try {
+        const product = await Product.findOne({ name: req.body.name })
+          .exec();
+        console.log('product fileFilter POST', product);
+        if (!isEmpty(product)) {
+          cb(new Error('Product already exist'), false);
+        }
+        else {
+          cb(null, Date.now() + path.extname(file.originalname));
+        }
+      } catch (e) {
+        cb(null, false, new Error(e));
+      }
+    }
+    else if (req.method === 'PUT') {
+      const product = await Product.findById(req.body.id)
+        .exec();
+      console.log('product fileFilter PUT', product);
+      if (!product) {
+        cb(new Error('Product not found'), false);
+      } else {
+        cb(null, Date.now() + path.extname(file.originalname));
+      }
+    }
+    // cb(null, Date.now() + path.extname(file.originalname));
   }
 });
 
@@ -65,28 +91,9 @@ const upload = multer({
       file.mimetype === 'image/jpg' ||
       file.mimetype === 'image/jpeg'
     ) {
-      if (req.method === 'POST') {
-        try {
-          const product = await Product.findOne({ name: req.body.name })
-            .exec();
-          console.log('product fileFilter POST', product);
-          if (!isEmpty(product)) {
-            cb(new Error('Product already exist'), false);
-          }
-          cb(null, true);
-        } catch (e) {
-          cb(null, false, new Error(e));
-        }
-      } else if (req.method === 'PUT') {
-        const product = await Product.findById(req.body.id)
-          .exec();
-        console.log('product fileFilter PUT', product);
-        if (!product) {
-          cb(new Error('Product not found'), false);
-        }
-        cb(null, true);
-      }
-    } else {
+      cb(null, true);
+    }
+    else {
       cb(new Error('File format should be PNG,JPG,JPEG'), false);
     }
   }
