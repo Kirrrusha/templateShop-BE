@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const validator = require('validator');
 const path = require('path');
 const multer = require('multer');
 const ctrlProduct = require('../../../controllers/product');
