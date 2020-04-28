@@ -147,7 +147,7 @@ exports.update = async (req, res, next) => {
     const product = await Product.findById(id).exec();
     if (product && photo.length) {
       for (const image of product.imagesPath) {
-        if (image !== 'unnamed.jpg' &&
+        if (image && image !== 'unnamed.jpg' &&
           fs.existsSync(`../../uploads/${image}`)) {
           await fs.unlinkSync(`../../uploads/${image}`);
         }
@@ -183,7 +183,7 @@ exports.delete = async (req, res, next) => {
     for (let i = 0, length = products.length; i < length; i++) {
       if (products[i]) {
         for (const image of products[i].imagesPath) {
-          if (image !== 'unnamed.jpg' &&
+          if (image && image !== 'unnamed.jpg' &&
             fs.existsSync(`../../uploads/${image}`)) {
             await fs.unlinkSync(`../../uploads/${image}`);
           }
