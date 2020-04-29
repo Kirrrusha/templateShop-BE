@@ -6,7 +6,6 @@ const { validate } = require('../../../middleware');
 const multer = require('multer');
 const path = require('path');
 const Manufacturer = require('../../../models/manufacturer');
-const { isEmpty } = require('lodash');
 
 const ordersValidator = [
   check('name')
