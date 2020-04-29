@@ -128,7 +128,6 @@ exports.getById = async (req, res, next) => {
 
 exports.create = async (req, res, next) => {
   const { body, files } = req;
-  console.log('files', files);
   try {
     const product = await Product.create({
       ...body,

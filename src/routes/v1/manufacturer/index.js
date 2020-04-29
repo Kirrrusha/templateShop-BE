@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const validator = require('validator');
 const { check } = require('express-validator');
 const ctrlManufacturers = require('../../../controllers/manufacturer');
 const { validate } = require('../../../middleware');
@@ -24,13 +23,39 @@ const ordersValidator = [
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    // cb(null, './src/uploads/');
     cb(null, path.join(process.cwd(), '/src/uploads/'));
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname)); //Appending extension
   }
 });
+
+const isExistManufacturer = async (req, cb) => {
+  try {
+    if (req.method === 'POST') {
+      const manufacturer = await Manufacturer.findOne({ name: req.body.name })
+        .exec();
+      if (!!manufacturer) {
+        return cb(new Error('Manufacturer already exist'), false);
+      } else {
+        return cb(null, true);
+      }
+    } else if (req.method === 'PUT') {
+      const manufacturer = await Manufacturer.findById(req.body.id)
+        .exec();
+      if (!manufacturer) {
+        return cb(new Error('Manufacturer not found'), false);
+      } else {
+        return cb(null, true);
+      }
+    } else {
+      return cb(null, true);
+    }
+
+  } catch (e) {
+    cb(new Error(e), false);
+  }
+};
 
 const upload = multer({
   storage,
@@ -43,26 +68,9 @@ const upload = multer({
       file.mimetype === "image/jpg" ||
       file.mimetype === "image/jpeg"
     ) {
-      cb(null, true);
+      await isExistManufacturer(req, cb);
     } else {
       cb(new Error("File format should be PNG,JPG,JPEG"), false);
-    }
-    if (req.method !== 'PUT') {
-      try {
-        const manufacturer = await Manufacturer.findOne({ name: req.body.name }).exec();
-        if (!isEmpty(manufacturer)) {
-          cb(new Error('Manufacture already exist'), false);
-        }
-        cb(null, true);
-      } catch (e) {
-        cb(null, false, new Error(e));
-      }
-    } else if (req.method === 'PUT') {
-      const manufacturer = await Manufacturer.findById(req.body.id).exec();
-      if (!manufacturer) {
-        cb(new Error('Manufacture not found'), false);
-      }
-      cb(null, true);
     }
     cb(null, true);
   }
