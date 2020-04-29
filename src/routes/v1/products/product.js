@@ -148,7 +148,8 @@ const storage = multer.diskStorage({
     //     cb(null, Date.now() + path.extname(file.originalname));
     //   }
     // }
-    cb(null, Date.now() + path.extname(file.originalname));
+    // cb(null, Date.now() + path.extname(file.originalname));
+    cb(null, file.originalname);
   }
 });
 
