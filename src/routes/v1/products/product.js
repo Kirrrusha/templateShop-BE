@@ -10,7 +10,6 @@ const { validate } = require('../../../middleware');
 const { errorHandler } = require('../../../lib/util');
 
 
-
 const ordersValidator = [
   check('name')
     .not()
@@ -40,10 +39,11 @@ const ordersValidator = [
 ];
 
 async function checkExist(req, res, next) {
-  console.log('req', req.body)
+  console.log('req', req.body);
   if (req.method === 'POST') {
     try {
-      const product = await Product.findOne({ name: req.body.name }).exec();
+      const product = await Product.findOne({ name: req.body.name })
+        .exec();
       console.log('product fileFilter POST', product);
       if (!!product) {
         return errorHandler({
@@ -54,7 +54,7 @@ async function checkExist(req, res, next) {
       else {
         return next();
       }
-    } catch ({message}) {
+    } catch ({ message }) {
       return errorHandler({
         message,
         statusCode: 401
@@ -63,15 +63,17 @@ async function checkExist(req, res, next) {
   }
   else if (req.method === 'PUT') {
     try {
-      console.log('body', req.body)
-      const product = await Product.findById(req.body.id).exec();
+      console.log('body', req.body);
+      const product = await Product.findById(req.body.id)
+        .exec();
       console.log('product fileFilter PUT', product);
       if (!product) {
         return errorHandler({
           message: 'Product not found',
           statusCode: 401
         }, next);
-      } else {
+      }
+      else {
         return next();
       }
     } catch (e) {
@@ -83,45 +85,73 @@ async function checkExist(req, res, next) {
   }
 }
 
+const isExistProduct = async (req, cb) => {
+  try {
+    if (req.method === 'POST') {
+      const product = await Product.findOne({ name: req.body.name })
+        .exec();
+      console.log('product fileFilter POST', product);
+      if (!!product) {
+        return cb(new Error('Product already exist'), false);
+      }
+      else {
+        return cb(null, true);
+      }
+    } else if (req.method === 'PUT') {
+      const product = await Product.findById(req.body.id)
+        .exec();
+      console.log('product fileFilter PUT', product);
+      if (!product) {
+        return cb(new Error('Product not found'), false);
+      }
+      else {
+        return cb(null, true);
+      }
+    } else {
+      return cb(null, true);
+    }
+
+  } catch (e) {
+    cb(new Error(e), false);
+  }
+};
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, path.join(process.cwd(), '/src/uploads/'));
   },
   filename: async (req, file, cb) => {
     console.log('file', file);
-    if (req.method === 'POST') {
-      try {
-        const product = await Product.findOne({ name: req.body.name })
-          .exec();
-        console.log('product fileFilter POST', product);
-        if (!isEmpty(product)) {
-          cb(new Error('Product already exist'), false);
-        }
-        else {
-          cb(null, Date.now() + path.extname(file.originalname));
-        }
-      } catch (e) {
-        cb(null, false, new Error(e));
-      }
-    }
-    else if (req.method === 'PUT') {
-      const product = await Product.findById(req.body.id)
-        .exec();
-      console.log('product fileFilter PUT', product);
-      if (!product) {
-        cb(new Error('Product not found'), false);
-      } else {
-        cb(null, Date.now() + path.extname(file.originalname));
-      }
-    }
-    // cb(null, Date.now() + path.extname(file.originalname));
+    // if (req.method === 'POST') {
+    //   try {
+    //     const product = await Product.findOne({ name: req.body.name })
+    //       .exec();
+    //     console.log('product fileFilter POST', product);
+    //     if (!isEmpty(product)) {
+    //       cb(new Error('Product already exist'), false);
+    //     }
+    //     else {
+    //       cb(null, Date.now() + path.extname(file.originalname));
+    //     }
+    //   } catch (e) {
+    //     cb(null, false, new Error(e));
+    //   }
+    // }
+    // else if (req.method === 'PUT') {
+    //   const product = await Product.findById(req.body.id)
+    //     .exec();
+    //   console.log('product fileFilter PUT', product);
+    //   if (!product) {
+    //     cb(new Error('Product not found'), false);
+    //   } else {
+    //     cb(null, Date.now() + path.extname(file.originalname));
+    //   }
+    // }
+    cb(null, Date.now() + path.extname(file.originalname));
   }
 });
 
 const upload = multer({
-  onFileUploadStart: (file, req, res) => {
-    console.log(req.body)
-  },
   storage,
   limits: {
     fileSize: 1000000
@@ -135,7 +165,7 @@ const upload = multer({
       file.mimetype === 'image/jpg' ||
       file.mimetype === 'image/jpeg'
     ) {
-      cb(null, true);
+      await isExistProduct(req.body, cb);
     }
     else {
       cb(new Error('File format should be PNG,JPG,JPEG'), false);
