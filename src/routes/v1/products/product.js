@@ -87,6 +87,7 @@ async function checkExist(req, res, next) {
 
 const isExistProduct = async (req, cb) => {
   try {
+    console.log('method', req.method);
     if (req.method === 'POST') {
       const product = await Product.findOne({ name: req.body.name })
         .exec();
@@ -165,7 +166,7 @@ const upload = multer({
       file.mimetype === 'image/jpg' ||
       file.mimetype === 'image/jpeg'
     ) {
-      await isExistProduct(req.body, cb);
+      await isExistProduct(req, cb);
     }
     else {
       cb(new Error('File format should be PNG,JPG,JPEG'), false);
