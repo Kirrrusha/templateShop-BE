@@ -7,6 +7,8 @@ const Product = require('../../../models/product');
 const { isEmpty } = require('lodash');
 const { check } = require('express-validator');
 const { validate } = require('../../../middleware');
+const { errorHandler } = require('../../../lib/util');
+
 
 
 const ordersValidator = [
@@ -37,48 +39,89 @@ const ordersValidator = [
     .withMessage('Wrong type')
 ];
 
-const checkExist = async (req, res, next) => {
+async function checkExist(req, res, next) {
+  console.log('req', req.body)
   if (req.method === 'POST') {
     try {
       const product = await Product.findOne({ name: req.body.name }).exec();
       console.log('product fileFilter POST', product);
       if (!!product) {
-        new Error('Product already exist')
+        return errorHandler({
+          message: 'Product already exist',
+          statusCode: 401
+        }, next);
       }
       else {
         return next();
       }
-    } catch (e) {
-      return Error(e);
+    } catch ({message}) {
+      return errorHandler({
+        message,
+        statusCode: 401
+      }, next);
     }
   }
   else if (req.method === 'PUT') {
     try {
+      console.log('body', req.body)
       const product = await Product.findById(req.body.id).exec();
       console.log('product fileFilter PUT', product);
       if (!product) {
-        new Error('Product not found');
+        return errorHandler({
+          message: 'Product not found',
+          statusCode: 401
+        }, next);
       } else {
         return next();
       }
     } catch (e) {
-      new Error(e);
+      return errorHandler({
+        message,
+        statusCode: 401
+      }, next);
     }
   }
 }
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    console.log(path.join(process.cwd(), '/src/uploads/'))
     cb(null, path.join(process.cwd(), '/src/uploads/'));
   },
   filename: async (req, file, cb) => {
     console.log('file', file);
-    cb(null, Date.now() + path.extname(file.originalname));
+    if (req.method === 'POST') {
+      try {
+        const product = await Product.findOne({ name: req.body.name })
+          .exec();
+        console.log('product fileFilter POST', product);
+        if (!isEmpty(product)) {
+          cb(new Error('Product already exist'), false);
+        }
+        else {
+          cb(null, Date.now() + path.extname(file.originalname));
+        }
+      } catch (e) {
+        cb(null, false, new Error(e));
+      }
+    }
+    else if (req.method === 'PUT') {
+      const product = await Product.findById(req.body.id)
+        .exec();
+      console.log('product fileFilter PUT', product);
+      if (!product) {
+        cb(new Error('Product not found'), false);
+      } else {
+        cb(null, Date.now() + path.extname(file.originalname));
+      }
+    }
+    // cb(null, Date.now() + path.extname(file.originalname));
   }
 });
 
 const upload = multer({
+  onFileUploadStart: (file, req, res) => {
+    console.log(req.body)
+  },
   storage,
   limits: {
     fileSize: 1000000
@@ -108,16 +151,14 @@ router.get('/byCategory/:id', ctrlProduct.productsByCategoryId);
 router.get('/:id', ctrlProduct.getById);
 
 router.post('/',
-  checkExist,
   upload.any(),
-  validate(ordersValidator),
+  // validate(ordersValidator),
   ctrlProduct.create
 );
 
 router.put('/',
-  checkExist,
   upload.any(),
-  validate(ordersValidator),
+  // validate(ordersValidator),
   ctrlProduct.update
 );
 
