@@ -32,7 +32,7 @@ exports.create = async (req, res, next) => {
   try {
     const manufacturer = await Manufacturer.create({
       name,
-      imagePath: file ? `/assets/uploads/${file.filename}` : '/assets/uploads/unnamed.jpg'
+      imagePath: file ? file.filename : 'unnamed.jpg'
     });
     await res.json(manufacturer.toJSON());
   } catch ({ message }) {

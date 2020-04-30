@@ -17,13 +17,8 @@ const ordersValidator = [
       min: 2
     })
     .withMessage('Wrong length')
-    .custom(value => {
-      if (!validator.isAlphanumeric(value, 'en-US')
-        && !validator.isAlphanumeric(value, 'ru-RU')) {
-        throw new Error('Wrong type');
-      }
-      return true;
-    })
+    .isAlphanumeric('en-US')
+    .withMessage('Wrong symbol')
     .trim().escape(),
   check('description')
     .optional()

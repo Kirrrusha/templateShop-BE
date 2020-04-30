@@ -21,7 +21,9 @@ const ordersValidator = [
     })
     .withMessage('Wrong length name')
     .trim()
-    .escape(),
+    .escape()
+    .isAlphanumeric('en-US')
+    .withMessage('Wrong symbol'),
   check('description')
     .optional()
     .isLength({ max: 1000 })
