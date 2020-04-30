@@ -22,7 +22,7 @@ const manufacturerSchema = new Schema({
   },
   imagePath: {
     type: String,
-    default: '/assets/uploads/unnamed.jpg'
+    default: 'unnamed.jpg'
   },
   manufacturerId: {
     type: Number,

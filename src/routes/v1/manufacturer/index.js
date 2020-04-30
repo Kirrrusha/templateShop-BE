@@ -17,7 +17,9 @@ const ordersValidator = [
       min: 2
     })
     .withMessage('Wrong length')
-    .trim().escape(),
+    .trim().escape()
+    .isAlphanumeric('en-US')
+    .withMessage('Wrong symbol'),
 ];
 
 const storage = multer.diskStorage({
