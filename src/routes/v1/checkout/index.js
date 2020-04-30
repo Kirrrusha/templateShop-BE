@@ -17,13 +17,6 @@ const ordersValidator = [
       min: 2
     })
     .withMessage('Wrong length')
-    .custom(value => {
-      if (!validator.isAlphanumeric(value, 'en-US')
-        && !validator.isAlphanumeric(value, 'ru-RU')) {
-        throw new Error('Wrong type');
-      }
-      return true;
-    })
     .trim()
     .escape(),
   check('phone')
@@ -32,15 +25,15 @@ const ordersValidator = [
     .withMessage('Obligatory field')
     .trim()
     .escape(),
-  check('email')
-    .not()
-    .isEmpty()
-    .withMessage('Obligatory field')
-    .not()
-    .isEmail()
-    .withMessage('Incorrect email')
-    .trim()
-    .escape(),
+  // check('email')
+  //   .not()
+  //   .isEmpty()
+  //   .withMessage('Obligatory field')
+  //   .not()
+  //   .isEmail()
+  //   .withMessage('Incorrect email')
+  //   .trim()
+  //   .escape(),
   check('surname')
     .optional()
     .isLength({
@@ -48,13 +41,6 @@ const ordersValidator = [
       min: 2
     })
     .withMessage('Wrong length')
-    .custom(value => {
-      if (!validator.isAlphanumeric(value, 'en-US')
-        && !validator.isAlphanumeric(value, 'ru-RU')) {
-        throw new Error('Wrong type');
-      }
-      return true;
-    })
     .trim()
     .escape(),
   check('name')
@@ -64,24 +50,17 @@ const ordersValidator = [
       min: 2
     })
     .withMessage('Wrong length')
-    .custom(value => {
-      if (!validator.isAlphanumeric(value, 'en-US')
-        && !validator.isAlphanumeric(value, 'ru-RU')) {
-        throw new Error('Wrong type');
-      }
-      return true;
-    })
     .trim()
     .escape(),
-  check('product')
-    .not()
-    .isEmpty()
-    .custom(value => {
-      if (!value.length) {
-        throw new Error('Empty checkout');
-      } else if (value.some(item => validator.isObjectId(item))) {}
-      return true;
-    })
+  // check('product')
+  //   .not()
+  //   .isEmpty()
+  //   .custom(value => {
+  //     if (!value.length) {
+  //       throw new Error('Empty checkout');
+  //     } else if (value.some(item => validator.isObjectId(item))) {}
+  //     return true;
+  //   })
 ];
 
 router.get('/', ctrlCheckout.getAll);

@@ -1,5 +1,5 @@
-const fs = require('fs');
 const Checkout = require('../models/checkout');
+const { errorHandler } = require('../lib/util');
 
 exports.getAll = async (req, res, next) => {
   try {

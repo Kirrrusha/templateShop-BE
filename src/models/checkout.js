@@ -21,15 +21,15 @@ const basketSchema = new Schema({
       message: '{VALUE} Invalid value'
     }
   },
-  total: {
-    type: Number,
-    required: [true, 'Required field'],
-    trim: true,
-    validate: {
-      validator: (value) => isNumber(value),
-      message: '{VALUE} Invalid value'
-    }
-  }
+  // total: {
+  //   type: Number,
+  //   required: [true, 'Required field'],
+  //   trim: true,
+  //   validate: {
+  //     validator: (value) => isNumber(value),
+  //     message: '{VALUE} Invalid value'
+  //   }
+  // }
 });
 
 const checkoutSchema = new Schema({
@@ -61,17 +61,34 @@ const checkoutSchema = new Schema({
       message: '{VALUE} Invalid value'
     }
   },
-  email: {
-    type: String,
-    trim: true,
-    validate: {
-      validator: value => !validator.isEmail(value),
-      message: '{VALUE} is not email'
-    }
-  },
+  // email: {
+  //   type: String,
+  //   trim: true,
+  //   validate: {
+  //     validator: value => !validator.isEmail(value),
+  //     message: '{VALUE} is not email'
+  //   }
+  // },
   phone: {
     type: String,
     trim: true
+  },
+  deliveryMethod: {
+    type: String,
+    default: 'pickup',
+    enum: ['pickup', 'courier_delivery'],
+  },
+  address: {
+    type: String
+  },
+  // checkoutTime: {
+  //   type: String,
+  //
+  // },
+  checkoutPaymentType: {
+    type: String,
+    default: 'cash_to_courier',
+    enum: ['cash_to_courier']
   }
 }, {
   timestamps: {
@@ -93,37 +110,37 @@ const checkoutSchema = new Schema({
   }
 });
 
-checkoutSchema.pre('save', async (next) => {
-  try {
-    const productIdList = this.basket.map(item => item.product);
-    const basketMap = this.basket.reduce((result, filter) => {
-      result[filter.product] = filter.quantity;
-      return result;
-    }, {});
-    const products = await Product.find({ _id: { $in: productIdList } })
-      .exec();
-    if (!products.deductFromStock) {
-      next();
-    }
-    products.forEach(item => {
-      if (+products.quantity < +this.quantity) {
-        item.quantity = +item.quantity - +basketMap[item.id];
-      } else {
-        errorHandler({
-          message: 'too little product',
-          statusCode: 401
-        }, next);
-      }
-      products.save();
-    });
-  } catch ({ message }) {
-    errorHandler({
-      message,
-      statusCode: 401
-    }, next);
-  }
-  next();
-});
+// checkoutSchema.pre('save', async (next) => {
+//   try {
+//     const productIdList = this.basket.map(item => item.product);
+//     const basketMap = this.basket.reduce((result, filter) => {
+//       result[filter.product] = filter.quantity;
+//       return result;
+//     }, {});
+//     const products = await Product.find({ _id: { $in: productIdList } })
+//       .exec();
+//     if (!products.deductFromStock) {
+//       next();
+//     }
+//     products.forEach(item => {
+//       if (+products.quantity < +this.quantity) {
+//         item.quantity = +item.quantity - +basketMap[item.id];
+//       } else {
+//         errorHandler({
+//           message: 'too little product',
+//           statusCode: 401
+//         }, next);
+//       }
+//       products.save();
+//     });
+//   } catch ({ message }) {
+//     errorHandler({
+//       message,
+//       statusCode: 401
+//     }, next);
+//   }
+//   next();
+// });
 
 const checkout = mongoose.model('checkout', checkoutSchema);
 

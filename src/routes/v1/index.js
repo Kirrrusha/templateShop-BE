@@ -6,6 +6,7 @@ const category = require('./category');
 const manufacturers = require('./manufacturer');
 const widgets = require('./widget');
 const pages = require('./pages');
+const checkout = require('./checkout');
 const passport = require('passport');
 
 const auth = passport.authenticate('jwt', {
@@ -19,6 +20,7 @@ router.use('/categories', category);
 router.use('/manufacturers', manufacturers);
 router.use('/widgets', widgets);
 router.use('/pages', pages);
+router.use('/checkout', checkout);
 
 
 
