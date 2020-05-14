@@ -54,6 +54,10 @@ const UserSchema = new Schema({
       message: '{VALUE} Invalid value',
     }
   },
+  isVerified: {
+    type: Boolean,
+    default: false
+  },
   role: {
     type: String,
     default: 'basic',

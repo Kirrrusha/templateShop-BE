@@ -1,9 +1,11 @@
 const defaultConfig = require('./default.json');
+const mailConfig = require('./mail.json');
 
 
 const config = {
   env: process.env.NODE_ENV,
   ...defaultConfig,
+  ...mailConfig,
 };
 
 // define env vars into config
@@ -14,6 +16,8 @@ config.protocol = process.env.PROTOCOL || config.protocol;
 config.mongoURI = process.env.MONGODB_URI || config.mongoURI;
 config.secretOrKey = process.env.SECRET_OR_KEY || config.secretOrKey;
 config.expiresIn = process.env.expiresIn || config.expiresIn;
+config.subject = process.env.subject || config.subject;
+config.smtp = process.env.smtp || config.smtp;
 
 console.log(config);
 

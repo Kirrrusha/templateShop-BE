@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const { check } = require('express-validator');
+const {auth} = require('../../../lib/util');
 const ctrlProductOptions = require('../../../controllers/option');
+const ctrlUser = require('../../../controllers/users');
 const { validate } = require('../../../middleware');
 
 const ordersValidator = [
@@ -23,10 +25,10 @@ router.get('/', ctrlProductOptions.getAll);
 
 router.get('/:id', ctrlProductOptions.getById);
 
-router.post('/', validate(ordersValidator), ctrlProductOptions.create);
+router.post('/', auth, validate(ordersValidator), ctrlProductOptions.create);
 
-router.put('/', validate(ordersValidator), ctrlProductOptions.update);
+router.put('/', auth, validate(ordersValidator), ctrlProductOptions.update);
 
-router.delete('/:id', ctrlProductOptions.delete);
+router.delete('/:id', auth,  ctrlUser.grantAccess('deleteOwn', 'supervisor'), ctrlProductOptions.delete);
 
 module.exports = router;

@@ -3,12 +3,13 @@ const router = express.Router();
 const path = require('path');
 const multer = require('multer');
 const ctrlProduct = require('../../../controllers/product');
+const ctrlUser = require('../../../controllers/users');
 const Product = require('../../../models/product');
 const { isEmpty } = require('lodash');
 const { check } = require('express-validator');
 const { validate } = require('../../../middleware');
 const { errorHandler } = require('../../../lib/util');
-
+const {auth} = require('../../../lib/util');
 
 const ordersValidator = [
   check('name')
@@ -21,9 +22,7 @@ const ordersValidator = [
     })
     .withMessage('Wrong length name')
     .trim()
-    .escape()
-    .isAlphanumeric('en-US')
-    .withMessage('Wrong symbol'),
+    .escape(),
   check('description')
     .optional()
     .isLength({ max: 1000 })
@@ -84,6 +83,8 @@ const upload = multer({
     fileSize: 1000000
   },
   fileFilter: async (req, file, cb) => {
+    console.log('body', req.body)
+    console.log('file', file)
     if (file.length > 12) {
       cb(new Error('Too many files'), false);
     }
@@ -108,17 +109,25 @@ router.get('/byCategory/:id', ctrlProduct.productsByCategoryId);
 router.get('/:id', ctrlProduct.getById);
 
 router.post('/',
+  auth,
+  ctrlUser.grantAccess('createAny', 'product'),
   upload.any(),
   validate(ordersValidator),
   ctrlProduct.create
 );
 
 router.put('/',
+  auth,
+  ctrlUser.grantAccess('updateAny', 'product'),
   upload.any(),
   validate(ordersValidator),
   ctrlProduct.update
 );
 
-router.delete('', ctrlProduct.delete);
+router.delete(
+  '',
+  auth,
+  ctrlUser.grantAccess('deleteAny', 'product'),
+  ctrlProduct.delete);
 
 module.exports = router;
