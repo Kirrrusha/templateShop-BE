@@ -7,11 +7,6 @@ const manufacturers = require('./manufacturer');
 const widgets = require('./widget');
 const pages = require('./pages');
 const checkout = require('./checkout');
-const passport = require('passport');
-
-const auth = passport.authenticate('jwt', {
-  session: false,
-});
 
 router.use('/users', users);
 router.use('/products', products);

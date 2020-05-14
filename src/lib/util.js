@@ -1,5 +1,6 @@
 const validator = require('validator');
 const HTMLParser = require('node-html-parser');
+const passport = require('passport');
 
 exports.toRes = function toRes(res, status = 200) {
   return (err, thing) => {
@@ -40,4 +41,8 @@ exports.useTag = (value) => HTMLParser.parse(value, {
   style: false,
   pre: false,
   comment: false
+});
+
+exports.auth = passport.authenticate('jwt', {
+  session: false,
 });

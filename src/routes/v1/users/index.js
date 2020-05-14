@@ -6,6 +6,7 @@ const ctrlUsers = require('../../../controllers/users');
 const { validate } = require('../../../middleware');
 const multer = require('multer');
 const multParse = multer();
+const {auth} = require('../../../controllers/users');
 
 const ordersValidator = [
   check('username').not().isEmpty()
@@ -17,7 +18,7 @@ const ordersValidator = [
     .isIn(['basic', 'supervisor'])
     .withMessage('Wrong type'),
   check('email')
-    .optional()
+    .not().isEmpty()
     .isEmail()
     .withMessage('Wrong type'),
   check('surname')
@@ -59,10 +60,39 @@ const passwordValidator = [
 
 router.post('/login', multParse.none(), validate(ordersValidator), ctrlUsers.auth);
 router.post('/registration', multParse.none(), validate(ordersValidator), ctrlUsers.registration);
-router.get('/:id', ctrlUsers.getById);
-router.get('/', ctrlUsers.getAll);
-router.put('/', multParse.none(), validate(ordersValidator), ctrlUsers.updateUser);
+router.get('/confirmation/:hash', multParse.none(), ctrlUsers.confirmation);
+router.post(
+  '/refresh-confirmation-token',
+  multParse.none(),
+  ctrlUsers.resendTokenPost
+);
+router.post('/resend', multParse.none(), validate(ordersValidator), ctrlUsers.resendTokenPost);
+router.get(
+  '/:id',
+  auth,
+  ctrlUsers.grantAccess('readAny', 'profile'),
+  ctrlUsers.getById
+);
+router.get(
+  '/',
+  auth,
+  ctrlUsers.grantAccess('readAny', 'profile'),
+  ctrlUsers.getAll
+);
+router.put(
+  '/',
+  auth,
+  ctrlUsers.grantAccess('updateAny', 'profile'),
+  multParse.none(),
+  validate(ordersValidator),
+  ctrlUsers.updateUser
+);
 router.put('/changePassword', multParse.none(), validate(passwordValidator), ctrlUsers.changePassword);
-router.delete('/', ctrlUsers.deleteUsers);
+router.delete(
+  '/',
+  auth,
+  ctrlUsers.grantAccess('deleteAny', 'profile'),
+  ctrlUsers.deleteUsers
+);
 
 module.exports = router;

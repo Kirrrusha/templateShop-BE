@@ -10,7 +10,7 @@ module.exports = {
         useCreateIndex: true,
       });
     } catch (e) {
-      Error(e);
+      console.error(e);
     }
   },
 };
